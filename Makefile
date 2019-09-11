@@ -6,7 +6,7 @@
 #    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 16:46:19 by smorty            #+#    #+#              #
-#    Updated: 2019/09/10 20:06:24 by smorty           ###   ########.fr        #
+#    Updated: 2019/09/11 20:43:16 by smorty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LFT_DIR := $(SRC_DIR)/libft
 
 HEADERS_DIR := include $(LFT_DIR)
 
-SRC_ASM := asm.c parse_file.c read_input.c
+SRC_ASM := asm.c parse_file.c temp.c
 
 SRC_COREWAR :=
 
@@ -32,7 +32,7 @@ LFT := libft.a
 
 HEADERS := asm.h libft.h op.h
 
-CC := gcc -Wall -Werror -Wextra
+CC := gcc -Wall -Werror -Wextra -g
 
 vpath %.c $(SRC_DIR) $(SRC_DIR)/asm $(SRC_DIR)/corewar
 vpath %.o $(OBJ_DIR)

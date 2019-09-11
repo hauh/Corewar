@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 19:38:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/10 19:47:08 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/11 18:30:08 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 
 # define COMMENT_CHAR		'#'
-# define ALT_COMMENT_CHAR	';'
+# define COMMENT_CHAR_ALT	';'
 # define LABEL_CHAR			':'
 # define DIRECT_CHAR		'%'
 # define SEPARATOR_CHAR		','

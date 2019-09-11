@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/10 19:51:06 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/11 21:48:46 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ static int	open_file(char *file_name)
 		error("Usage: asm file.s");
 	if ((fd = open(file_name, O_RDONLY)) < 0)
 		error(strerror(errno));
-	return (fd);	
+	return (fd);
 }
 
 int			main(int argc, char **argv)
 {
-	t_cor	*list;
+	t_token	*list;
 	int		fd;
 
 	if (argc != 2)
