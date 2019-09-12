@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 19:38:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/11 18:30:08 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/12 14:19:14 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define LABEL_CHAR			':'
 # define DIRECT_CHAR		'%'
 # define SEPARATOR_CHAR		','
+# define REGISTRY_CHAR		'r'
 
 # define LABEL_CHARS		"abcdefghijklmnopqrstuvwxyz_0123456789"
 

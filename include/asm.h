@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/11 23:00:45 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/12 23:17:21 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include "libft.h"
 # include "op.h"
 
+# include <stdio.h> // remove
+
 # define BUFF_SIZE 16
+# define GOTO_LABEL INT16_MIN
 
 typedef enum	e_token_type
 {
@@ -41,19 +44,26 @@ typedef enum	e_token_type
 	crw_lldi,
 	crw_lfork,
 	crw_aff,
-	crw_undefined
+	crw_undefined,
+	crw_registry,
+	crw_direct,
+	crw_indirect
 }				t_token_type;
 
-typedef struct	s_cor
+typedef struct	s_argument
 {
-	char			*line;
-	struct s_cor	*next;
-}				t_cor;
+	t_token_type	type;
+	int				val;
+	int				x;
+	int				y;
+}				t_argument;
 
 typedef struct	s_token
 {
-	char			*line;
 	t_token_type	type;
+	t_argument		*arg[3];
+	char			*label;
+	int				size;
 	int				x;
 	int				y;
 	struct s_token	*next;
@@ -61,7 +71,9 @@ typedef struct	s_token
 }				t_token;
 
 void			error(char *err);
+char			*read_input(int fd);
 t_token			*parse_file(int fd);
+void			parse_arguments(t_token *new, char *line);
 
 void			print_list(t_token *list); //temp
 
