@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 23:47:48 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/13 15:46:49 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,22 @@ static void	parse_line(t_token **list, char *line, int y)
 	*list = new;
 }
 
+static void get_name(int fd)
+{
+	char *line;
+
+	free((line = read_input(fd)));
+	free((line = read_input(fd)));
+}
+
 t_token		*parse_file(int fd)
 {
 	t_token *list;
 	char	*line;
 	int		y;
 
-	y = 0;
+	get_name(fd);
+	y = 2;
 	list = NULL;
 	while ((line = read_input(fd)))
 	{

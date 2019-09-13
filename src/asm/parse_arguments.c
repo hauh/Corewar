@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 23:54:29 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/13 15:51:17 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static t_token_type	get_type(char **line, int *x)
 	int			i;
 	char		*p;
 
-	while (**line == ' ' || **line == '\t')
+	while (**line && (**line == ' ' || **line == '\t'))
 	{
 		++(*line);
 		++(*x);
@@ -105,6 +105,7 @@ static char			*get_label(char **line, int *x)
 	while (size--)
 		*p++ = *(*line)++;
 	*p = 0;
+	++(*line);
 	return (label);
 }
 

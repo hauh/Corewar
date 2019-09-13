@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 20:41:49 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 23:55:15 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/13 15:47:49 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ void	print_list(t_token *list)
 		printf("type: %s\n", types[list->type]);
 		printf("x y: %d %d\n", list->x, list->y);
 		printf("label: %s\n", list->label);
+		printf("-------------\n");
 		int i = 0;
 		while (i < 3)
 		{
-//			if (list->arg[i])
-//				printf("\targ %d type %d val %d\n", i, list->arg[i]->type, list->arg[i]->val);
+			// if (list->arg[i])
+			// 	printf("\targ %d type %d val %d\n", i, list->arg[i]->type, list->arg[i]->val);
 			++i;
 		}
 		list = list->next;

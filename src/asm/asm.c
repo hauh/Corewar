@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 23:50:02 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/13 15:47:06 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int			main(int argc, char **argv)
 		error("Usage: asm file.s");
 	fd = open_file(argv[1]);
 	list = parse_file(fd);
-	print_list(list->next->next);
+	print_list(list);
 	close(fd);
 	return (0);
 }
