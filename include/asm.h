@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 23:17:21 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/14 19:36:23 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <stdio.h> // remove
 
 # define BUFF_SIZE 16
-# define GOTO_LABEL INT16_MIN
 
 typedef enum	e_token_type
 {
@@ -73,7 +72,7 @@ typedef struct	s_token
 void			error(char *err);
 char			*read_input(int fd);
 t_token			*parse_file(int fd);
-void			parse_arguments(t_token *new, char *line);
+int				parse_arguments(t_token *new, char *line);
 
 void			print_list(t_token *list); //temp
 

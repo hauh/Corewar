@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/13 15:46:49 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/14 19:38:06 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,37 @@ static int	check_emptiness_and_comment(char *line)
 	return (is_empty);
 }
 
-static void	parse_line(t_token **list, char *line, int y)
+static int	parse_line(t_token **list, char *line, int y, int fd)
 {
-	t_token *new;
+	t_token	*new;
+	char	*next_line;
 
 	if (check_emptiness_and_comment(line))
-		return ;
+		return (1);
 	if (!(new = (t_token *)malloc(sizeof(t_token))))
 		error(strerror(errno));
 	new->y = y;
+	new->label = NULL;
 	new->next = NULL;
 	if ((new->prev = *list))
 		(*list)->next = new;
-	parse_arguments(new, line);
 	*list = new;
+	if (parse_arguments(new, line))
+	{
+		next_line = read_input(fd);
+		++new->y;
+		parse_arguments(new, next_line);
+		free(next_line);
+		return (2);
+	}
+	return (1);
 }
 
-static void get_name(int fd)
+static void	get_name(int fd) // stub
 {
 	char *line;
 
+	free((line = read_input(fd)));
 	free((line = read_input(fd)));
 	free((line = read_input(fd)));
 }
@@ -66,8 +77,7 @@ t_token		*parse_file(int fd)
 	list = NULL;
 	while ((line = read_input(fd)))
 	{
-		++y;
-		parse_line(&list, line, y);
+		y += parse_line(&list, line, y, fd);
 		free(line);
 	}
 	while (list->prev)
