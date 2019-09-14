@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/14 19:36:37 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/14 23:39:21 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,39 @@
 
 static void			save_argument(t_argument *arg, char **line, int *x)
 {
+	char *p;
+
 	arg->type = crw_undefined;
 	if (**line == REGISTRY_CHAR)
+	{
 		arg->type = crw_registry;
+		arg->val = ft_atoi(*line + 1);
+	}
 	else if (**line == DIRECT_CHAR)
 	{
-		if (*(*line + 1) == LABEL_CHAR)
+		++(*line);
+		++(*x);
+		if (**line == LABEL_CHAR)
+		{
 			arg->type = crw_indirect;
-		else if (*(*line + 1) >= '0' && *(*line + 1) <= '9')
+			p = *line + 1;
+		}
+		else if ((**line >= '0' && **line <= '9') || **line == '-')
+		{
 			arg->type = crw_direct;
+			arg->val = ft_atoi(*line);
+		}
 	}
-	arg->val = arg->type == crw_indirect ? 0 : ft_atoi(*line + 1);
+	if (arg->type == crw_undefined)
+		error("Undefined argument");	
 	while (**line && **line != ' ' && **line != '\t'
 		&& **line != SEPARATOR_CHAR)
 	{
 		++(*line);
 		++(*x);
 	}
+	if (arg->type == crw_indirect)
+		arg->link = ft_strndup(p, *line - p);
 }
 
 static t_argument	*get_argument(char **line, int *x, int y)
@@ -104,12 +120,8 @@ static char			*get_label(char **line, int *x)
 	while (size--)
 		*p++ = *(*line)++;
 	*p = 0;
-	++(*line);
-	while (**line && (**line == ' ' || **line == '\t'))
-	{
-		++(*line);
+	while (*++(*line) && (**line == ' ' || **line == '\t'))
 		++(*x);
-	}
 	return (label);
 }
 
@@ -127,7 +139,9 @@ int					parse_arguments(t_token *new, char *line)
 	if (!new->label)
 		if ((new->label = get_label(&line, &x)) && !*line)
 			return (1);
-	new->type = get_type(&line, &x);
+	new->x = x;
+	if ((new->type = get_type(&line, &x)) == crw_undefined)
+		error("Undefined argument");
 	i = 0;
 	while (i < 3)
 		new->arg[i++] = *line ? get_argument(&line, &x, new->y) : NULL;
