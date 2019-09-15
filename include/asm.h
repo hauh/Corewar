@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/14 21:26:21 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/15 21:00:32 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,23 @@ typedef struct	s_token
 	struct s_token	*prev;
 }				t_token;
 
+typedef struct	s_warrior
+{
+	char	*name;
+	char	*comment;
+	t_token	*program;
+	char	*byte_code;
+}				t_warrior;
+
 void			error(char *err);
 char			*read_input(int fd);
-t_token			*parse_file(int fd);
+int				skip_whitespaces(char **line);
+int				skip_letters(char **line);
+t_warrior		*parse_file(int fd);
+void			parse_name_and_comment(t_warrior *warrior, int *y, int fd);
 int				parse_arguments(t_token *new, char *line);
 void			analyze(t_token *list);
 
-void			print_list(t_token *list); //temp
+void			print_list(t_warrior *list); //temp
 
 #endif

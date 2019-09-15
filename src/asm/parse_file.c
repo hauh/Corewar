@@ -6,13 +6,13 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/14 22:25:41 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/15 21:00:02 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int	check_emptiness_and_comment(char *line)
+static int	is_empty_or_comment(char *line)
 {
 	int is_empty;
 
@@ -36,7 +36,7 @@ static int	parse_line(t_token **list, char *line, int y, int fd)
 	t_token	*new;
 	char	*next_line;
 
-	if (check_emptiness_and_comment(line))
+	if (is_empty_or_comment(line))
 		return (1);
 	if (!(new = (t_token *)malloc(sizeof(t_token))))
 		error(strerror(errno));
@@ -48,7 +48,8 @@ static int	parse_line(t_token **list, char *line, int y, int fd)
 	*list = new;
 	if (parse_arguments(new, line))
 	{
-		next_line = read_input(fd);
+		while ((next_line = read_input(fd)) && is_empty_or_comment(line))
+			free(next_line);
 		++new->y;
 		parse_arguments(new, next_line);
 		free(next_line);
@@ -57,23 +58,17 @@ static int	parse_line(t_token **list, char *line, int y, int fd)
 	return (1);
 }
 
-static void	get_name(int fd) // stub
+t_warrior	*parse_file(int fd)
 {
-	char *line;
+	t_warrior	*warrior;
+	t_token		*list;
+	char		*line;
+	int			y;
 
-	free((line = read_input(fd)));
-	free((line = read_input(fd)));
-	free((line = read_input(fd)));
-}
-
-t_token		*parse_file(int fd)
-{
-	t_token *list;
-	char	*line;
-	int		y;
-
-	get_name(fd);
-	y = 2;
+	if (!(warrior = (t_warrior *)malloc(sizeof(t_warrior))))
+		error(strerror(errno));
+	y = 1;
+	parse_name_and_comment(warrior, &y, fd);
 	list = NULL;
 	while ((line = read_input(fd)))
 	{
@@ -82,5 +77,6 @@ t_token		*parse_file(int fd)
 	}
 	while (list->prev)
 		list = list->prev;
-	return (list);
+	warrior->program = list;
+	return (warrior);
 }

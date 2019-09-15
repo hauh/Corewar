@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/14 20:37:19 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/15 17:07:51 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ static int	open_file(char *file_name)
 
 int			main(int argc, char **argv)
 {
-	t_token	*list;
-	int		fd;
+	t_warrior	*warrior;
+	int			fd;
 
 	if (argc != 2)
 		error("Usage: asm file.s");
 	fd = open_file(argv[1]);
-	list = parse_file(fd);
-	analyze(list);
-	print_list(list);
+	warrior = parse_file(fd);
+	analyze(warrior->program);
+	print_list(warrior);
 	close(fd);
 	return (0);
 }
