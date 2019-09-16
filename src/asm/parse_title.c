@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_name_and_comment.c                           :+:      :+:    :+:   */
+/*   parse_title.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 20:20:13 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/15 22:26:46 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/16 22:22:51 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,12 @@ static char	*get_string(int *y, int fd)
 		error(strerror(errno));
 	read(fd, s, size + 1);
 	s[size] = 0;
-	while (read(fd, &buf, 1) > 0 && buf != '\n')
-		if (buf == COMMENT_CHAR || buf == COMMENT_CHAR_ALT)
-			while (read(fd, &buf, 1) > 0 && buf != '\n')
-				;
-		else if (buf != ' ' && buf != '\t')
-			error("Syntax Error");
 	if (errno)
 		error(strerror(errno));
 	return (s);
 }
 
-static int	check_string(const char *s, int size, int fd)
+static int	check_string(const char *s, size_t size, int fd)
 {
 	char buf[size + 1];
 
@@ -89,20 +83,24 @@ static void	skip_until_token(int *y, int fd)
 		error(strerror(errno));
 }
 
-void		parse_name_and_comment(t_warrior *warrior, int *y, int fd)
+int			parse_title(t_warrior *warrior, int fd)
 {
+	int y;
+
+	y = 0;
 	warrior->name = NULL;
 	warrior->comment = NULL;
 	while (!warrior->name || !warrior->comment)
 	{
-		skip_until_token(y, fd);
+		skip_until_token(&y, fd);
 		if (!warrior->name && check_string(NAME_CMD_STRING,
 									sizeof(NAME_CMD_STRING) - 1, fd))
-			warrior->name = get_string(y, fd);
+			warrior->name = get_string(&y, fd);
 		else if (!warrior->comment && check_string(COMMENT_CMD_STRING,
 									sizeof(COMMENT_CMD_STRING) - 1, fd))
-			warrior->comment = get_string(y, fd);
+			warrior->comment = get_string(&y, fd);
 		else
 			error("Syntax Error");
 	}
+	return (y);
 }
