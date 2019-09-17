@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 20:41:49 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 18:03:28 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 22:50:24 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 void	print_list(t_warrior *warrior)
 {
-	const char	*types[16] = {"live", "add", "sub", "and", "or", "xor",
-							"sti", "st", "lfork", "fork", "lldi", "lld",
-							"ldi", "ld", "zjmp", "aff"};
+	const char	*types[17] = {NULL, "live", "ld", "st", "add", "sub",
+							"and", "or", "xor", "zjmp", "ldi", "sti",
+							"fork", "lld", "lldi", "lfork", "aff"};
 	const char	*param_types[4] = {"<undef>", "r", "%", "indir"};
 	t_opcode *list;
 
@@ -29,7 +29,7 @@ void	print_list(t_warrior *warrior)
 	{
 
 		printf("type: %s\n", types[list->type]);
-		printf("size x y: %d %d %d\n",list->size, list->x, list->y);
+		printf("size %d, x %d, y %d\n",list->size, list->x, list->y);
 		printf("label: %s\n", list->label);
 		printf("code: %x\n", list->param_code);
 		int i = 0;

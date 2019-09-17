@@ -6,13 +6,13 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 19:43:43 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 22:14:53 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int			crw_atoi(char *line)
+static int		get_dir_indir_value(char *line)
 {
 	int	val;
 	int	sign;
@@ -24,27 +24,28 @@ static int			crw_atoi(char *line)
 	}
 	else
 		sign = 1;
-	while (*line >= '0' && *line <= '9')
+	while (IS_DIGIT(*line))
 	{
 		val = val * 10 + (*line - 48);
 		if (val >= IDX_MOD)
 			val %= IDX_MOD;
 		++line;
 	}
-	if (*line && *line != SEPARATOR_CHAR && *line != ' ' && *line != '\t')
+	if (*line && *line != SEPARATOR_CHAR && !IS_BLANK(*line))
 		error("Syntax error in parameter value");
 	return (val * sign);
 }
 
-static char			*crw_strdup(char *line)
+static char		*get_label_link(char *line)
 {
 	char	*link;
 	size_t	size;
 
 	size = 0;
-	while (line[size] && line[size] != SEPARATOR_CHAR
-		&& line[size] != ' ' && line[size] != '\t')
+	while (line[size] && line[size] != SEPARATOR_CHAR && !IS_BLANK(line[size]))
 		++size;
+	if (!size)
+		error("Syntax error in 'label' link");
 	if (!(link = (char *)malloc(sizeof(char) * size)))
 		error(strerror(errno));
 	link[size] = 0;
@@ -53,60 +54,55 @@ static char			*crw_strdup(char *line)
 	return (link);
 }
 
-static void			get_param_value(t_opcode_param *param, char *line)
+static int		get_registry_value(char *line)
 {
-	if (param->type == crw_registry || param->type == crw_direct)
-		++line;
-	if (*line == LABEL_CHAR && param->type != crw_registry)
-	{
-		param->value = 0;
-		param->link = crw_strdup(line + 1);
-	}
-	else if (*line == '-' || (*line >= '0' && *line <= '9'))
-	{
-		param->value = crw_atoi(line);
-		param->link = NULL;
-	}
-	else
-		error("Wrong parameter value");
+	int val;
+
+	if (!IS_DIGIT(*line))
+		error("Syntax error in 'r' token");
+	val = *line++ - 48;
+	if (IS_DIGIT(*line))
+		val = val * 10 + (*line++ - 48);
+	if (!val || (*line && *line != SEPARATOR_CHAR && !IS_BLANK(*line)))
+		error("Syntax error in 'r' token");
+	return (val);
 }
 
-static t_param_type	get_param_type(char *line)
+static void		get_parameter(t_opcode_param *param, char *line)
 {
 	if (*line == REGISTRY_CHAR)
-		return (crw_registry);
+	{
+		param->type = crw_registry;
+		param->value = get_registry_value(line + 1);
+		return ;
+	}
 	if (*line == DIRECT_CHAR)
-		return (crw_direct);
-	if (*line == LABEL_CHAR || *line == '-' || (*line >= '0' && *line <= '9'))
-		return (crw_indirect);
-	error("Syntax error at parameter");
-	return (crw_undef_param);
+	{
+		param->type = crw_direct;
+		++line;
+	}
+	else if (*line == LABEL_CHAR || IS_DIGIT(*line) || *line == '-')
+		param->type = crw_indirect;
+	else
+		error("Syntax error at parameter type");
+	if (*line == LABEL_CHAR)
+		param->link = get_label_link(line + 1);
+	else
+		param->value = get_dir_indir_value(line);
 }
 
-t_opcode_param		*parse_parameter(char **line, int *x, int y)
+t_opcode_param	*parse_parameter(char *line)
 {
 	t_opcode_param *param;
 
 	param = NULL;
-	*x += skip_whitespaces(line);
-	if (**line)
+	if (*line)
 	{
 		if (!(param = (t_opcode_param *)malloc(sizeof(t_opcode_param))))
 			error(strerror(errno));
-		param->type = get_param_type(*line);
-		get_param_value(param, *line);
-		param->x = *x;
-		param->y = y;
-		while (**line && **line != SEPARATOR_CHAR)
-		{
-			++(*line);
-			++(*x);
-		}
-		if (**line == SEPARATOR_CHAR)
-		{
-			++(*line);
-			++(*x);
-		}
+		param->value = 0;
+		param->link = NULL;
+		get_parameter(param, line);
 	}
 	return (param);
 }

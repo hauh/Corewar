@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 20:20:13 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/16 22:22:51 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 23:48:33 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*get_string(int *y, int fd)
 	char	buf;
 
 	while (read(fd, &buf, 1) > 0 && buf != '"')
-		if (buf != ' ' && buf != '\t')
+		if (!IS_BLANK(buf))
 			error("Syntax Error");
 	size = get_string_size(y, fd);
 	if (!(s = (char *)malloc(sizeof(char) * size)))
@@ -51,7 +51,7 @@ static char	*get_string(int *y, int fd)
 	return (s);
 }
 
-static int	check_string(const char *s, size_t size, int fd)
+static int	check_token(const char *s, size_t size, int fd)
 {
 	char buf[size + 1];
 
@@ -72,11 +72,14 @@ static void	skip_until_token(int *y, int fd)
 
 	while (read(fd, &buf, 1) > 0)
 		if (buf == COMMENT_CHAR || buf == COMMENT_CHAR_ALT)
+		{
 			while (read(fd, &buf, 1) > 0 && buf != '\n')
 				;
+			++(*y);
+		}
 		else if (buf == '\n')
 			++(*y);
-		else if (buf != ' ' && buf != '\t')
+		else if (!IS_BLANK(buf))
 			break ;
 	lseek(fd, -1, SEEK_CUR);
 	if (errno)
@@ -93,14 +96,18 @@ int			parse_title(t_warrior *warrior, int fd)
 	while (!warrior->name || !warrior->comment)
 	{
 		skip_until_token(&y, fd);
-		if (!warrior->name && check_string(NAME_CMD_STRING,
+		if (!warrior->name && check_token(NAME_CMD_STRING,
 									sizeof(NAME_CMD_STRING) - 1, fd))
 			warrior->name = get_string(&y, fd);
-		else if (!warrior->comment && check_string(COMMENT_CMD_STRING,
+		else if (!warrior->comment && check_token(COMMENT_CMD_STRING,
 									sizeof(COMMENT_CMD_STRING) - 1, fd))
 			warrior->comment = get_string(&y, fd);
 		else
-			error("Syntax Error");
+			error("Syntax error in title");
 	}
+	if (ft_strlen(warrior->name) > PROG_NAME_LENGTH)
+		error("Name is too big");
+	if (ft_strlen(warrior->comment) > COMMENT_LENGTH)
+		error("Commentary is too big");
 	return (y);
 }

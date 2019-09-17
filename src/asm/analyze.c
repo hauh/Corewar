@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/16 21:05:08 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 22:15:07 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	evaluate_sizes(t_opcode *list)
 static int	find_label(t_opcode *head, char *label_name)
 {
 	t_opcode	*list;
-	int		bytes;
+	int			bytes;
 
 	list = head->prev;
 	bytes = 0;

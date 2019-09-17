@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 18:00:23 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 23:44:35 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,28 @@
 
 # define BUFF_SIZE 16
 
+# define IS_BLANK(c) (c == ' ' || c == '\t')
+# define IS_DIGIT(c) (c >= '0' && c <= '9')
+
 typedef enum	e_opcode_type
 {
+	crw_undef_code,
 	crw_live,
+	crw_ld,
+	crw_st,
 	crw_add,
 	crw_sub,
 	crw_and,
 	crw_or,
 	crw_xor,
-	crw_sti,
-	crw_st,
-	crw_lfork,
-	crw_fork,
-	crw_lldi,
-	crw_lld,
-	crw_ldi,
-	crw_ld,
 	crw_zjmp,
-	crw_aff,
-	crw_undef_code
+	crw_ldi,
+	crw_sti,
+	crw_fork,
+	crw_lld,
+	crw_lldi,
+	crw_lfork,
+	crw_aff
 }				t_opcode_type;
 
 typedef enum	e_param_type
@@ -88,8 +91,9 @@ int				skip_whitespaces(char **line);
 int				skip_letters(char **line);
 t_warrior		*parse_file(int fd);
 int				parse_title(t_warrior *warrior, int fd);
+int				parse_label(t_opcode *list, char *line);
 void			parse_opcode(t_opcode *new, char *line, int x);
-t_opcode_param	*parse_parameter(char **line, int *x, int y);
+t_opcode_param	*parse_parameter(char *line);
 void			analyze(t_opcode *list);
 
 void			print_list(t_warrior *list); //temp
