@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/16 23:54:25 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 19:43:43 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static t_param_type	get_param_type(char *line)
 		return (crw_direct);
 	if (*line == LABEL_CHAR || *line == '-' || (*line >= '0' && *line <= '9'))
 		return (crw_indirect);
-	error("Wrong parameter");
+	error("Syntax error at parameter");
 	return (crw_undef_param);
 }
 
@@ -88,6 +88,7 @@ t_opcode_param		*parse_parameter(char **line, int *x, int y)
 	t_opcode_param *param;
 
 	param = NULL;
+	*x += skip_whitespaces(line);
 	if (**line)
 	{
 		if (!(param = (t_opcode_param *)malloc(sizeof(t_opcode_param))))
@@ -96,7 +97,7 @@ t_opcode_param		*parse_parameter(char **line, int *x, int y)
 		get_param_value(param, *line);
 		param->x = *x;
 		param->y = y;
-		while (**line && **line != SEPARATOR_CHAR && **line != ' ' && **line != '\t')
+		while (**line && **line != SEPARATOR_CHAR)
 		{
 			++(*line);
 			++(*x);
@@ -106,7 +107,6 @@ t_opcode_param		*parse_parameter(char **line, int *x, int y)
 			++(*line);
 			++(*x);
 		}
-		*x += skip_whitespaces(line);
 	}
 	return (param);
 }

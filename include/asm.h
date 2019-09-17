@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/16 23:44:58 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/17 18:00:23 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ typedef enum	e_opcode_type
 
 typedef enum	e_param_type
 {
+	crw_undef_param,
 	crw_registry,
 	crw_direct,
-	crw_indirect,
-	crw_undef_param
+	crw_indirect
 }				t_param_type;
 
 typedef struct	s_opcode_param
@@ -65,6 +65,7 @@ typedef struct	s_opcode
 {
 	char			*label;
 	t_opcode_param	*param[3];
+	int				param_code;
 	t_opcode_type	type;
 	int				size;
 	int				x;
