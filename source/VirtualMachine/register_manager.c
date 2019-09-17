@@ -1,30 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   register_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/12 19:13:55 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/12 19:20:42 by vrichese         ###   ########.fr       */
+/*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
+/*   Updated: 2019/09/17 19:01:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
 
-int main(void)
-{
-	int test;
-	int i;
-	char new[4] = {100, 100, 100, 100};
-
-	test = 0;
-	i = 0;
-	while (i < 4)
-	{
-		test |= new[i] << (sizeof(int) - i + 1) * 8;
-		++i;
-	}
-	printf("%d\n", test);
-	return (0);
-}
