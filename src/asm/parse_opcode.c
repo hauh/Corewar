@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 23:45:16 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 00:25:05 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_opcode_type	get_opcode_type(char **line, int *x)
 	int			i;
 
 	i = 17;
-	while (i--)
+	while (--i)
 	{
 		size = ft_strlen(types[i]);
 		if (ft_strnequ(*line, types[i], size))
@@ -62,15 +62,30 @@ static int				validate_parameters(t_opcode_type type, int code)
 	return (1);
 }
 
+static int				skip_to_separator(char **line)
+{
+	int count;
+
+	count = 0;
+	while (**line && !IS_BLANK(**line) && **line != SEPARATOR_CHAR)
+	{
+		++(*line);
+		++count;
+	}
+	return (count);
+}
+
 void					parse_opcode(t_opcode *new, char *line, int x)
 {
 	int i;
 
 	x += skip_whitespaces(&line);
+	if (!*line)
+		return ;
 	new->x = x;
 	new->type = get_opcode_type(&line, &x);
-	i = -1;
-	while (++i < 3)
+	i = 0;
+	while (i < 3)
 	{
 		x += skip_whitespaces(&line);
 		if ((new->param[i] = parse_parameter(line)))
@@ -78,10 +93,11 @@ void					parse_opcode(t_opcode *new, char *line, int x)
 			new->param_code |= new->param[i]->type << ((3 - i) * 2);
 			new->param[i]->y = new->y;
 			new->param[i]->x = x;
-			x += skip_letters(&line) + skip_whitespaces(&line) + 1;
+			x += skip_to_separator(&line) + skip_whitespaces(&line) + 1;
 			if (*line && (*line++ != SEPARATOR_CHAR || i == 2))
 				error("Syntax error in parameters");
 		}
+		++i;
 	}
 	if (!validate_parameters(new->type, new->param_code))
 		error("Wrong parameters");

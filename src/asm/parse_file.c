@@ -6,11 +6,24 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 23:47:49 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 00:22:35 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+
+int				skip_whitespaces(char **line)
+{
+	int count;
+
+	count = 0;
+	while (**line && IS_BLANK(**line))
+	{
+		++(*line);
+		++count;
+	}
+	return (count);
+}
 
 static void		trim_comment(char *line)
 {
@@ -46,10 +59,8 @@ static void		parse_line(t_opcode **list, char *line, int y)
 		*list = new_element(list);
 	(*list)->x = x;
 	(*list)->y = y;
-	if (parse_label(*list, line))
-		x += skip_letters(&line) + skip_whitespaces(&line);
-	if (*line)
-		parse_opcode(*list, line, x);
+	parse_label(*list, &line);
+	parse_opcode(*list, line, x);
 }
 
 t_warrior		*parse_file(int fd)

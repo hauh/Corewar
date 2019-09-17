@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 23:44:35 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 00:21:58 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,13 @@ typedef struct	s_warrior
 void			error(char *err);
 char			*read_input(int fd);
 int				skip_whitespaces(char **line);
-int				skip_letters(char **line);
+
 t_warrior		*parse_file(int fd);
 int				parse_title(t_warrior *warrior, int fd);
-int				parse_label(t_opcode *list, char *line);
+void			parse_label(t_opcode *list, char **line);
 void			parse_opcode(t_opcode *new, char *line, int x);
 t_opcode_param	*parse_parameter(char *line);
+
 void			analyze(t_opcode *list);
 
 void			print_list(t_warrior *list); //temp
