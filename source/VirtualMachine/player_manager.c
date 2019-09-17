@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/17 21:16:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/17 21:24:01 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void			validate_player(player_t *player)
 		--check_size;
 	if (player->code_size != check_size + 1)
 	{
-		printf("Real code_size is not corresponding declaread code_size, cheater!!! Get away!\n");
+		printf("Real code_size is not corresponding declaread code_size, cheater!!! Go away!\n");
 		exit(-1);
 	}
 }

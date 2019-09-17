@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/17 19:17:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/17 21:27:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,13 @@ int get_waiting_time(int command)
 		return (2);
 }
 
-carriage_t			*new_carriage(int owner, int id, int current_location, int current_command, int waiting_time, int step_bytes)
+void			new_carriage(corewar_t *game, int owner, int id, int current_location, int current_command, int waiting_time, int step_bytes)
 {
-	carriage_t		*new_carriage;
+	carriage_t	*new_carriage;
 
-	new_carriage = (carriage_t *)malloc(sizeof(carriage_t));
+	if (!(new_carriage = (carriage_t *)malloc(sizeof(carriage_t))))
+		exit(-1);
+	game->memory_status.carriage_list_detect = TRUE;
 	new_carriage->id = id;
 	new_carriage->player_id = owner;
 	new_carriage->carry_flag = 0;
@@ -66,7 +68,7 @@ carriage_t			*new_carriage(int owner, int id, int current_location, int current_
 	new_carriage->current_location = current_location;
 	new_carriage->registers = (int *)malloc(sizeof(int) * REG_NUMBER);
 	memset(new_carriage->registers, 0, REG_SIZE * REG_NUMBER);
-	return (new_carriage);
+	game->
 }
 
 void				add_carriage(carriage_list_t **list, carriage_t *carriage)

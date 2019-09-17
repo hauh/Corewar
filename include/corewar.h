@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/17 21:09:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/17 21:27:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,9 @@ typedef struct				carriage_s
 	unsigned int			current_command;
 	unsigned int			current_location;
 	int						*registers;
+	struct carriage_s		*next;
+	struct carriage_s		*prev;
 }							carriage_t;
-
-typedef struct				carriage_list_s
-{
-	carriage_t				*current_carriage;
-	struct carriage_list_s	*next;
-	struct carriage_list_s	*prev;
-}							carriage_list_t;
 
 typedef struct				arena_s
 {
@@ -99,7 +94,7 @@ typedef struct				corewar_s
 {
 	arena_t					*arena;
 	args_t					*args;
-	carriage_list_t			*carriage_list;
+	carriage_t				*carriages;
 	player_t				*players[MAX_PLAYERS];
 	memory_status_t			memory_status;
 	int						*players_indicies;
