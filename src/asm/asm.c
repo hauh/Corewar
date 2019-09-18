@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 21:59:18 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 23:26:50 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,20 @@ static int	check_endian(void)
 
 static void	build_file(t_warrior *warrior, char *name)
 {
+	char	*p;
 	mode_t	mode;
 	int		fd;
 
-	(void)name;
-	mode = S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-	fd = open("test.cor", O_CREAT | O_WRONLY | O_TRUNC, mode);
+	p = name;
+	while (*p)
+		++p;
+	*(p - 2) = 0;
+	if (!(name = ft_strjoin(name, ".cor")))
+		error(strerror(errno));
+	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	fd = open(name, O_CREAT | O_WRONLY | O_TRUNC, mode);
 	write(fd, warrior->byte_code, warrior->total_size);
+	ft_printf("Writing output program to %s\n", name);
 }
 
 int			main(int argc, char **argv)
@@ -61,9 +68,8 @@ int			main(int argc, char **argv)
 	if (argc != 2)
 		error("Usage: asm file.s");
 	warrior = parse_file(open_file(argv[1]));
-	analyze(warrior);
+	analyze_sizes(warrior);
 	warrior->endian = check_endian();
-	print_list(warrior);
 	assemble(warrior);
 	build_file(warrior, argv[1]);
 	return (0);

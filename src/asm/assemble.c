@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:55:25 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 21:55:37 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 23:39:29 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		assemble(t_warrior *warrior)
 
 	size = PROG_NAME_LENGTH + COMMENT_LENGTH + warrior->code_size + 16;
 	if (!(code = (unsigned char *)malloc(sizeof(char) * size)))
-		error(strerror(errno));
+	 	error(strerror(errno));
 	warrior->byte_code = code;
 	warrior->total_size = size;
 	ft_bzero(code, size);
