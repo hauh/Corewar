@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 00:25:05 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:35:39 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,30 +75,30 @@ static int				skip_to_separator(char **line)
 	return (count);
 }
 
-void					parse_opcode(t_opcode *new, char *line, int x)
+void					parse_opcode(t_opcode *opcode, char *line, int x)
 {
 	int i;
 
 	x += skip_whitespaces(&line);
 	if (!*line)
 		return ;
-	new->x = x;
-	new->type = get_opcode_type(&line, &x);
+	opcode->x = x;
+	opcode->type = get_opcode_type(&line, &x);
 	i = 0;
 	while (i < 3)
 	{
 		x += skip_whitespaces(&line);
-		if ((new->param[i] = parse_parameter(line)))
+		if ((opcode->param[i] = parse_parameter(line)))
 		{
-			new->param_code |= new->param[i]->type << ((3 - i) * 2);
-			new->param[i]->y = new->y;
-			new->param[i]->x = x;
+			opcode->param_code |= opcode->param[i]->type << ((3 - i) * 2);
+			opcode->param[i]->y = opcode->y;
+			opcode->param[i]->x = x;
 			x += skip_to_separator(&line) + skip_whitespaces(&line) + 1;
 			if (*line && (*line++ != SEPARATOR_CHAR || i == 2))
 				error("Syntax error in parameters");
 		}
 		++i;
 	}
-	if (!validate_parameters(new->type, new->param_code))
+	if (!validate_parameters(opcode->type, opcode->param_code))
 		error("Wrong parameters");
 }

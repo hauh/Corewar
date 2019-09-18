@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 21:02:56 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:03:22 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char		*get_label_link(char *line)
 		++size;
 	if (!size)
 		error("Syntax error in 'label' link");
-	if (!(link = (char *)malloc(sizeof(char) * size)))
+	if (!(link = (char *)malloc(sizeof(char) * (size + 1))))
 		error(strerror(errno));
 	link[size] = 0;
 	while (size--)

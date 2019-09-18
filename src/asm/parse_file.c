@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 21:58:14 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:38:08 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void		trim_comment(char *line)
 	*line = 0;
 }
 
-static t_opcode	*new_element(t_opcode **list)
+static t_opcode	*new_element(t_opcode **program)
 {
 	t_opcode *new;
 
@@ -42,12 +42,12 @@ static t_opcode	*new_element(t_opcode **list)
 	new->label = NULL;
 	new->type = crw_undef_code;
 	new->param_code = 0;
-	if ((new->prev = *list))
-		(*list)->next = new;
+	if ((new->prev = *program))
+		(*program)->next = new;
 	return (new);
 }
 
-static void		parse_line(t_opcode **list, char *line, int y)
+static void		parse_line(t_opcode **program, char *line, int y)
 {
 	int	x;
 
@@ -55,33 +55,33 @@ static void		parse_line(t_opcode **list, char *line, int y)
 	trim_comment(line);
 	if (!*line)
 		return ;
-	if (!(*list) || (*list)->type != crw_undef_code)
-		*list = new_element(list);
-	(*list)->x = x;
-	(*list)->y = y;
-	parse_label(*list, &line);
-	parse_opcode(*list, line, x);
+	if (!(*program) || (*program)->type != crw_undef_code)
+		*program = new_element(program);
+	(*program)->x = x;
+	(*program)->y = y;
+	parse_label(*program, &line);
+	parse_opcode(*program, line, x);
 }
 
 t_warrior		*parse_file(int fd)
 {
 	t_warrior	*warrior;
-	t_opcode	*list;
+	t_opcode	*program;
 	char		*line;
 	int			y;
 
 	if (!(warrior = (t_warrior *)malloc(sizeof(t_warrior))))
 		error(strerror(errno));
 	y = parse_title(warrior, fd);
-	list = NULL;
+	program = NULL;
 	while ((line = read_input(fd)))
 	{
-		parse_line(&list, line, ++y);
+		parse_line(&program, line, ++y);
 		free(line);
 	}
 	close(fd);
-	while (list->prev)
-		list = list->prev;
-	warrior->program = list;
+	while (program->prev)
+		program = program->prev;
+	warrior->program = program;
 	return (warrior);
 }

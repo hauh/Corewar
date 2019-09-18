@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 23:26:50 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:33:22 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,6 @@ static int	open_file(char *file_name)
 	return (fd);
 }
 
-static int	check_endian(void)
-{
-	unsigned int	i;
-	char			*c;
-
-	i = 1;
-	c = (char *)&i;
-	return (*c ? 1 : 0);
-}
-
 static void	build_file(t_warrior *warrior, char *name)
 {
 	char	*p;
@@ -57,8 +47,34 @@ static void	build_file(t_warrior *warrior, char *name)
 		error(strerror(errno));
 	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	fd = open(name, O_CREAT | O_WRONLY | O_TRUNC, mode);
-	write(fd, warrior->byte_code, warrior->total_size);
+	write(fd, warrior->byte_code, warrior->code_size);
 	ft_printf("Writing output program to %s\n", name);
+	close(fd);
+	free(name);
+}
+
+static void	cleanup(t_warrior *warrior)
+{
+	t_opcode *clean;
+
+	while (warrior->program)
+	{
+		clean = warrior->program;
+		warrior->program = warrior->program->next;
+		if (clean->label)
+			free(clean->label);
+		if (clean->param[0])
+			free(clean->param[0]);
+		if (clean->param[1])
+			free(clean->param[1]);
+		if (clean->param[2])
+			free(clean->param[2]);
+		free(clean);
+	}
+	free(warrior->name);
+	free(warrior->comment);
+	free(warrior->byte_code);
+	free(warrior);
 }
 
 int			main(int argc, char **argv)
@@ -69,8 +85,8 @@ int			main(int argc, char **argv)
 		error("Usage: asm file.s");
 	warrior = parse_file(open_file(argv[1]));
 	analyze_sizes(warrior);
-	warrior->endian = check_endian();
 	assemble(warrior);
 	build_file(warrior, argv[1]);
+	cleanup(warrior);
 	return (0);
 }

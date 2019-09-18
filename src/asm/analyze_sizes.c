@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 23:13:37 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:43:43 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,48 @@
 
 static int	find_label(t_opcode *head, char *label_name)
 {
-	t_opcode	*list;
+	t_opcode	*prog;
 	int			bytes;
 
-	list = head->prev;
+	prog = head->prev;
 	bytes = 0;
-	while (list)
+	while (prog)
 	{
-		bytes -= list->size;
-		if (list->label && ft_strequ(list->label, label_name))
+		bytes -= prog->size;
+		if (prog->label && ft_strequ(prog->label, label_name))
 			return (bytes);
-		list = list->prev;
+		prog = prog->prev;
 	}
-	list = head;
+	prog = head;
 	bytes = 0;
-	while (list)
+	while (prog)
 	{
-		if (list->label && ft_strequ(list->label, label_name))
+		if (prog->label && ft_strequ(prog->label, label_name))
 			return (bytes);
-		bytes += list->size;
-		list = list->next;
+		bytes += prog->size;
+		prog = prog->next;
 	}
 	error("Indirect label not found");
 	return (0);
 }
 
-static void	set_links_values(t_opcode *list)
+static void	set_links_values(t_opcode *prog)
 {
 	int i;
 
-	while (list)
+	while (prog)
 	{
 		i = 0;
 		while (i < 3)
 		{
-			if (list->param[i] && list->param[i]->link)
-				list->param[i]->value = find_label(list, list->param[i]->link);
+			if (prog->param[i] && prog->param[i]->link)
+			{
+				prog->param[i]->value = find_label(prog, prog->param[i]->link);
+				free(prog->param[i]->link);
+			}
 			++i;
 		}
-		list = list->next;
+		prog = prog->next;
 	}
 }
 
@@ -81,18 +84,18 @@ static int	params_size(t_opcode_param **params, t_opcode_type type)
 	return (size);
 }
 
-static int	calculate_sizes(t_opcode *list)
+static int	calculate_sizes(t_opcode *prog)
 {
 	size_t total;
 
 	total = 0;
-	while (list)
+	while (prog)
 	{
-		list->size = 1 + (list->type != crw_live && list->type != crw_zjmp
-						&& list->type != crw_fork && list->type != crw_lfork);
-		list->size += params_size(list->param, list->type);
-		total += list->size;
-		list = list->next;
+		prog->size = 1 + (prog->type != crw_live && prog->type != crw_zjmp
+						&& prog->type != crw_fork && prog->type != crw_lfork);
+		prog->size += params_size(prog->param, prog->type);
+		total += prog->size;
+		prog = prog->next;
 	}
 	return (total);
 }

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 20:20:13 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 23:48:33 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 23:59:59 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*get_string(int *y, int fd)
 		if (!IS_BLANK(buf))
 			error("Syntax Error");
 	size = get_string_size(y, fd);
-	if (!(s = (char *)malloc(sizeof(char) * size)))
+	if (!(s = (char *)malloc(sizeof(char) * (size + 1))))
 		error(strerror(errno));
 	read(fd, s, size + 1);
 	s[size] = 0;

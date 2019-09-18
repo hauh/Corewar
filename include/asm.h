@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 23:43:31 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:37:08 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ typedef struct	s_warrior
 	t_opcode		*program;
 	unsigned char	*byte_code;
 	size_t			code_size;
-	size_t			total_size;
-	int				endian;
 }				t_warrior;
 
 void			error(char *err);
@@ -96,7 +94,7 @@ int				ft_printf(const char *line, ...);
 
 t_warrior		*parse_file(int fd);
 int				parse_title(t_warrior *warrior, int fd);
-void			parse_label(t_opcode *list, char **line);
+void			parse_label(t_opcode *program, char **line);
 void			parse_opcode(t_opcode *new, char *line, int x);
 t_opcode_param	*parse_parameter(char *line);
 

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:55:25 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 23:39:29 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 00:41:23 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,12 @@ static void	assemble_text(unsigned char **code, char *text, size_t size)
 		++(*code);
 }
 
-static void	assemble_number(unsigned char **code, int number, int endian)
+static void	assemble_number(unsigned char **code, int number)
 {
-	if (endian)
-	{
-		*(*code)++ = (number >> 24) & 0xff;
-		*(*code)++ = (number >> 16) & 0xff;
-		*(*code)++ = (number >> 8) & 0xff;
-		*(*code)++ = number & 0xff;
-	}
-	else
-	{
-		*(*code)++ = number & 0xff;
-		*(*code)++ = (number >> 8) & 0xff;
-		*(*code)++ = (number >> 16) & 0xff;
-		*(*code)++ = (number >> 24) & 0xff;
-	}
+	*(*code)++ = (number >> 24) & 0xff;
+	*(*code)++ = (number >> 16) & 0xff;
+	*(*code)++ = (number >> 8) & 0xff;
+	*(*code)++ = number & 0xff;
 }
 
 static void	assemble_params(unsigned char **code,
@@ -61,7 +51,7 @@ static void	assemble_params(unsigned char **code,
 				*(*code)++ = params[i]->value & 0xff;
 			}
 			else
-				assemble_number(code, params[i]->value, 1);
+				assemble_number(code, params[i]->value);
 		}
 		++i;
 	}
@@ -86,13 +76,13 @@ void		assemble(t_warrior *warrior)
 
 	size = PROG_NAME_LENGTH + COMMENT_LENGTH + warrior->code_size + 16;
 	if (!(code = (unsigned char *)malloc(sizeof(char) * size)))
-	 	error(strerror(errno));
+		error(strerror(errno));
 	warrior->byte_code = code;
-	warrior->total_size = size;
 	ft_bzero(code, size);
-	assemble_number(&code, COREWAR_EXEC_MAGIC, 1);
+	assemble_number(&code, COREWAR_EXEC_MAGIC);
 	assemble_text(&code, warrior->name, PROG_NAME_LENGTH);
-	assemble_number(&code, warrior->code_size, 1);
+	assemble_number(&code, warrior->code_size);
 	assemble_text(&code, warrior->comment, COMMENT_LENGTH);
 	assemble_code(code, warrior->program);
+	warrior->code_size = size;
 }
