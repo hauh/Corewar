@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 00:22:35 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 21:58:14 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_warrior		*parse_file(int fd)
 		parse_line(&list, line, ++y);
 		free(line);
 	}
+	close(fd);
 	while (list->prev)
 		list = list->prev;
 	warrior->program = list;

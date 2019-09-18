@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 00:21:58 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 19:31:37 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,24 @@ typedef struct	s_opcode
 {
 	char			*label;
 	t_opcode_param	*param[3];
-	int				param_code;
 	t_opcode_type	type;
-	int				size;
+	size_t			size;
 	int				x;
 	int				y;
+	unsigned char	param_code;
 	struct s_opcode	*next;
 	struct s_opcode	*prev;
 }				t_opcode;
 
 typedef struct	s_warrior
 {
-	char		*name;
-	char		*comment;
-	t_opcode	*program;
-	char		*byte_code;
+	char			*name;
+	char			*comment;
+	t_opcode		*program;
+	unsigned char	*byte_code;
+	size_t			code_size;
+	size_t			total_size;
+	int				endian;
 }				t_warrior;
 
 void			error(char *err);
@@ -95,7 +98,8 @@ void			parse_label(t_opcode *list, char **line);
 void			parse_opcode(t_opcode *new, char *line, int x);
 t_opcode_param	*parse_parameter(char *line);
 
-void			analyze(t_opcode *list);
+void			analyze(t_warrior *list);
+void			assemble(t_warrior *warrior);
 
 void			print_list(t_warrior *list); //temp
 

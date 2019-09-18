@@ -6,35 +6,11 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/18 00:25:14 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 21:02:56 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-static int		get_dir_indir_value(char *line)
-{
-	int	val;
-	int	sign;
-
-	if (*line == '-')
-	{
-		++line;
-		sign = -1;
-	}
-	else
-		sign = 1;
-	while (IS_DIGIT(*line))
-	{
-		val = val * 10 + (*line - 48);
-		if (val >= IDX_MOD)
-			val %= IDX_MOD;
-		++line;
-	}
-	if (*line && *line != SEPARATOR_CHAR && !IS_BLANK(*line))
-		error("Syntax error in parameter value");
-	return (val * sign);
-}
 
 static char		*get_label_link(char *line)
 {
@@ -88,7 +64,7 @@ static void		get_parameter(t_opcode_param *param, char *line)
 	if (*line == LABEL_CHAR)
 		param->link = get_label_link(line + 1);
 	else
-		param->value = get_dir_indir_value(line);
+		param->value = ft_atoi(line);
 }
 
 t_opcode_param	*parse_parameter(char *line)

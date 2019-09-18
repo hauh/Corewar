@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 20:41:49 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 22:50:24 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 17:38:14 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	print_list(t_warrior *warrior)
 	{
 
 		printf("type: %s\n", types[list->type]);
-		printf("size %d, x %d, y %d\n",list->size, list->x, list->y);
+		printf("size %zu, x %d, y %d\n", list->size, list->x, list->y);
 		printf("label: %s\n", list->label);
 		printf("code: %x\n", list->param_code);
 		int i = 0;

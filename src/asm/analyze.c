@@ -6,17 +6,19 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/17 22:15:07 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/18 21:41:24 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static void	evaluate_sizes(t_opcode *list)
+static int	evaluate_sizes(t_opcode *list)
 {
+	int total;
 	int size;
 	int i;
 
+	total = 0;
 	while (list)
 	{
 		size = 1 + (list->type != crw_live && list->type != crw_zjmp
@@ -27,7 +29,8 @@ static void	evaluate_sizes(t_opcode *list)
 			{
 				if (list->param[i]->type == crw_registry)
 					size += T_REG;
-				else if (list->type == crw_zjmp || list->type == crw_ldi
+				else if (list->param[i]->type == crw_indirect
+						|| list->type == crw_zjmp || list->type == crw_ldi
 						|| list->type == crw_sti || list->type == crw_fork
 						|| list->type == crw_lld || list->type == crw_lfork)
 					size += T_DIR;
@@ -35,8 +38,10 @@ static void	evaluate_sizes(t_opcode *list)
 					size += T_DIR * 2;
 			}
 		list->size = size;
+		total += size;
 		list = list->next;
 	}
+	return (total);
 }
 
 static int	find_label(t_opcode *head, char *label_name)
@@ -66,7 +71,7 @@ static int	find_label(t_opcode *head, char *label_name)
 	return (0);
 }
 
-static void	set_indirect_lenghts(t_opcode *list)
+static void	set_link_lenghts(t_opcode *list)
 {
 	int i;
 
@@ -80,8 +85,8 @@ static void	set_indirect_lenghts(t_opcode *list)
 	}
 }
 
-void		analyze(t_opcode *list)
+void		analyze(t_warrior *warrior)
 {
-	evaluate_sizes(list);
-	set_indirect_lenghts(list);
+	warrior->code_size = evaluate_sizes(warrior->program);
+	set_link_lenghts(warrior->program);
 }
