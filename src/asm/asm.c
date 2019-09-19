@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 00:33:22 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 17:45:07 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,20 @@ static void	cleanup(t_warrior *warrior)
 
 int			main(int argc, char **argv)
 {
-	t_warrior *warrior;
+	t_warrior	*warrior;
+	int			i;
 
-	if (argc != 2)
+	if (argc == 1)
 		error("Usage: asm file.s");
-	warrior = parse_file(open_file(argv[1]));
-	analyze_sizes(warrior);
-	assemble(warrior);
-	build_file(warrior, argv[1]);
-	cleanup(warrior);
+	i = 1;
+	while (i < argc)
+	{
+		warrior = parse_file(open_file(argv[i]));
+		analyze_sizes(warrior);
+		assemble(warrior);
+		build_file(warrior, argv[i]);
+		cleanup(warrior);
+		++i;
+	}
 	return (0);
 }
