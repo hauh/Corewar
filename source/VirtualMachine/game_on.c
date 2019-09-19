@@ -6,28 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 16:05:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/19 17:44:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
-
-void	reg_write(unsigned char *reg, void *data, int num_reg, int data_size)
-{
-	int iter;
-
-	iter = REG_SIZE * num_reg;
-	while (--iter >= REG_SIZE * (num_reg - 1))
-		reg[iter] = ((unsigned char *)data)[--data_size];
-}
-
-void	reg_read(unsigned char *reg , int num_reg, unsigned char *where int data_location)
-{
-	int iter;
-
-	iter = REG_SIZE * num_reg;
-	while (--iter >= REG_SIZE * (num_reg - 1))
-}
 
 int get_waiting_time(int command)
 {
@@ -87,43 +70,76 @@ void	introduce_players(corewar_t *game)
 	}
 }
 
-int		get_reg(char data)
-{
-	return ((int)data);
-}
-
-int 	recomp_addr(arena_t *arena, int location)
+int		conversetion_bytes_to_int(unsigned char *data, int amount)
 {
 	int total;
 	int iter;
+	int bias;
 
 	total = 0;
 	iter = 0;
-	while (iter < 4)
+	if (amount == 4)
 	{
-		total |= arena->field[location--] << (8 * iter);
-		++iter;
+		bias = 3;
+		while (iter < amound)
+		{
+			total |= data[iter] << (bias * 8);
+			++iter;
+			--bias;
+		}
+	}
+	else
+	{
+		bias = 1;
+		whiel (iter < amount)
 	}
 	return (total);
 }
 
+void	check_carry(carriage_t *carriage)
+{
+	int iter;
+	int carry_flag;
+
+	iter = 0;
+	carry_flag = 0;
+	while (iter < REG_SIZE)
+	{
+		if (carriage->reg_buf[iter] != 0)
+			carry_flag = 1;
+		++iter;
+	}
+	if (carry_flag)
+		carriage->carry_flag = 0;
+	else
+		carriage->carry_flag = 1;
+}
+
 void	ld_exec(corewar_t *game)
 {
-	if (game->arena->field[game->carriages->current_location + 1] >> 4 == 2)
-		reg_write(game->carriages->registers,
-		game->arena->field[game->carriages->current_location + 5],
-		get_reg(game->arena->field[game->carriages->current_location + 6]), 4);
-	else if (game->arena->field[game->carriages->current_location + 1] >> 4 == 3)
-		reg_write(game->carriages->registers,
-		game->arena->field[game->carriages->current_location + recomp_addr(game->arena, game->carriages->current_location + 5) + 4],
-		get_reg(game->arena->field[game->carriages->current_location + 6]), 4);
+	if (game->arena->field[game->carriages->current_location + 1] >> 4 == DIR_CODE)
+	{
+		read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 2, 4);
+		check_carry(game->carriages);
+		write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + 6]);
+	}
+	else if (game->arena->field[game->carriages->current_location + 1] >> 4 == IND_CODE)
+	{
+		read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 2, 2);
+		read_from_arena_to_buf(game->carriages, game->arena->field, (game->carriages->current_location + conversetion_bytes_to_int(game->carriages->reg_buf, 2)) % IDX_MOD, 4);
+		check_carry(game->carriages);
+		write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + 6]);
+	}
 	else
 		printf("Bug!\n");
 }
 
 void	st_exec(corewar_t *game)
 {
-
+	if ((game->arena->field[game->carriages->current_location + 1] << 4) >> 2 == REG_CODE)
+	{
+		read_from_reg_to_buf(game->carriages, (int)game->arena->field[game->carriages->current_location])
+	}
 }
 
 void	start_execution(corewar_t *game)

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/18 21:22:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/19 17:15:55 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void			carriages_init(corewar_t *game)
 		game->carriages->id = game->players[iter]->id * CARRIAGE_ID_STEP;
 		game->carriages->player_id = game->players[iter]->id;
 		game->carriages->carry_flag = 0;
-		game->carriages->last_live_loop = 0;
-		game->carriages->waiting_time = 0;
 		game->carriages->step_bytes = 0;
+		game->carriages->waiting_time = 0;
+		game->carriages->last_live_loop = 0;
 		game->carriages->current_command = 0;
 		game->carriages->current_location = 0;
 		reg_write(game->carriages->registers, &game->players[iter]->id, 1, 4);
