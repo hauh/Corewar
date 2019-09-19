@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/17 21:24:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:02:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void		players_init(corewar_t *game, char **argv)
 	int		fd;
 
 	iter = 0;
-	while (iter <= game->players_amount)
+	while (iter < game->players_amount)
 	{
 		if ((fd = open(argv[game->players_indicies[iter]], O_RDONLY)) < 0)
 			exit(fd);

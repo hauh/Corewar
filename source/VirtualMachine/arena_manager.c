@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/17 21:24:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/19 12:58:20 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		print_arena(corewar_t *game)
 	i		= 0;
 	while (i < MEM_SIZE)
 	{
-		printf("%.2x | ", game->arena[i]);
+		printf("%.2x | ", game->arena->field[i]);
 		if ((i + 1) % border == 0 && i > 10)
 			printf("\n");
 		++i;
@@ -40,12 +40,12 @@ int				arrange_units(corewar_t *game)
 	{
 		arena_carriage = memory_step * iter;
 		game->players[iter]->reading_carriage = 0;
-		add_carriage(game->carriage_list, new_carriage(game->players[iter]->id, game->players[iter]->id, arena_carriage, game->players[iter]->code[game->players[iter]->reading_carriage], get_waiting_time(game->players[iter]->code[game->players[iter]->reading_carriage]), ));
+		game->carriages->current_location = arena_carriage;
 		while (arena_carriage < memory_step * iter + CHAMP_MAX_SIZE)
-			game->arena[arena_carriage++] = game->players[iter]->code[game->players[iter]->reading_carriage++];
+			game->arena->field[arena_carriage++] = game->players[iter]->code[game->players[iter]->reading_carriage++];
 		++iter;
 	}
-	print_arena(game);
+	//print_arena(game);
 	return (0);
 }
 
