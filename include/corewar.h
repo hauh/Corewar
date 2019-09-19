@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 17:41:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:33:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ typedef enum				byte_blocks_e
 #define LLDI				0x0e
 #define LFORK				0x0f
 #define AFF					0x10
+
+#define FIRST_ARG			1
+#define SECOND_ARG			2
+#define THIRD_ARG			3
 
 typedef struct				player_s
 {
@@ -141,6 +145,13 @@ void						write_from_buf_to_reg(carriage_t *carriage, int reg_num);
 void						read_from_arena_to_buf(carriage_t *carriage, unsigned char *arena, int data_location, int amount);
 void						read_from_reg_to_buf(carriage_t *carriage, int reg_num);
 void						write_from_buf_to_arena(carriage_t *carriage, unsigned char *arena, int data_location);
+void						conversetion_int_to_bytes(unsigned char *dst, int number);
+void						ld_exec(corewar_t *game);
+void						st_exec(corewar_t *game);
+void						add_exec(corewar_t *game);
+void						sub_exec(corewar_t *game);
+void						and_exec(corewar_t *game);
+void						check_carry(carriage_t *carriage);
 
 #endif
 // 1	0x01	live	T_DIR					—						—				Нет	Нет		4	10	alive

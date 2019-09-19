@@ -6,11 +6,26 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 17:15:55 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:33:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
+
+void			conversetion_int_to_bytes(unsigned char *dst, int number)
+{
+	int iter;
+	int bias;
+
+	iter = 0;
+	bias = 3;
+	while (iter < REG_SIZE)
+	{
+		dst[iter] = number & (0xff << bias);
+		++iter;
+		--bias;
+	}
+}
 
 void			carriage_init(corewar_t *game)
 {
@@ -49,8 +64,8 @@ void			carriages_init(corewar_t *game)
 		game->carriages->last_live_loop = 0;
 		game->carriages->current_command = 0;
 		game->carriages->current_location = 0;
-		reg_write(game->carriages->registers, &game->players[iter]->id, 1, 4);
-		game->players[iter]->carriage_id = game->carriages->id;
+		ft_memset(game->carriages->reg_buf, 0, REG_SIZE);
+		conversetion_int_to_bytes(game->carriages->reg_buf, game->players[iter]->id);
 		++iter;
 	}
 }
