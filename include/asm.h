@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 00:37:08 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/19 19:23:23 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,6 @@ t_opcode_param	*parse_parameter(char *line);
 
 void			analyze_sizes(t_warrior *list);
 void			assemble(t_warrior *warrior);
+void			disassemble(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 16:46:19 by smorty            #+#    #+#              #
-#    Updated: 2019/09/19 00:44:36 by smorty           ###   ########.fr        #
+#    Updated: 2019/09/19 19:20:25 by smorty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ LFT_PRINTF_DIR := $(SRC_DIR)/ft_printf
 
 HEADERS_DIR := include $(LFT_DIR) $(LFT_PRINTF_DIR)/includes
 
-SRC_ASM := asm.c read_input.c parse_file.c parse_title.c parse_label.c parse_opcode.c parse_parameter.c analyze_sizes.c assemble.c
+SRC_ASM := asm.c read_input.c parse_file.c parse_title.c parse_label.c parse_opcode.c parse_parameter.c analyze_sizes.c assemble.c disassemble.c
 
 SRC_COREWAR :=
 
