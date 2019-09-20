@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 20:33:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:52:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,18 @@ typedef struct				memory_status_s
 	int						carriage_list_detect;
 	int						players_detect;
 	int						indicies_detect;
+	int						command_detect;
 }							memory_status_t;
+
+typedef struct				commands_s
+{
+	unsigned int			id;
+	unsigned int			first_arg;
+	unsigned int			second_arg;
+	unsigned int			third_arg;
+	unsigned char			type_args;
+	void					(*function)(corewar_t *);
+}							commands_t;
 
 typedef struct				args_s
 {
@@ -120,6 +131,7 @@ typedef struct				corewar_s
 	carriage_t				*carriages;
 	player_t				*players[MAX_PLAYERS];
 	memory_status_t			memory_status;
+	commands_t				*available_command;
 	int						*players_indicies;
 	int						players_amount;
 }							corewar_t;
@@ -152,6 +164,7 @@ void						add_exec(corewar_t *game);
 void						sub_exec(corewar_t *game);
 void						and_exec(corewar_t *game);
 void						check_carry(carriage_t *carriage);
+int							conversetion_bytes_to_int(unsigned char *data, int amount);
 
 #endif
 // 1	0x01	live	T_DIR					—						—				Нет	Нет		4	10	alive

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 19:01:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:46:01 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ void			args_init(corewar_t *game, char **argv, int argc)
 		--argc;
 	}
 	game->args = new_args;
+}
+
+void			command_init(corewar_t *game)
+{
+	commands_t	*new_commands;
 }
 
 void			game_init(corewar_t **game, char **argv, int argc)

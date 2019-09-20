@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 20:27:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:42:54 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,16 @@ void	delete_carriage(corewar_t *game, carriage_t **tmp)
 			}
 		}
 	}
+}
+
+void	rule_check(corewar_t *game)
+{
+	;
+}
+
+void	set_command(corewar_t *game)
+{
+	game->carriages->current_command = game->arena->field[game->carriages->current_location];
 }
 
 int		here_we_go(corewar_t *game)

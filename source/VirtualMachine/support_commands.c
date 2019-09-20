@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 21:57:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:40:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,10 @@ void	xor_exec(corewar_t *game)
 
 void	zjmp_exec(corewar_t *game)
 {
-	;
+	if (game->carriages->carry == 1)
+	{
+
+		game->carriages->curre
 }
 
 void	ldi_exec(corewar_t *game)
@@ -420,5 +423,9 @@ void	lfork_exec(corewar_t *game)
 
 void	aff_exec(corewar_t *game)
 {
-	;
+	int result;
+
+	read_from_reg_to_buf(game->carriages, (int)game->arena->field[game->carriages->current_location + 1]);
+	result = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
+	printf("%c", (char)result);
 }
