@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/19 20:33:30 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 18:40:37 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,17 @@ int				arrange_units(corewar_t *game)
 			game->arena->field[arena_carriage++] = game->players[iter]->code[game->players[iter]->reading_carriage++];
 		++iter;
 	}
-	//print_arena(game);
 	return (0);
 }
 
-void			arena_init(corewar_t *game)
+void			initialization_arena(corewar_t *game)
 {
 	arena_t		*new_arena;
 
 	if (!(new_arena = (arena_t *)malloc(sizeof(arena_t))))
-		exit(-1);
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
 	if (!(new_arena->field = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
-		exit(-1);
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
 	game->memory_status.arena_detect = TRUE;
 	ft_memset(new_arena->field, 0, MEM_SIZE);
 	new_arena->last_survivor	= game->players[game->players_amount - 1];

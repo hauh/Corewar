@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/20 14:42:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 15:27:37 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ void	rule_check(corewar_t *game)
 void	set_command(corewar_t *game)
 {
 	game->carriages->current_command = game->arena->field[game->carriages->current_location];
+
 }
 
 int		here_we_go(corewar_t *game)

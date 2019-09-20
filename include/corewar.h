@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/20 14:52:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/20 18:56:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/libft/includes/libft.h"
+#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/ft_printf/includes/ft_printf.h"
 
 typedef enum				byte_blocks_e
 {
@@ -30,6 +31,30 @@ typedef enum				byte_blocks_e
 	COMMENT					= CODE_SIZE + COMMENT_LENGTH,
 	CODE					= COMMENT + NULL_SEPARATOR + CHAMP_MAX_SIZE
 }							byte_blocks_t;
+
+/*
+**	-------------------------
+**	Defines for error_catcher
+*/
+
+#define MEMORY_ALLOC_ERROR	1
+#define NOT_VALID_ARG		2
+#define OPEN_FILE_ERROR		3
+#define READ_FILE_ERROR		4
+#define INCORRECT_BINARY	5
+#define TOO_BIG_SIZE		6
+#define CHEAT_DETECT		7
+
+#define DESTRUCTOR			"Destructor"
+#define GAME				"Game"
+#define KEYS				"Keys"
+#define PLAYER				"Player"
+#define CARRIAGE			"Carriage"
+#define ARENA				"Arena"
+
+/*
+** ---------------------------
+*/
 
 #define TRUE				1
 #define FALSE				0
@@ -59,28 +84,39 @@ typedef enum				byte_blocks_e
 typedef struct				player_s
 {
 	int						id;
+	int						code_size;
 	int						carriage_id;
-	int						reading_carriage;
 	int						binary_label;
-	unsigned int			code_size;
-	unsigned char			*name;
-	unsigned char			*comment;
 	unsigned char			*code;
-	unsigned char			*player_source;
+	unsigned char			*name;
+	unsigned char			*source;
+	unsigned char			*comment;
+	struct player_s			*next;
+	struct player_s			*prev;
 }							player_t;
+
+typedef struct				command_s
+{
+	unsigned int			id;
+	unsigned int			first_arg;
+	unsigned int			second_arg;
+	unsigned int			third_arg;
+	unsigned char			type_args;
+	//void					(*function)(corewar_t *);
+}							command_t;
 
 typedef struct				carriage_s
 {
 	int						id;
 	int						player_id;
 	int						carry_flag;
-	int						last_live_loop;
 	int						waiting_time;
-	int						step_bytes;
-	unsigned int			current_command;
-	unsigned int			current_location;
-	unsigned char			reg_buf[REG_SIZE];
+	int						last_live_loop;
+	int						next_command_location;
+	int						current_location;
+	unsigned char			*reg_buf;
 	unsigned char			*registers;
+	command_t				*current_command;
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
 }							carriage_t;
@@ -95,61 +131,46 @@ typedef struct				arena_s
 	int						live_amount;
 }							arena_t;
 
-typedef struct				memory_status_s
+typedef struct				destructor_s
 {
+	int						keys_detect;
+	int						self_detect;
+	int						game_detect;
 	int						arena_detect;
-	int						args_detect;
-	int						carriage_list_detect;
 	int						players_detect;
-	int						indicies_detect;
-	int						command_detect;
-}							memory_status_t;
+	int						commands_detect;
+	int						carriages_detect;
+}							destructor_t;
 
-typedef struct				commands_s
+typedef struct				key_s
 {
-	unsigned int			id;
-	unsigned int			first_arg;
-	unsigned int			second_arg;
-	unsigned int			third_arg;
-	unsigned char			type_args;
-	void					(*function)(corewar_t *);
-}							commands_t;
-
-typedef struct				args_s
-{
-	int						custom_id;
-	int						concurance_cpu;
-	int						concurance_gpu;
-	int						visualizator;
-	int						extended_param;
-}							args_t;
+	unsigned int			custom_id;
+	unsigned int			concurance_cpu;
+	unsigned int			concurance_gpu;
+	unsigned int			visualizator;
+	unsigned int			extended_param;
+}							key_t;
 
 typedef struct				corewar_s
 {
-	arena_t					*arena;
-	args_t					*args;
-	carriage_t				*carriages;
-	player_t				*players[MAX_PLAYERS];
-	memory_status_t			memory_status;
-	commands_t				*available_command;
-	int						*players_indicies;
 	int						players_amount;
+	int						carriages_amount;
+	int						commands_amount;
+	key_t					*keys;
+	arena_t					*arena;
+	player_t				*players;
+	command_t				*commands;
+	carriage_t				*carriages;
+	destructor_t			*destructor;
 }							corewar_t;
 
-carriage_t					*new_carriage(int owner, int id, int current_location, int current_command, int waiting_time, int step_bytes);
-void						init_carriage(corewar_t *game);
 void						validate_player(player_t *player);
-player_t					*player_init(int player_id);
 void						build_player(player_t *player);
 void						check_arguments(int argc, char **argv);
 void						print_arena(corewar_t *game);
 int							arrange_units(corewar_t *game);
 int							get_waiting_time(int command);
 void						players_init(corewar_t *game, char **argv);
-void						arena_init(corewar_t *game);
-void						args_init(corewar_t *game, char **argv, int argc);
-void						clean_up(corewar_t *game);
-void						carriages_init(corewar_t *game);
 void						introduce_players(corewar_t *game);
 int							here_we_go(corewar_t *game);
 void						print_arena(corewar_t *game);
@@ -165,6 +186,10 @@ void						sub_exec(corewar_t *game);
 void						and_exec(corewar_t *game);
 void						check_carry(carriage_t *carriage);
 int							conversetion_bytes_to_int(unsigned char *data, int amount);
+void						error_catcher(int error_code, const char *section);
+void						initialization_players(corewar_t *game, char **argv, int argc);
+void						initialization_carriages(corewar_t *game);
+void						initialization_arena(corewar_t *game);
 
 #endif
 // 1	0x01	live	T_DIR					—						—				Нет	Нет		4	10	alive
