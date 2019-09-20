@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 19:24:22 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/21 00:46:53 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int			main(int argc, char **argv)
 	if (argc == 1)
 		error("Usage: asm file.s");
 	i = 1;
-	while (0 && i < argc)
+	argc = 0;
+	while (i < argc)
 	{
 		warrior = parse_file(open_file(argv[i]));
 		analyze_sizes(warrior);
