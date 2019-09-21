@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/09/21 19:58:39 by vrichese         ###   ########.fr        #
+#    Updated: 2019/09/21 20:11:04 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ SOURCE			:=		arena_manager.c\
 							carriage_manager.c\
 							corewar.c\
 							error_manager.c\
-							game_on.c\
 							memory_manager.c\
 							player_manager.c\
 							support_commands.c
@@ -43,7 +42,7 @@ vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
-	gcc $(OBJ_WITH_DIR) -o $@ $(DIR_LIB)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+	gcc $(OBJ_WITH_DIR) -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 
 $(OBJ):%.o:%.c $(HEADERS) | $(DIR_BIN)
 	gcc -c $< $(addprefix -I , $(HEADERS)) -o $(DIR_BIN)$@
@@ -52,7 +51,7 @@ $(DIR_BIN):
 	mkdir -p $@
 
 $(LIBFT):
-	make -C $(DIR_LIB)
+	make -C $(DIR_LIBFT)
 
 $(LIBFTPRINTF):
 	make -C $(DIR_PRINTF)
@@ -60,7 +59,7 @@ $(LIBFTPRINTF):
 clean:
 	rm -rf $(OBJ_WITH_DIR)
 	rm -rf $(DIR_BIN)
-	make -C $(DIR_LIB) clean
+	make -C $(DIR_LIBFT) clean
 	make -C $(DIR_PRINTF) clean
 
 fclean: clean
@@ -71,4 +70,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re
-#.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
+.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
