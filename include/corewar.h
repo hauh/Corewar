@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 20:10:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:20:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/libft/includes/libft.h"
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/ft_printf/includes/ft_printf.h"
+#include "libft.h"
+#include "ft_printf.h"
 
 typedef enum				byte_blocks_e
 {
@@ -228,21 +228,6 @@ void						error_catcher				(int error_code, const char *section);
 void						initialization_players		(corewar_t *game, char **argv, int argc);
 void						initialization_carriages	(corewar_t *game);
 void						initialization_arena		(corewar_t *game);
+void						initialization_commands		(corewar_t *game);
 
 #endif
-// 1	0x01	live	T_DIR					—						—				Нет	Нет		4	10	alive
-// 2	0x02	ld		T_DIR / T_IND			T_REG					—				Да	Есть	4	5	load
-// 3	0x03	st		T_REG					T_REG / T_IND			—				Нет	Есть	4	5	store
-// 4	0x04	add		T_REG					T_REG					T_REG			Да	Есть	4	10	addition
-// 5	0x05	sub		T_REG					T_REG					T_REG			Да	Есть	4	10	subtraction
-// 6	0x06	and		T_REG / T_DIR / T_IND	T_REG / T_DIR / T_IND	T_REG			Да	Есть	4	6	bitwise AND (&)
-// 7	0x07	or		T_REG / T_DIR / T_IND	T_REG / T_DIR / T_IND	T_REG			Да	Есть	4	6	bitwise OR (|)
-// 8	0x08	xor		T_REG / T_DIR / T_IND	T_REG / T_DIR / T_IND	T_REG			Да	Есть	4	6	bitwise XOR (^)
-// 9	0x09	zjmp	T_DIR					—						—				Нет	Нет		2	20	jump if non-zero
-// 10	0x0a	ldi		T_REG / T_DIR / T_IND	T_REG / T_DIR			T_REG			Нет	Есть	2	25	load index
-// 11	0x0b	sti		T_REG					T_REG / T_DIR / T_IND	T_REG / T_DIR	Нет	Есть	2	25	store index
-// 12	0x0c	fork	T_DIR					—						—				Нет	Нет		2	800	fork
-// 13	0x0d	lld		T_DIR / T_IND			T_REG					—				Да	Есть	4	10	long load
-// 14	0x0e	lldi	T_REG / T_DIR / T_IND	T_REG / T_DIR			T_REG			Да	Есть	2	50	long load index
-// 15	0x0f	lfork	T_DIR					—						—				Нет	Нет		2	1000long fork
-// 16	0x10	aff		T_REG					—						—				Нет	Есть	4	2	aff

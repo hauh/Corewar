@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 17:12:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 20:14:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
+#include "corewar.h"
 
 void			initialization_carriage(corewar_t *game)
 {

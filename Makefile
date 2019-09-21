@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/09/21 20:11:04 by vrichese         ###   ########.fr        #
+#    Updated: 2019/09/21 20:27:41 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,13 @@ DIR_INCLUDE		:=		include/
 DIR_BIN			:=		bin/
 
 SOURCE			:=		arena_manager.c\
-							carriage_manager.c\
+							game_on.c\
 							corewar.c\
 							error_manager.c\
 							memory_manager.c\
 							player_manager.c\
+							command_manager.c\
+							carriage_manager.c\
 							support_commands.c
 
 HEADERS			:=		corewar.h op.h
@@ -45,7 +47,7 @@ $(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
 	gcc $(OBJ_WITH_DIR) -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 
 $(OBJ):%.o:%.c $(HEADERS) | $(DIR_BIN)
-	gcc -c $< $(addprefix -I , $(HEADERS)) -o $(DIR_BIN)$@
+	gcc -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
 
 $(DIR_BIN):
 	mkdir -p $@
@@ -70,4 +72,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re
-.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
+#.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re

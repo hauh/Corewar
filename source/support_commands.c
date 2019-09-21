@@ -6,11 +6,39 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 20:10:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:35:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
+#include "corewar.h"
+
+player_t	*find_player(corewar_t *game, int id)
+{
+	player_t	*iter;
+
+	iter = game->players;
+	while (iter)
+	{
+		if (iter->id == id)
+			return (iter);
+		iter = iter->next;
+	}
+	return (NULL);
+}
+
+void	copy_reg(carriage_t *from, carriage_t *to)
+{
+	int iter;
+
+	iter = 0;
+	if (!(from->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_SIZE * REG_NUMBER)))
+		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+	while (iter < REG_NUMBER * REG_SIZE)
+	{
+		from->registers[iter] = to->registers[iter];
+		++iter;
+	}
+}
 
 int		get_arg(corewar_t *game, int requesting_argument)
 {
@@ -38,7 +66,8 @@ void	live_exec(corewar_t *game)
 	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 4);
 	live2 = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
 	if (-live == live2)
-		game->arena->last_survivor = game->c
+		game->arena->last_survivor = find_player(game, live2);
+	++game->arena->live_amount_in_ctd;
 }
 
 void	ld_exec(corewar_t *game)
@@ -269,11 +298,11 @@ void	xor_exec(corewar_t *game)
 
 void	zjmp_exec(corewar_t *game)
 {
-	//if (game->carriages->carry == 1)
-	//{
-//
-	//	game->carriages->curre
-	;
+	int step;
+
+	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 2);
+	step = conversetion_bytes_to_int(game->carriages->reg_buf, 2);
+	game->carriages->current_location += step;
 }
 
 void	ldi_exec(corewar_t *game)
@@ -362,7 +391,30 @@ void	sti_exec(corewar_t *game)
 
 void	fork_exec(corewar_t *game)
 {
-	;
+	carriage_t	*new_carriage;
+	carriage_t	*iter;
+
+	if (!(new_carriage		= (carriage_t *)malloc(sizeof(carriage_t))))
+		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+	if (!(new_carriage->reg_buf = (unsigned char *)malloc(sizeof(unsigned char))))
+		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+	ft_memset(new_carriage, 0, REG_SIZE);
+	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 2);
+	new_carriage->id					= game->carriages->id;
+	new_carriage->player_id				= game->carriages->id;
+	new_carriage->carry_flag			= game->carriages->carry_flag;
+	new_carriage->waiting_time			= FALSE;
+	new_carriage->last_live_loop		= game->carriages->last_live_loop;
+	new_carriage->next_command_location	= FALSE;
+	new_carriage->current_location		= conversetion_bytes_to_int(game->carriages->reg_buf, 2) % IDX_MOD;
+	new_carriage->current_command		= NULL;
+	iter = game->carriages;
+	while (iter->prev)
+		iter = iter->prev;
+	new_carriage->prev = NULL;
+	new_carriage->next = iter;
+	iter->prev = new_carriage;
+	copy_reg(game->carriages, new_carriage);
 }
 
 void	lld_exec(corewar_t *game)
@@ -429,7 +481,30 @@ void	lldi_exec(corewar_t *game)
 
 void	lfork_exec(corewar_t *game)
 {
-	;
+	carriage_t	*new_carriage;
+	carriage_t	*iter;
+
+	if (!(new_carriage		= (carriage_t *)malloc(sizeof(carriage_t))))
+		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+	if (!(new_carriage->reg_buf = (unsigned char *)malloc(sizeof(unsigned char))))
+		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+	ft_memset(new_carriage, 0, REG_SIZE);
+	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 2);
+	new_carriage->id					= game->carriages->id;
+	new_carriage->player_id				= game->carriages->id;
+	new_carriage->carry_flag			= game->carriages->carry_flag;
+	new_carriage->waiting_time			= FALSE;
+	new_carriage->last_live_loop		= game->carriages->last_live_loop;
+	new_carriage->next_command_location	= FALSE;
+	new_carriage->current_location		= game->carriages->current_location + conversetion_bytes_to_int(game->carriages->reg_buf, 2);
+	new_carriage->current_command		= NULL;
+	iter = game->carriages;
+	while (iter->prev)
+		iter = iter->prev;
+	new_carriage->prev = NULL;
+	new_carriage->next = iter;
+	iter->prev = new_carriage;
+	copy_reg(game->carriages, new_carriage);
 }
 
 void	aff_exec(corewar_t *game)

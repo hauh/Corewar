@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 19:22:55 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:33:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
+#include "corewar.h"
 
 int				compute_sum(char target, int trim_byte)
 {
@@ -71,26 +71,25 @@ void			start_checking(corewar_t *game)
 	tmp = game->carriages;
 	while (game->carriages)
 	{
-		if (game->carriages->last_live_loop >= game->arena->cycle_to_die)
+		if (game->arena->loop_amount - game->carriages->last_live_loop >= game->arena->cycle_to_die)
 			delete_carriage(game, &tmp);
 		if (game->arena->cycle_to_die <= 0)
 			delete_carriage(game, &tmp);
 		if (game->carriages)
 			game->carriages = game->carriages->next;
 	}
-	if (game->arena->live_amount_in_ctd >= NBR_LIVE || game->arena->check_amount >= MAX_CHECKS)
+	if (game->arena->live_amount_in_ctd >= NBR_LIVE)
 	{
 		game->arena->cycle_to_die -= CYCLE_DELTA;
-		if (game->arena->check_amount >= MAX_CHECKS)
-			game->arena->check_amount = 0;
-		else
-		{
-			game->arena->live_amount = 0;
-			game->arena->check_amount = 0;
-		}
+		game->arena->check_amount = 0;
 	}
 	else
-		game->arena->check_amount += 1;
+		++game->arena->check_amount;
+	if (game->arena->check_amount >= MAX_CHECKS)
+	{
+		game->arena->check_amount = 0;
+		game->arena->cycle_to_die -= CYCLE_DELTA;
+	}
 }
 
 void			here_we_go(corewar_t *game)
