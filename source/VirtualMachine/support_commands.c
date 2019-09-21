@@ -6,21 +6,36 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/20 15:27:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 17:25:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
 
-void		live_exec(corewar_t *game)
+int		get_arg(corewar_t *game, int requesting_argument)
+{
+	int bytes_of_type;
+
+	bytes_of_type = game->arena->field[game->carriages->current_location + 1];
+	if (requesting_argument == FIRST_ARG)
+		return ((bytes_of_type << 2) >> 6);
+	else if (requesting_argument == SECOND_ARG)
+		return ((bytes_of_type << 4) >> 6);
+	else if (requesting_argument == THIRD_ARG)
+		return ((bytes_of_type << 6) >> 6);
+	else
+		printf("Request of arg not valid\n"); exit(1);
+}
+
+void	live_exec(corewar_t *game)
 {
 	int live;
 	int live2;
 
 	read_from_reg_to_buf(game->carriages, 1);
-	live = conversetion_bytes_to_int(game->carriages, 4);
+	live = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
 	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 4);
-	live2 = conversetion_bytes_to_int(game->carriages, 4);
+	live2 = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
 	if (-live == live2)
 		game->carriages->last_live_loop = 0;
 }
@@ -259,10 +274,11 @@ void	xor_exec(corewar_t *game)
 
 void	zjmp_exec(corewar_t *game)
 {
-	if (game->carriages->carry == 1)
-	{
-
-		game->carriages->curre
+	//if (game->carriages->carry == 1)
+	//{
+//
+	//	game->carriages->curre
+	;
 }
 
 void	ldi_exec(corewar_t *game)
@@ -303,7 +319,7 @@ void	ldi_exec(corewar_t *game)
 		right_args = conversetion_bytes_to_int(game->carriages->reg_buf, 2);
 		step += 2;
 	}
-	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_command + (left_args + right_args) % IDX_MOD, 4);
+	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + (left_args + right_args) % IDX_MOD, 4);
 	write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + step]);
 }
 
@@ -412,7 +428,7 @@ void	lldi_exec(corewar_t *game)
 		right_args = conversetion_bytes_to_int(game->carriages->reg_buf, 2);
 		step += 2;
 	}
-	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_command + (left_args + right_args), 4);
+	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + (left_args + right_args), 4);
 	write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + step]);
 }
 

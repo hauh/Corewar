@@ -6,24 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/20 19:04:02 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 17:12:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
-
-void			conversetion_int_to_bytes(unsigned char *dst, int number)
-{
-	int iter;
-	int bias;
-
-	iter = 0;
-	while (iter < REG_SIZE)
-	{
-		dst[iter] = (number << (iter * 8)) >> 24;
-		++iter;
-	}
-}
 
 void			initialization_carriage(corewar_t *game)
 {

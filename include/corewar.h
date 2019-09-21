@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/20 18:56:09 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 17:30:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,28 @@ typedef enum				byte_blocks_e
 	CODE					= COMMENT + NULL_SEPARATOR + CHAMP_MAX_SIZE
 }							byte_blocks_t;
 
+#define	COMMAND_AMOUNT		16
+#define DIRECTION_SIZE		4
+#define SHORT_DIR_SIZE		2
+
+#define PUT_WAITING_TIME(x)	(x << 48)
+#define PUT_DIR_SIZE(x)		(x << 40)
+#define PUT_ID(x)			(x << 32)
+#define PUT_FIRST_ARG(x)	(x << 31)
+#define PUT_SECOND_ARG(x)	(x << 30)
+#define PUT_THIRD_ARG(x)	(x << 29)
+#define PUT_CHANGE_CARRY(x)	(x << 28)
+#define PUT_AVAI_TYPES(x)	(x << 27)
+
+#define GET_WAITING_TIME(x) (x >> 48)
+#define GET_DIR_SIZE(x)		(x << 16) >> 56
+#define GET_ID(x)			(x << 24) >> 56
+#define GET_FIRST_ARG(x)	(x << 32) >> 63
+#define GET_SECOND_ARG(x)	(x << 33) >> 63
+#define GET_THIRD_ARG(x)	(x << 34) >> 63
+#define GET_CHANGE_CARRY(x)	(x << 35) >> 63
+#define GET_AVAI_TYPES(x)	(x << 36) >> 63
+
 /*
 **	-------------------------
 **	Defines for error_catcher
@@ -44,6 +66,7 @@ typedef enum				byte_blocks_e
 #define INCORRECT_BINARY	5
 #define TOO_BIG_SIZE		6
 #define CHEAT_DETECT		7
+#define ARGS_AMOUN_ERROR	8
 
 #define DESTRUCTOR			"Destructor"
 #define GAME				"Game"
@@ -51,6 +74,8 @@ typedef enum				byte_blocks_e
 #define PLAYER				"Player"
 #define CARRIAGE			"Carriage"
 #define ARENA				"Arena"
+#define COMMAND				"Command"
+#define INIT				"Initialization"
 
 /*
 ** ---------------------------
@@ -81,6 +106,8 @@ typedef enum				byte_blocks_e
 #define SECOND_ARG			2
 #define THIRD_ARG			3
 
+typedef struct	corewar_s corewar_t;
+
 typedef struct				player_s
 {
 	int						id;
@@ -101,8 +128,11 @@ typedef struct				command_s
 	unsigned int			first_arg;
 	unsigned int			second_arg;
 	unsigned int			third_arg;
-	unsigned char			type_args;
-	//void					(*function)(corewar_t *);
+	unsigned int			dir_size;
+	unsigned int			change_carry;
+	unsigned int			waiting_time;
+	unsigned int			availability_types;
+	void					(*function)(corewar_t *);
 }							command_t;
 
 typedef struct				carriage_s
@@ -156,40 +186,52 @@ typedef struct				corewar_s
 	int						players_amount;
 	int						carriages_amount;
 	int						commands_amount;
+	int						pause;
 	key_t					*keys;
 	arena_t					*arena;
 	player_t				*players;
-	command_t				*commands;
+	command_t				*commands[COMMAND_AMOUNT + 1];
 	carriage_t				*carriages;
 	destructor_t			*destructor;
 }							corewar_t;
 
-void						validate_player(player_t *player);
-void						build_player(player_t *player);
-void						check_arguments(int argc, char **argv);
-void						print_arena(corewar_t *game);
-int							arrange_units(corewar_t *game);
-int							get_waiting_time(int command);
-void						players_init(corewar_t *game, char **argv);
-void						introduce_players(corewar_t *game);
-int							here_we_go(corewar_t *game);
-void						print_arena(corewar_t *game);
-void						write_from_buf_to_reg(carriage_t *carriage, int reg_num);
-void						read_from_arena_to_buf(carriage_t *carriage, unsigned char *arena, int data_location, int amount);
-void						read_from_reg_to_buf(carriage_t *carriage, int reg_num);
-void						write_from_buf_to_arena(carriage_t *carriage, unsigned char *arena, int data_location);
-void						conversetion_int_to_bytes(unsigned char *dst, int number);
-void						ld_exec(corewar_t *game);
-void						st_exec(corewar_t *game);
-void						add_exec(corewar_t *game);
-void						sub_exec(corewar_t *game);
-void						and_exec(corewar_t *game);
-void						check_carry(carriage_t *carriage);
-int							conversetion_bytes_to_int(unsigned char *data, int amount);
-void						error_catcher(int error_code, const char *section);
-void						initialization_players(corewar_t *game, char **argv, int argc);
-void						initialization_carriages(corewar_t *game);
-void						initialization_arena(corewar_t *game);
+void						validate_player				(player_t *player);
+void						build_player				(player_t *player);
+void						check_arguments				(int argc, char **argv);
+void						print_arena					(corewar_t *game);
+int							arrange_units				(corewar_t *game);
+int							get_waiting_time			(int command);
+void						players_init				(corewar_t *game, char **argv);
+void						introduce_players			(corewar_t *game);
+int							here_we_go					(corewar_t *game);
+void						print_arena					(corewar_t *game);
+void						write_from_buf_to_reg		(carriage_t *carriage, int reg_num);
+void						read_from_arena_to_buf		(carriage_t *carriage, unsigned char *arena, int data_location, int amount);
+void						read_from_reg_to_buf		(carriage_t *carriage, int reg_num);
+void						write_from_buf_to_arena		(carriage_t *carriage, unsigned char *arena, int data_location);
+void						conversetion_int_to_bytes	(unsigned char *dst, int number);
+void						live_exec					(corewar_t *game);
+void						ld_exec						(corewar_t *game);
+void						st_exec						(corewar_t *game);
+void						add_exec					(corewar_t *game);
+void						sub_exec					(corewar_t *game);
+void						and_exec					(corewar_t *game);
+void						or_exec						(corewar_t *game);
+void						xor_exec					(corewar_t *game);
+void						zjmp_exec					(corewar_t *game);
+void						ldi_exec					(corewar_t *game);
+void						sti_exec					(corewar_t *game);
+void						fork_exec					(corewar_t *game);
+void						lld_exec					(corewar_t *game);
+void						lldi_exec					(corewar_t *game);
+void						lfork_exec					(corewar_t *game);
+void						aff_exec					(corewar_t *game);
+void						check_carry					(carriage_t *carriage);
+int							conversetion_bytes_to_int	(unsigned char *data, int amount);
+void						error_catcher				(int error_code, const char *section);
+void						initialization_players		(corewar_t *game, char **argv, int argc);
+void						initialization_carriages	(corewar_t *game);
+void						initialization_arena		(corewar_t *game);
 
 #endif
 // 1	0x01	live	T_DIR					—						—				Нет	Нет		4	10	alive
