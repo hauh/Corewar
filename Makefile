@@ -6,41 +6,69 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/09/18 21:36:46 by vrichese         ###   ########.fr        #
+#    Updated: 2019/09/21 19:58:39 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME_ASM		:= asm
-NAME_GAME		:= corewar
-SRC_DIR			:= src
-OBJ_DIR			:= obj
-LFT_DIR			:= $(SRC_DIR)/libft
-HEADERS_DIR		:= include $(LFT_DIR)
-SRC_ASM			:= asm.c read_input.c parse_file.c parse_title.c parse_label.c parse_opcode.c parse_parameter.c analyze.c assemble.c temp.c
-SRC_COREWAR		:=
-OBJ_ASM			:= $(SRC_ASM:.c=.o)
-LFT				:= libft.a
-HEADERS			:= asm.h libft.h op.h
-CC := gcc -Wall -Werror -Wextra -g
-vpath %.c $(SRC_DIR) $(SRC_DIR)/asm $(SRC_DIR)/corewar
-vpath %.o $(OBJ_DIR)
-vpath %.h $(HEADERS_DIR)
-vpath %.a $(LFT_DIR)
-all: $(NAME_ASM)
-$(NAME_ASM): $(LFT) $(OBJ_ASM)
-    @$(CC) $(addprefix $(OBJ_DIR)/, $(OBJ_ASM)) $(INCLUDE) -lft -L $(LFT_DIR) -o $@
-    @printf "\r\e[J\e[32m$@\e[0m done!\n\e[?25h"
-$(OBJ_ASM): %.o: %.c $(HEADERS)
-    @mkdir -p $(OBJ_DIR)
-    @$(CC) -c $< $(addprefix -I,$(HEADERS_DIR)) -o $(OBJ_DIR)/$@
-    @printf "\r\e[?25l\e[Jcompiling \e[32m$(notdir $<)\e[0m"
-$(LFT):
-    @$(MAKE) -C $(LFT_DIR)
-    @$(MAKE) -C $(LFT_DIR) clean
+NAME			:=		corewar
+
+DIR_PRINTF		:=		ft_printf/
+DIR_LIBFT		:=		libft/
+DIR_SOURCE		:=		source/
+DIR_INCLUDE		:=		include/
+DIR_BIN			:=		bin/
+
+SOURCE			:=		arena_manager.c\
+							carriage_manager.c\
+							corewar.c\
+							error_manager.c\
+							game_on.c\
+							memory_manager.c\
+							player_manager.c\
+							support_commands.c
+
+HEADERS			:=		corewar.h op.h
+
+OBJ				:=		$(SOURCE:.c=.o)
+OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ))
+
+LIBFT			:=		libft.a
+LIBFTPRINTF		:=		libftprintf.a
+
+vpath %.c $(DIR_SOURCE)
+vpath %.h $(DIR_INCLUDE)
+vpath %.o $(DIR_BIN)
+vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
+
+all: $(NAME)
+
+$(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
+	gcc $(OBJ_WITH_DIR) -o $@ $(DIR_LIB)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+
+$(OBJ):%.o:%.c $(HEADERS) | $(DIR_BIN)
+	gcc -c $< $(addprefix -I , $(HEADERS)) -o $(DIR_BIN)$@
+
+$(DIR_BIN):
+	mkdir -p $@
+
+$(LIBFT):
+	make -C $(DIR_LIB)
+
+$(LIBFTPRINTF):
+	make -C $(DIR_PRINTF)
+
 clean:
-    @rm -rf $(OBJ_DIR)
-    @$(MAKE) -C $(LFT_DIR) fclean
+	rm -rf $(OBJ_WITH_DIR)
+	rm -rf $(DIR_BIN)
+	make -C $(DIR_LIB) clean
+	make -C $(DIR_PRINTF) clean
+
 fclean: clean
-    @rm -f $(NAME_ASM)
-    @rm -f $(NAME_COREWAR)
+	rm -rf $(NAME)
+	make -C $(DIR_LIBFT) fclean
+	make -C $(DIR_PRINTF) fclean
+
 re: fclean all
+
+.PHONY: clean fclean re
+#.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re

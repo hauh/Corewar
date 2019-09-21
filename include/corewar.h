@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 17:30:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:41:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ typedef struct				carriage_s
 	int						player_id;
 	int						carry_flag;
 	int						waiting_time;
-	int						last_live_loop;
+	int						last_live_loop; // -> lst-live
 	int						next_command_location;
 	int						current_location;
 	unsigned char			*reg_buf;
@@ -158,7 +158,7 @@ typedef struct				arena_s
 	unsigned long long		loop_amount;
 	int						check_amount;
 	int						cycle_to_die;
-	int						live_amount;
+	int						live_amount_in_ctd;
 }							arena_t;
 
 typedef struct				destructor_s
@@ -197,13 +197,9 @@ typedef struct				corewar_s
 
 void						validate_player				(player_t *player);
 void						build_player				(player_t *player);
-void						check_arguments				(int argc, char **argv);
-void						print_arena					(corewar_t *game);
-int							arrange_units				(corewar_t *game);
-int							get_waiting_time			(int command);
-void						players_init				(corewar_t *game, char **argv);
+void						arrange_units				(corewar_t *game);
 void						introduce_players			(corewar_t *game);
-int							here_we_go					(corewar_t *game);
+void						here_we_go					(corewar_t *game);
 void						print_arena					(corewar_t *game);
 void						write_from_buf_to_reg		(carriage_t *carriage, int reg_num);
 void						read_from_arena_to_buf		(carriage_t *carriage, unsigned char *arena, int data_location, int amount);

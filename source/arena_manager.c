@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 17:24:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:40:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
 
-void	introduce_players(corewar_t *game)
+void			introduce_players(corewar_t *game)
 {
 	player_t	*tmp;
 	int iter;
@@ -30,10 +30,10 @@ void	introduce_players(corewar_t *game)
 	}
 }
 
-void		print_arena(corewar_t *game)
+void			print_arena(corewar_t *game)
 {
-	int		border;
-	int		i;
+	int			border;
+	int			i;
 
 	border	= sqrt(MEM_SIZE);
 	i		= 0;
@@ -46,7 +46,7 @@ void		print_arena(corewar_t *game)
 	}
 }
 
-int				arrange_units(corewar_t *game)
+void			arrange_units(corewar_t *game)
 {
 	player_t	*tmp;
 	carriage_t 	*tmp2;
@@ -72,7 +72,6 @@ int				arrange_units(corewar_t *game)
 	}
 	game->players = tmp;
 	game->carriages = tmp2;
-	return (0);
 }
 
 void			initialization_arena(corewar_t *game)
@@ -86,7 +85,7 @@ void			initialization_arena(corewar_t *game)
 	ft_memset(new_arena->field, 0, MEM_SIZE);
 	new_arena->last_survivor		= game->players;
 	new_arena->loop_amount 			= 0;
-	new_arena->live_amount			= 0;
+	new_arena->live_amount_in_ctd	= 0;
 	new_arena->check_amount			= 0;
 	new_arena->cycle_to_die			= CYCLE_TO_DIE;
 	game->arena						= new_arena;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   corewar.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 18:22:27 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 19:18:58 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,8 +209,8 @@ int				main(int argc, char **argv)
 	initialization_carriages	(game);
 	initialization_arena		(game);
 	initialization_commands		(game);
-	print_arena(game);
-	introduce_players(game);
-	//here_we_go(game);
+	print_arena					(game);
+	introduce_players			(game);
+	here_we_go(game);
 	return (0);
 }

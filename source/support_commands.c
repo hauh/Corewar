@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 17:25:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 19:22:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,27 @@ void	live_exec(corewar_t *game)
 	int live;
 	int live2;
 
+	game->carriages->last_live_loop = game->arena->check_amount;
 	read_from_reg_to_buf(game->carriages, 1);
 	live = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
 	read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 1, 4);
 	live2 = conversetion_bytes_to_int(game->carriages->reg_buf, 4);
 	if (-live == live2)
-		game->carriages->last_live_loop = 0;
+		game->arena->last_survivor = game->c
 }
 
 void	ld_exec(corewar_t *game)
 {
 	if (get_arg(game, FIRST_ARG) == DIR_CODE)
-	{
 		read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 2, 4);
-		check_carry(game->carriages);
-		write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + 6]);
-	}
-	else if (get_arg(game, SECOND_ARG) == IND_CODE)
+	else if (get_arg(game, FIRST_ARG) == IND_CODE)
 	{
 		read_from_arena_to_buf(game->carriages, game->arena->field, game->carriages->current_location + 2, 2);
 		read_from_arena_to_buf(game->carriages, game->arena->field,
 		game->carriages->current_location + conversetion_bytes_to_int(game->carriages->reg_buf, 2) % IDX_MOD, 4);
-		check_carry(game->carriages);
-		write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + 6]);
 	}
-	else
-		printf("Bug!\n");
+	check_carry(game->carriages);
+	write_from_buf_to_reg(game->carriages, (int)game->arena->field[game->carriages->current_location + 6]);
 }
 
 void	st_exec(corewar_t *game)

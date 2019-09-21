@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 17:25:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/21 19:22:55 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,6 @@ int				compute_sum(char target, int trim_byte)
 		iter -= 2;
 	}
 	return (total);
-}
-
-void	check_carry(carriage_t *carriage)
-{
-	int iter;
-	int carry_flag;
-
-	iter = 0;
-	carry_flag = 0;
-	while (iter < REG_SIZE)
-	{
-		if (carriage->reg_buf[iter] != 0)
-			carry_flag = 1;
-		++iter;
-	}
-	if (carry_flag)
-		carriage->carry_flag = 0;
-	else
-		carriage->carry_flag = 1;
 }
 
 void	delete_carriage(corewar_t *game, carriage_t **tmp)
@@ -83,59 +64,64 @@ void	delete_carriage(corewar_t *game, carriage_t **tmp)
 	}
 }
 
-int		here_we_go(corewar_t *game)
+void			start_checking(corewar_t *game)
 {
 	carriage_t	*tmp;
 
-	while (1)
+	tmp = game->carriages;
+	while (game->carriages)
+	{
+		if (game->carriages->last_live_loop >= game->arena->cycle_to_die)
+			delete_carriage(game, &tmp);
+		if (game->arena->cycle_to_die <= 0)
+			delete_carriage(game, &tmp);
+		if (game->carriages)
+			game->carriages = game->carriages->next;
+	}
+	if (game->arena->live_amount_in_ctd >= NBR_LIVE || game->arena->check_amount >= MAX_CHECKS)
+	{
+		game->arena->cycle_to_die -= CYCLE_DELTA;
+		if (game->arena->check_amount >= MAX_CHECKS)
+			game->arena->check_amount = 0;
+		else
+		{
+			game->arena->live_amount = 0;
+			game->arena->check_amount = 0;
+		}
+	}
+	else
+		game->arena->check_amount += 1;
+}
+
+void			here_we_go(corewar_t *game)
+{
+	carriage_t	*tmp;
+
+	while (TRUE)
 	{
 		tmp = game->carriages;
-		if ((game->arena->loop_amount > 0 && game->arena->loop_amount % game->arena->cycle_to_die == 0) || game->arena->loop_amount <= 0)
-		{
-			while (game->carriages)
-			{
-				if (game->carriages->last_live_loop >= game->arena->cycle_to_die)
-					delete_carriage(game, &tmp);
-				if (game->arena->cycle_to_die <= 0)
-					delete_carriage(game, &tmp);
-				if (game->carriages)
-					game->carriages = game->carriages->next;
-			}
-			if (game->arena->live_amount >= NBR_LIVE || game->arena->check_amount >= MAX_CHECKS)
-			{
-				game->arena->cycle_to_die -= CYCLE_DELTA;
-				if (game->arena->check_amount >= MAX_CHECKS)
-					game->arena->check_amount = 0;
-				else
-				{
-					game->arena->live_amount = 0;
-					game->arena->check_amount = 0;
-				}
-			}
-			else
-				game->arena->check_amount += 1;
-			game->carriages = tmp;
-		}
+		if (!(game->arena->loop_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
+			start_checking(game);
 		while (game->carriages)
 		{
-			if (game->carriages->waiting_time == 0)
+			if (!game->carriages->waiting_time)
 			{
-				game->carriages->current_command = game->arena->field[game->carriages->current_location];
-				game->carriages->waiting_time = get_waiting_time(game->carriages->current_command);
+				game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
+				game->carriages->waiting_time = game->carriages->current_command->waiting_time;
 			}
-			if (game->carriages->waiting_time > 0)
-				game->carriages->waiting_time--;
-			if (game->carriages->waiting_time == 0)
-				start_execution(game);
+			if (game->carriages->waiting_time)
+				--game->carriages->waiting_time;
+			if (!game->carriages->waiting_time)
+				game->carriages->current_command->function(game);
 			game->carriages = game->carriages->next;
 		}
-		usleep(100000);
-		system("clear");
-		print_arena(game);
-		game->arena->loop_amount++;
+		++game->arena->loop_amount;
 		game->carriages = tmp;
 		if (!game->carriages)
 			break;
+		usleep(100000);
+		system("clear");
+		print_arena(game);
 	}
 	exit(1);
 }
