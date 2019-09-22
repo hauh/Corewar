@@ -1,0 +1,2 @@
+validate is working some sega and so on, many errors, the code isn't changing, need more carefully with command very big probability to make a mistake with memory
+don't forgot do bzero every time when i useing buffer for memory in each registers, it is so important

@@ -6,11 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 13:54:29 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/22 16:57:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/vrichese/Workspace/Rus42/Algorithms/Corewar/include/corewar.h"
+#include "corewar.h"
 
 void			validate_player(player_t *player)
 {
@@ -108,5 +108,7 @@ void			initialization_players(corewar_t *game, char **argv, int argc)
 		}
 		++iter;
 	}
+	if (game->players_amount < 1)
+		error_catcher(INVALID_PLAYERS, PLAYER);
 	game->destructor->players_detect = TRUE;
 }

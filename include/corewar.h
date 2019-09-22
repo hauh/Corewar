@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/21 21:20:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:10:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,28 @@ typedef enum				byte_blocks_e
 	CODE					= COMMENT + NULL_SEPARATOR + CHAMP_MAX_SIZE
 }							byte_blocks_t;
 
+#define	R1					1
+#define	R2					2
+#define	R3					3
+#define	R4					4
+#define	R5					5
+#define	R6					6
+#define	R7					7
+#define	R8					8
+#define	R9					9
+#define	R10					10
+#define	R11					11
+#define	R12					12
+#define	R13					13
+#define	R14					14
+#define	R15					15
+#define	R16					16
+
 #define	COMMAND_AMOUNT		16
 #define DIRECTION_SIZE		4
 #define SHORT_DIR_SIZE		2
+#define MOVE_TO_ARG			1
+#define REGISTR_SIZE		1
 
 #define PUT_WAITING_TIME(x)	(x << 48)
 #define PUT_DIR_SIZE(x)		(x << 40)
@@ -67,6 +86,7 @@ typedef enum				byte_blocks_e
 #define TOO_BIG_SIZE		6
 #define CHEAT_DETECT		7
 #define ARGS_AMOUN_ERROR	8
+#define INVALID_PLAYERS		9
 
 #define DESTRUCTOR			"Destructor"
 #define GAME				"Game"
@@ -144,7 +164,9 @@ typedef struct				carriage_s
 	int						last_live_loop; // -> lst-live
 	int						next_command_location;
 	int						current_location;
-	unsigned char			*reg_buf;
+	int						tmp_value;
+	unsigned char			*value_buf;
+	unsigned char			*address_buf;
 	unsigned char			*registers;
 	command_t				*current_command;
 	struct carriage_s		*next;
@@ -201,11 +223,13 @@ void						arrange_units				(corewar_t *game);
 void						introduce_players			(corewar_t *game);
 void						here_we_go					(corewar_t *game);
 void						print_arena					(corewar_t *game);
-void						write_from_buf_to_reg		(carriage_t *carriage, int reg_num);
-void						read_from_arena_to_buf		(carriage_t *carriage, unsigned char *arena, int data_location, int amount);
-void						read_from_reg_to_buf		(carriage_t *carriage, int reg_num);
-void						write_from_buf_to_arena		(carriage_t *carriage, unsigned char *arena, int data_location);
-void						conversetion_int_to_bytes	(unsigned char *dst, int number);
+void						conversetionIntToBytes		(unsigned char *buffer, int *from, int bias);
+void						conversetionBytesToInt		(unsigned char *buffer, int *dest, int bias);
+void						readFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
+void						readFromArenaToBuf			(unsigned char *buffer, unsigned char *field, int data_location, int bias);
+void						writeFromBufToReg			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
+void						writeFromBufToArena			(unsigned char *buffer, unsigned char *field, int data_location, int bias);
+void						check_carry					(unsigned char *buffer, int *carry);
 void						live_exec					(corewar_t *game);
 void						ld_exec						(corewar_t *game);
 void						st_exec						(corewar_t *game);
@@ -222,8 +246,6 @@ void						lld_exec					(corewar_t *game);
 void						lldi_exec					(corewar_t *game);
 void						lfork_exec					(corewar_t *game);
 void						aff_exec					(corewar_t *game);
-void						check_carry					(carriage_t *carriage);
-int							conversetion_bytes_to_int	(unsigned char *data, int amount);
 void						error_catcher				(int error_code, const char *section);
 void						initialization_players		(corewar_t *game, char **argv, int argc);
 void						initialization_carriages	(corewar_t *game);
