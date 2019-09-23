@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/22 19:30:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 16:38:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void			initialization_carriage(corewar_t *game)
 	new_carriage->current_command		= NULL;
 	new_carriage->current_location 		= FALSE;
 	new_carriage->next_command_location	= FALSE;
+	new_carriage->last_command			= NULL;
 	if (!game->carriages)
 	{
 		game->carriages = new_carriage;

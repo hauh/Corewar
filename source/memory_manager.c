@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/22 19:37:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 16:09:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	readFromRegToBuf(unsigned char *buffer, unsigned char *registers, int reg_n
 	ft_memset(buffer, 0, REG_SIZE);
 	while (bias < REG_SIZE)
 	{
-		buffer[bias] = registers[bias + ((reg_num + 1) * REG_SIZE)];
+		buffer[bias] = registers[bias + ((reg_num - 1) * REG_SIZE)];
 		++bias;
 	}
 }
@@ -70,7 +70,7 @@ void	writeFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_
 {
 	while (bias < REG_SIZE)
 	{
-		buffer[bias] = registers[bias + ((reg_num - 1) * REG_SIZE)];
+		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias];
 		++bias;
 	}
 }

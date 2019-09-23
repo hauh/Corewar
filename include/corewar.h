@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/22 19:10:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 16:36:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ typedef enum				byte_blocks_e
 #define	COMMAND_AMOUNT		16
 #define DIRECTION_SIZE		4
 #define SHORT_DIR_SIZE		2
-#define MOVE_TO_ARG			1
+#define OVERSTEP_NAME		1
 #define REGISTR_SIZE		1
+#define JUMP_TO_ARG			OVERSTEP_NAME + game->carriages->current_command->availability_types
 
 #define PUT_WAITING_TIME(x)	(x << 48)
 #define PUT_DIR_SIZE(x)		(x << 40)
@@ -165,6 +166,7 @@ typedef struct				carriage_s
 	int						next_command_location;
 	int						current_location;
 	int						tmp_value;
+	command_t				*last_command;
 	unsigned char			*value_buf;
 	unsigned char			*address_buf;
 	unsigned char			*registers;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/22 21:54:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 17:35:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void	copy_reg(carriage_t *from, carriage_t *to)
 int		get_arg(unsigned char byte_of_types, int requesting_argument)
 {
 	if (requesting_argument == FIRST_ARG)
-		return ((byte_of_types << 2) >> 6);
+		return (byte_of_types & 0xc0) >> 6;
 	else if (requesting_argument == SECOND_ARG)
-		return ((byte_of_types << 4) >> 6);
+		return (byte_of_types & 0x30) >> 4;
 	else if (requesting_argument == THIRD_ARG)
-		return ((byte_of_types << 6) >> 6);
+		return (byte_of_types & 0x0c) >> 2;
 	return (0);
 }
 
@@ -56,31 +56,39 @@ void	live_exec(corewar_t *game)
 	int	step;
 	int live;
 
+	printf("Live\n");
 	game->arena->live_amount_in_ctd += 1;
 	game->carriages->last_live_loop = game->arena->loop_amount;
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	step = JUMP_TO_ARG;
 	readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, R1, 0);
 	conversetionBytesToInt(game->carriages->value_buf, &game->carriages->tmp_value, 0);
 	readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 0);
 	conversetionBytesToInt(game->carriages->value_buf, &live, 0);
 	if (game->carriages->tmp_value == -live)
+	{
 		game->arena->last_survivor = find_player(game, live);
+		if (!game->arena->last_survivor)
+			printf("Fuuuuuck you %d %d\n", game->carriages->tmp_value, -live);
+	}
 	step += DIRECTION_SIZE;
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("Live\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	ld_exec(corewar_t *game)
 {
 	int	step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
+	printf("Ld\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -90,31 +98,34 @@ void	ld_exec(corewar_t *game)
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
 	game->carriages->next_command_location = step;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	printf("Ld\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	st_exec(corewar_t *game)
 {
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	printf("St\n");
+	step = JUMP_TO_ARG;
 	readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
-		writeFromBufToArena(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step), 0);
+		writeFromBufToArena(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + (game->carriages->tmp_value % IDX_MOD)) % MEM_SIZE, 0);
 		step += IND_SIZE;
 	}
 	game->carriages->next_command_location = step;
-	printf("St\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	add_exec(corewar_t *game)
@@ -124,10 +135,11 @@ void	add_exec(corewar_t *game)
 	int result;
 	int step;
 
+	printf("Add\n");
 	left_operand = 0;
 	right_operand = 0;
 	result = 0;
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	step = JUMP_TO_ARG;
 	readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 	step += REGISTR_SIZE;
@@ -138,9 +150,10 @@ void	add_exec(corewar_t *game)
 	conversetionIntToBytes(game->carriages->value_buf, &result, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("Add\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	sub_exec(corewar_t *game)
@@ -150,10 +163,12 @@ void	sub_exec(corewar_t *game)
 	int result;
 	int step;
 
+	printf("Sub\n");
+	//return ;
 	left_operand = 0;
 	right_operand = 0;
 	result = 0;
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	step = JUMP_TO_ARG;
 	readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 	step += REGISTR_SIZE;
@@ -164,9 +179,10 @@ void	sub_exec(corewar_t *game)
 	conversetionIntToBytes(game->carriages->value_buf, &result, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("Sub\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	and_exec(corewar_t *game)
@@ -176,20 +192,21 @@ void	and_exec(corewar_t *game)
 	int result;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == REG_CODE)
+	printf("And\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -197,19 +214,19 @@ void	and_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += IND_SIZE;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -221,9 +238,10 @@ void	and_exec(corewar_t *game)
 	conversetionIntToBytes(game->carriages->value_buf, &result, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("And\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	or_exec(corewar_t *game)
@@ -233,20 +251,21 @@ void	or_exec(corewar_t *game)
 	int result;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == REG_CODE)
+	printf("Or\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG)], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME)], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -254,19 +273,19 @@ void	or_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += IND_SIZE;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -278,9 +297,10 @@ void	or_exec(corewar_t *game)
 	conversetionIntToBytes(game->carriages->value_buf, &result, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("Or\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	xor_exec(corewar_t *game)
@@ -290,20 +310,21 @@ void	xor_exec(corewar_t *game)
 	int result;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == REG_CODE)
+	printf("Xor\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -311,19 +332,19 @@ void	xor_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_operand, 0);
 		step += IND_SIZE;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 4);
 		conversetionBytesToInt(game->carriages->value_buf, &right_operand, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -335,16 +356,18 @@ void	xor_exec(corewar_t *game)
 	conversetionIntToBytes(game->carriages->value_buf, &result, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
 	game->carriages->next_command_location = step;
-	printf("Xor\n");
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	zjmp_exec(corewar_t *game)
 {
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	printf("Zjmp\n");
+	step = JUMP_TO_ARG;
 	if (game->carriages->carry_flag)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
@@ -363,20 +386,21 @@ void	ldi_exec(corewar_t *game)
 	int right_args;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == REG_CODE)
+	printf("Ldi\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG)], FIRST_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME)], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step), 2);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 2);
 		step += 2;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -384,13 +408,13 @@ void	ldi_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += 2;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 2);
@@ -400,7 +424,9 @@ void	ldi_exec(corewar_t *game)
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
 	game->carriages->next_command_location = step;
-	printf("Ldi\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	sti_exec(corewar_t *game)
@@ -409,20 +435,21 @@ void	sti_exec(corewar_t *game)
 	int right_args;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types + REGISTR_SIZE;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	printf("Sti\n");
+	step = OVERSTEP_NAME + game->carriages->current_command->availability_types + REGISTR_SIZE;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 2);
 		step += 2;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -430,13 +457,13 @@ void	sti_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += 2;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], THIRD_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], THIRD_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], THIRD_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], THIRD_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 2);
@@ -445,11 +472,14 @@ void	sti_exec(corewar_t *game)
 	readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + ((left_args + right_args) % IDX_MOD)) % MEM_SIZE, 0);
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + 1) % MEM_SIZE], 0);
 	game->carriages->next_command_location = step;
-	printf("Sdi\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	fork_exec(corewar_t *game)
 {
+	printf("Fork\n");
 	//carriage_t	*new_carriage;
 	//carriage_t	*iter;
 //
@@ -474,20 +504,23 @@ void	fork_exec(corewar_t *game)
 	//new_carriage->next = iter;
 	//iter->prev = new_carriage;
 	//copy_reg(game->carriages, new_carriage);
-	printf("Fork\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	lld_exec(corewar_t *game)
 {
 	int	step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
+	printf("Lld\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 0);
 		step += game->carriages->current_command->dir_size;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -497,8 +530,9 @@ void	lld_exec(corewar_t *game)
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
 	game->carriages->next_command_location = step;
-	check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
-	printf("Lld\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	lldi_exec(corewar_t *game)
@@ -507,20 +541,21 @@ void	lldi_exec(corewar_t *game)
 	int right_args;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == REG_CODE)
+	printf("Lldi\n");
+	step = JUMP_TO_ARG;
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG)], FIRST_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME)], FIRST_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step), 2);
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 2);
 		step += 2;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], FIRST_ARG) == IND_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], FIRST_ARG) == IND_CODE)
 	{
 		readFromArenaToBuf(game->carriages->address_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->address_buf, &game->carriages->tmp_value, 2);
@@ -528,13 +563,13 @@ void	lldi_exec(corewar_t *game)
 		conversetionBytesToInt(game->carriages->value_buf, &left_args, 0);
 		step += 2;
 	}
-	if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == REG_CODE)
+	if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == REG_CODE)
 	{
 		readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 0);
 		step += REGISTR_SIZE;
 	}
-	else if (get_arg(game->arena->field[(game->carriages->current_location + MOVE_TO_ARG) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
+	else if (get_arg(game->arena->field[(game->carriages->current_location + OVERSTEP_NAME) % MEM_SIZE], SECOND_ARG) == DIR_CODE)
 	{
 		readFromArenaToBuf(game->carriages->value_buf, game->arena->field, (game->carriages->current_location + step) % MEM_SIZE, 2);
 		conversetionBytesToInt(game->carriages->value_buf, &right_args, 2);
@@ -544,11 +579,14 @@ void	lldi_exec(corewar_t *game)
 	writeFromBufToReg(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	step += REGISTR_SIZE;
 	game->carriages->next_command_location = step;
-	printf("Ldi\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	lfork_exec(corewar_t *game)
 {
+	printf("Lfork\n");
 	//carriage_t	*new_carriage;
 	//carriage_t	*iter;
 //
@@ -573,7 +611,9 @@ void	lfork_exec(corewar_t *game)
 	//new_carriage->next = iter;
 	//iter->prev = new_carriage;
 	//copy_reg(game->carriages, new_carriage);
-	printf("Lfork\n");
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 }
 
 void	aff_exec(corewar_t *game)
@@ -581,8 +621,12 @@ void	aff_exec(corewar_t *game)
 	int result;
 	int step;
 
-	step = MOVE_TO_ARG + game->carriages->current_command->availability_types;
+	printf("Aff\n");
+	step = JUMP_TO_ARG;
 	readFromRegToBuf(game->carriages->value_buf, game->carriages->registers, game->arena->field[(game->carriages->current_location + step) % MEM_SIZE], 0);
 	conversetionBytesToInt(game->carriages->value_buf, &result, 0);
+	if (game->carriages->current_command->change_carry)
+		check_carry(game->carriages->value_buf, &game->carriages->carry_flag);
+	game->carriages->last_command = game->carriages->current_command;
 	printf("%c", (char)result);
 }

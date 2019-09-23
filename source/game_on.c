@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/22 21:58:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 17:29:08 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,14 @@ void			here_we_go(corewar_t *game)
 		{
 			if (!game->carriages->waiting_time)
 			{
-				game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
+				if (game->arena->field[game->carriages->current_location] > 0 && game->arena->field[game->carriages->current_location] < 17)
+					game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
+				else
+				{
+					game->carriages->current_location += 1;
+					game->carriages->current_location %= MEM_SIZE;
+					continue;
+				}
 				game->carriages->waiting_time = game->carriages->current_command->waiting_time;
 			}
 			if (game->carriages->waiting_time)
@@ -92,20 +99,27 @@ void			here_we_go(corewar_t *game)
 			if (!game->carriages->waiting_time)
 			{
 				game->carriages->current_command->function(game);
-				game->carriages->current_location += game->carriages->next_command_location % MEM_SIZE;
+				game->carriages->current_location += game->carriages->next_command_location;
+				game->carriages->current_location %= MEM_SIZE;
 			}
 			game->carriages = game->carriages->prev;
 			++iter;
+			system("clear");
+			print_arena(game);
+			printf("Carriage_id: %d\n", game->carriages->id);
+			printf("Next_command_step: %d\n", game->carriages->next_command_location);
+			printf("Current_location: %d\n", game->carriages->current_location);
+			printf("Value on this address: %d\n", game->arena->field[game->carriages->current_location]);
+			if (game->carriages->last_command)
+				printf("Last_command: %d\n", game->carriages->last_command->id);
+			usleep(30000);
 		}
 		++game->arena->loop_amount;
 		if (!(game->arena->loop_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
 			start_checking(game);
 		if (!game->carriages)
 			break;
-		system("clear");
-		print_arena(game);
 		printf("L_a:%llu C_d:%d C_a:%d\n", game->arena->loop_amount, game->arena->cycle_to_die, game->arena->check_amount);
-		usleep(3000);
 	}
 	exit(1);
 }
