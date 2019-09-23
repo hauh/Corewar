@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/23 16:36:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/23 20:56:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "ft_printf.h"
+
+#define REQUEST_REGISTER	game->carriages->current_register
+#define CARRIAGE_LOCATION	game->carriages->current_location
+#define DYNAMIC_SIZE_DIR	4 - game->carriages->current_command->dir_size
 
 typedef enum				byte_blocks_e
 {
@@ -54,7 +58,8 @@ typedef enum				byte_blocks_e
 #define SHORT_DIR_SIZE		2
 #define OVERSTEP_NAME		1
 #define REGISTR_SIZE		1
-#define JUMP_TO_ARG			OVERSTEP_NAME + game->carriages->current_command->availability_types
+#define TO_FIRST_ARG		1
+#define ERROR				-335
 
 #define PUT_WAITING_TIME(x)	(x << 48)
 #define PUT_DIR_SIZE(x)		(x << 40)
@@ -123,9 +128,13 @@ typedef enum				byte_blocks_e
 #define LFORK				0x0f
 #define AFF					0x10
 
-#define FIRST_ARG			1
-#define SECOND_ARG			2
-#define THIRD_ARG			3
+#define FIRST_ARG			game->carriages->current_command->first_arg
+#define SECOND_ARG			game->carriages->current_command->second_arg
+#define THIRD_ARG			game->carriages->current_command->third_arg
+
+#define ONE_MORE_LIVE		1
+#define READING_MODE		1
+#define WRITING_MODE		2
 
 typedef struct	corewar_s corewar_t;
 
@@ -159,20 +168,24 @@ typedef struct				command_s
 typedef struct				carriage_s
 {
 	int						id;
-	int						player_id;
+	int						next_step;
+	int						tmp_value;
 	int						carry_flag;
 	int						waiting_time;
-	int						last_live_loop; // -> lst-live
-	int						next_command_location;
+	int						last_live_loop;				// -> lst-live
 	int						current_location;
-	int						tmp_value;
-	command_t				*last_command;
-	unsigned char			*value_buf;
+	int						save_point;
+	int						current_register;
+	unsigned char			*common_buf;
+	unsigned char			*value_buf1;
+	unsigned char			*value_buf2;
+	unsigned char			*value_buf3;
 	unsigned char			*address_buf;
 	unsigned char			*registers;
-	command_t				*current_command;
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
+	command_t				*current_command;
+	player_t				*owner;
 }							carriage_t;
 
 typedef struct				arena_s
@@ -225,12 +238,12 @@ void						arrange_units				(corewar_t *game);
 void						introduce_players			(corewar_t *game);
 void						here_we_go					(corewar_t *game);
 void						print_arena					(corewar_t *game);
-void						conversetionIntToBytes		(unsigned char *buffer, int *from, int bias);
-void						conversetionBytesToInt		(unsigned char *buffer, int *dest, int bias);
-void						readFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
-void						readFromArenaToBuf			(unsigned char *buffer, unsigned char *field, int data_location, int bias);
-void						writeFromBufToReg			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
-void						writeFromBufToArena			(unsigned char *buffer, unsigned char *field, int data_location, int bias);
+void						cwConversetionIntToBytes	(unsigned char *buffer, int *from, int bias);
+void						cwConversetionBytesToInt	(unsigned char *buffer, int *dest, int bias);
+void						cwReadFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
+void						cwReadFromArenaToBuf		(unsigned char *buffer, unsigned char *field, int data_location, int bias);
+void						cwWriteFromBufToReg			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
+void						cwWriteFromBufToArena		(unsigned char *buffer, unsigned char *field, int data_location, int bias);
 void						check_carry					(unsigned char *buffer, int *carry);
 void						live_exec					(corewar_t *game);
 void						ld_exec						(corewar_t *game);
