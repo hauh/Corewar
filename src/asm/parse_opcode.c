@@ -6,13 +6,15 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 16:45:58 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 23:33:15 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static t_opcode_type	get_opcode_type(char **line, int *x)
+int g_cur_col;
+
+static t_opcode_type	get_opcode_type(char **line)
 {
 	static const char	*types[17] = {NULL, "live", "ld", "st", "add", "sub",
 									"and", "or", "xor", "zjmp", "ldi", "sti",
@@ -28,9 +30,9 @@ static t_opcode_type	get_opcode_type(char **line, int *x)
 			break ;
 	}
 	if (i == crw_undef_code)
-		error("Undefined opcode");
+		error("Lexical error: invalid instruction", 1);
 	*line += size;
-	*x += size;
+	g_cur_col += size;
 	return (i);
 }
 
@@ -62,43 +64,37 @@ static int				validate_parameters(t_opcode_type type, int code)
 	return (1);
 }
 
-static int				skip_to_separator(char **line)
+static void				skip_to_separator(char **line)
 {
-	int count;
-
-	count = 0;
 	while (**line && !IS_BLANK(**line) && **line != SEPARATOR_CHAR)
 	{
 		++(*line);
-		++count;
+		++g_cur_col;
 	}
-	return (count);
 }
 
-void					parse_opcode(t_opcode *opcode, char *line, int x)
+void					parse_opcode(t_opcode *opcode, char *line)
 {
 	int i;
 
-	x += skip_whitespaces(&line);
+	skip_whitespaces(&line);
 	if (!*line)
 		return ;
-	opcode->x = x;
-	opcode->type = get_opcode_type(&line, &x);
+	opcode->type = get_opcode_type(&line);
 	i = 0;
 	while (i < 3)
 	{
-		x += skip_whitespaces(&line);
+		skip_whitespaces(&line);
 		if ((opcode->param[i] = parse_parameter(line)))
 		{
 			opcode->param_code |= opcode->param[i]->type << ((3 - i) * 2);
-			opcode->param[i]->y = opcode->y;
-			opcode->param[i]->x = x;
-			x += skip_to_separator(&line) + skip_whitespaces(&line) + 1;
+			skip_to_separator(&line);
+			skip_whitespaces(&line);
 			if (*line && (*line++ != SEPARATOR_CHAR || i == 2))
-				error("Syntax error in parameters");
+				error("Syntax error: wrong parameters", 1);
 		}
 		++i;
 	}
 	if (!validate_parameters(opcode->type, opcode->param_code))
-		error("Wrong parameters");
+		error("Syntax error: wrong parameters types", 1);
 }

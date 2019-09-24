@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/20 23:31:09 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 23:11:10 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static int	find_label(t_opcode *head, char *label_name)
 		bytes += prog->size;
 		prog = prog->next;
 	}
-	error("Indirect label not found");
+	ft_printf("Label %s ");
+	error("not found", 0);
 	return (0);
 }
 

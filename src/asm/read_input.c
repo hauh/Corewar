@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/04 23:05:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 21:05:53 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:41:25 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*get_new_line(char **tail, char *newline)
 	char *new_tail;
 
 	if (!(line0 = (char *)malloc(sizeof(char) * (newline - *tail + 1))))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	line = line0;
 	p = *tail;
 	while (p != newline)
@@ -29,7 +29,7 @@ static char	*get_new_line(char **tail, char *newline)
 	if (!*++p)
 		new_tail = NULL;
 	else if (!(new_tail = ft_strdup(p)))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	free(*tail);
 	*tail = new_tail;
 	return (line0);
@@ -42,13 +42,13 @@ static char	*read_more(char *tail, int fd)
 	int		r;
 
 	if ((r = read(fd, buf, BUFF_SIZE)) < 0)
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	buf[r] = 0;
 	if (tail)
 	{
 		p = tail;
 		if (!(tail = ft_strjoin(tail, r ? buf : "\n")))
-			error(strerror(errno));
+			error(strerror(errno), 0);
 		free(p);
 	}
 	else
@@ -56,7 +56,7 @@ static char	*read_more(char *tail, int fd)
 		if (!r)
 			return (NULL);
 		if (!(tail = ft_strdup(buf)))
-			error(strerror(errno));
+			error(strerror(errno), 0);
 	}
 	return (tail);
 }

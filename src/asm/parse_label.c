@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 23:24:54 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 00:36:27 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:53:30 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static char		*get_label(char *line, size_t size)
 	char *label;
 
 	if (!(label = (char *)malloc(sizeof(char) * (size + 1))))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	label[size] = 0;
 	while (size--)
 		if (!ft_strchr(LABEL_CHARS, (label[size] = line[size])))
-			error("Invalid label characters");
+			error("Syntax error: invalid label character", 1);
 	return (label);
 }
 
@@ -44,9 +44,9 @@ void			parse_label(t_opcode *opcode, char **line)
 	if ((size = label_size(*line)))
 	{
 		if (opcode->label)
-			error("Multiple labels");
+			error("Syntax error: multiple labels", 1);
 		opcode->label = get_label(*line, size);
-		opcode->x += size;
+		g_cur_col += size;
 		*line += size + 1;
 	}
 }

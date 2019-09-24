@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 23:15:13 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 23:31:41 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,15 @@ static char		*get_label_link(char *line)
 
 	size = 0;
 	while (line[size] && line[size] != SEPARATOR_CHAR && !IS_BLANK(line[size]))
+	{
+		if (!ft_strchr(LABEL_CHARS, line[size]))
+			error("Lexical error: wrong characters", 1);
 		++size;
+	}
 	if (!size)
-		error("Syntax error in 'label' link");
+		error("Lexial error: empty label", 1);
 	if (!(link = (char *)malloc(sizeof(char) * (size + 1))))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	link[size] = 0;
 	while (size--)
 		link[size] = line[size];
@@ -35,12 +39,13 @@ static int		get_registry_value(char *line)
 	int val;
 
 	if (!IS_DIGIT(*line))
-		error("Syntax error in 'r' token");
+		error("Syntax error: wrong registry value", 1);
 	val = *line++ - 48;
 	if (IS_DIGIT(*line))
 		val = val * 10 + (*line++ - 48);
+	++g_cur_col;
 	if (!val || (*line && *line != SEPARATOR_CHAR && !IS_BLANK(*line)))
-		error("Syntax error in 'r' token");
+		error("Syntax error: wrong registry value", 1);
 	return (val);
 }
 
@@ -60,7 +65,7 @@ static void		get_parameter(t_opcode_param *param, char *line)
 	else if (*line == LABEL_CHAR || IS_DIGIT(*line) || *line == '-')
 		param->type = crw_indirect;
 	else
-		error("Syntax error at parameter type");
+		error("Syntax error: wrong parameter type", 1);
 	if (*line == LABEL_CHAR)
 		param->link = get_label_link(line + 1);
 	else
@@ -75,7 +80,7 @@ t_opcode_param	*parse_parameter(char *line)
 	if (*line)
 	{
 		if (!(param = (t_opcode_param *)malloc(sizeof(t_opcode_param))))
-			error(strerror(errno));
+			error(strerror(errno), 0);
 		param->value = 0;
 		param->link = NULL;
 		get_parameter(param, line);

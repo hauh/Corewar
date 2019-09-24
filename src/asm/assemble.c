@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:55:25 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 00:41:23 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:41:29 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		assemble(t_warrior *warrior)
 
 	size = PROG_NAME_LENGTH + COMMENT_LENGTH + warrior->code_size + 16;
 	if (!(code = (unsigned char *)malloc(sizeof(char) * size)))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	warrior->byte_code = code;
 	ft_bzero(code, size);
 	assemble_number(&code, COREWAR_EXEC_MAGIC);

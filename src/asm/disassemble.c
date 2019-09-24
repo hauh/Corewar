@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:11:48 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 20:55:40 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:42:08 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	get_int(int fd, size_t size)
 	int				i;
 
 	if (read(fd, byte, size) < 0)
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	num = 0;
 	i = size;
 	while (i--)
@@ -32,7 +32,7 @@ static void	print_string(char *token, int size, int fd, int fd_out)
 	char byte[size + 1];
 
 	if (read(fd, byte, size) < 0)
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	byte[size + 1] = 0;
 	ft_printf("{*}%s \"%s\"\n", fd_out, token, byte);
 	get_int(fd, 4);
@@ -70,7 +70,7 @@ static void	print_code(int fd, int fd_out)
 	while (read(fd, &byte, 1) > 0)
 	{
 		if (errno)
-			error(strerror(errno));
+			error(strerror(errno), 0);
 		ft_printf("{*}%s ", fd_out, types[(t_opcode_type)byte]);
 		if (byte == crw_live)
 			ft_printf("{*}%c%d\n", fd_out, DIRECT_CHAR, get_int(fd, T_IND));
@@ -86,7 +86,7 @@ static void	print_code(int fd, int fd_out)
 void		disassemble(int fd, int fd_out)
 {
 	if (get_int(fd, sizeof(int)) != COREWAR_EXEC_MAGIC)
-		error("Error: wrong magic number");
+		error("Error: wrong magic number", 0);
 	print_string(NAME_CMD_STRING, PROG_NAME_LENGTH, fd, fd_out);
 	get_int(fd, sizeof(int));
 	print_string(COMMENT_CMD_STRING, COMMENT_LENGTH, fd, fd_out);

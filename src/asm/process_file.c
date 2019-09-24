@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 18:11:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 20:58:15 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:47:56 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static int	open_file(char *file_name, int flag)
 	if (flag & 1 ?
 		p - file_name < 5 || !ft_strequ(p - 4, ".cor")
 		: p - file_name < 3 || !ft_strequ(p - 2, ".s"))
-		error("Wrong filename (need .s or .cor with -d flag)");
+		error("Wrong filename (need .s or .cor with -d flag)", 0);
 	if ((fd = open(file_name, O_RDONLY)) < 0)
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	return (fd);
 }
 
@@ -46,7 +46,7 @@ static char	*get_new_filename(char *file_name, int flag)
 		file_name = new;
 	}
 	if (!(new = ft_strjoin(file_name, flag & 1 ? ".s" : ".cor")))
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	return (new);
 }
 
@@ -59,7 +59,7 @@ static int	build_file(t_warrior *warrior, char *name, int flag)
 	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	new_file = get_new_filename(name, flag);
 	if ((fd = open(new_file, O_CREAT | O_WRONLY | O_TRUNC, mode)) < 0)
-		error(strerror(errno));
+		error(strerror(errno), 0);
 	if (!(flag & 1))
 	{
 		write(fd, warrior->byte_code, warrior->code_size);

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 20:56:07 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 22:59:09 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # define IS_BLANK(c) (c == ' ' || c == '\t')
 # define IS_DIGIT(c) (c >= '0' && c <= '9')
 
-extern int		g_current_row;
-extern int		g_current_col;
+extern int		g_cur_line;
+extern int		g_cur_col;
 
 typedef enum	e_opcode_type
 {
@@ -61,8 +61,6 @@ typedef struct	s_opcode_param
 	char			*link;
 	t_param_type	type;
 	int				value;
-	int				x;
-	int				y;
 }				t_opcode_param;
 
 typedef struct	s_opcode
@@ -71,8 +69,6 @@ typedef struct	s_opcode
 	t_opcode_param	*param[3];
 	t_opcode_type	type;
 	size_t			size;
-	int				x;
-	int				y;
 	unsigned char	param_code;
 	struct s_opcode	*next;
 	struct s_opcode	*prev;
@@ -87,16 +83,16 @@ typedef struct	s_warrior
 	size_t			code_size;
 }				t_warrior;
 
-void			error(char *err);
 char			*read_input(int fd);
-int				skip_whitespaces(char **line);
+void			skip_whitespaces(char **line);
 int				ft_printf(const char *line, ...);
 void			process_file(char *arg, int flag);
+void			error(char *err, int type);
 
 t_warrior		*parse_file(int fd);
-int				parse_title(t_warrior *warrior, int fd);
+void			parse_title(t_warrior *warrior, int fd);
 void			parse_label(t_opcode *program, char **line);
-void			parse_opcode(t_opcode *new, char *line, int x);
+void			parse_opcode(t_opcode *new, char *line);
 t_opcode_param	*parse_parameter(char *line);
 
 void			analyze_sizes(t_warrior *list);
