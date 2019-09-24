@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/23 19:26:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 17:38:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int				main(int argc, char **argv)
 	initialization_carriages	(game);
 	initialization_arena		(game);
 	initialization_commands		(game);
-	print_arena					(game);
 	introduce_players			(game);
-	here_we_go					(game);
+	print_arena					(game);
+	//here_we_go					(game);
 	return (0);
 }

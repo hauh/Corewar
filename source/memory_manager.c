@@ -6,22 +6,34 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/23 16:09:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 16:18:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	check_carry(unsigned char *buffer, int *carry)
+void	copy_reg(unsigned char *from, unsigned char *to, int size)
 {
 	int iter;
 
 	iter = 0;
+	while (iter < size)
+	{
+		to[iter] = from[iter];
+		++iter;
+	}
+}
+
+void	check_carry(unsigned char *registers, int *carry, int reg_num)
+{
+	int iter;
+
+	iter = --reg_num * REG_SIZE;
 	while (iter < REG_SIZE)
 	{
-		if (buffer[iter] != 0)
+		if (registers[iter] != 0)
 		{
-			*carry = 1;
+			*carry = 0;
 			return ;
 		}
 		++iter;
@@ -29,17 +41,17 @@ void	check_carry(unsigned char *buffer, int *carry)
 	*carry = 1;
 }
 
-void	conversetionIntToBytes(unsigned char *buffer, int *from, int bias)
+void	cwConversionIntToBytes(unsigned char *buffer, int *from, int bias)
 {
 	ft_memset(buffer, 0, REG_SIZE);
 	while (bias < REG_SIZE)
 	{
-		buffer[bias] = (*from << (3 - bias) * 8) >> 24;
+		buffer[bias] = (*from << (bias * 8)) >> 24;
 		++bias;
 	}
 }
 
-void	conversetionBytesToInt(unsigned char *buffer, int *dest, int bias)
+void	cwConversionBytesToInt(unsigned char *buffer, int *dest, int bias)
 {
 	*dest = 0;
 	while (bias < REG_SIZE)
@@ -49,7 +61,7 @@ void	conversetionBytesToInt(unsigned char *buffer, int *dest, int bias)
 	}
 }
 
-void	readFromRegToBuf(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
+void	cwReadFromRegToBuf(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
 {
 	ft_memset(buffer, 0, REG_SIZE);
 	while (bias < REG_SIZE)
@@ -59,14 +71,14 @@ void	readFromRegToBuf(unsigned char *buffer, unsigned char *registers, int reg_n
 	}
 }
 
-void	readFromArenaToBuf(unsigned char *buffer, unsigned char *field, int data_location, int bias)
+void	cwReadFromArenaToBuf(unsigned char *buffer, unsigned char *field, int data_location, int bias)
 {
 	ft_memset(buffer, 0, REG_SIZE);
 	while (bias < REG_SIZE)
 		buffer[bias++] = field[data_location++];
 }
 
-void	writeFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
+void	cwWriteFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
 {
 	while (bias < REG_SIZE)
 	{
@@ -75,7 +87,7 @@ void	writeFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_
 	}
 }
 
-void	writeFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)
+void	cwWriteFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)
 {
 	while (bias < REG_SIZE)
 		field[data_location++] = buffer[bias++];

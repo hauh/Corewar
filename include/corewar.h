@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/23 20:56:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 16:19:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ typedef enum				byte_blocks_e
 #define THIRD_ARG			game->carriages->current_command->third_arg
 
 #define ONE_MORE_LIVE		1
-#define READING_MODE		1
-#define WRITING_MODE		2
+#define CW_READING_MODE		1
+#define CW_WRITING_MODE		2
 
 typedef struct	corewar_s corewar_t;
 
@@ -168,34 +168,37 @@ typedef struct				command_s
 typedef struct				carriage_s
 {
 	int						id;
-	int						next_step;
-	int						tmp_value;
-	int						carry_flag;
-	int						waiting_time;
-	int						last_live_loop;				// -> lst-live
-	int						current_location;
+	int						jump;
+	int						carry;
 	int						save_point;
+	int						last_cycle;				// -> lst-live
+	int						waiting_time;
+	int						error_occured;
+	int						current_location;
 	int						current_register;
-	unsigned char			*common_buf;
-	unsigned char			*value_buf1;
-	unsigned char			*value_buf2;
-	unsigned char			*value_buf3;
-	unsigned char			*address_buf;
+	player_t				*owner;
+	command_t				*current_command;
 	unsigned char			*registers;
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
-	command_t				*current_command;
-	player_t				*owner;
 }							carriage_t;
 
 typedef struct				arena_s
 {
-	player_t				*last_survivor;
-	unsigned char			*field;
-	unsigned long long		loop_amount;
+	int						tmp_value1;
+	int						tmp_value2;
+	int						tmp_value3;
+	int						live_amount;
 	int						check_amount;
 	int						cycle_to_die;
-	int						live_amount_in_ctd;
+	player_t				*last_survivor;
+	carriage_t				*last_carriage;
+	unsigned long			cycle_amount;
+	unsigned char			*field;
+	unsigned char			*value_buf1;
+	unsigned char			*value_buf2;
+	unsigned char			*value_buf3;
+	unsigned char			*address_buf;
 }							arena_t;
 
 typedef struct				destructor_s
@@ -238,13 +241,12 @@ void						arrange_units				(corewar_t *game);
 void						introduce_players			(corewar_t *game);
 void						here_we_go					(corewar_t *game);
 void						print_arena					(corewar_t *game);
-void						cwConversetionIntToBytes	(unsigned char *buffer, int *from, int bias);
-void						cwConversetionBytesToInt	(unsigned char *buffer, int *dest, int bias);
+void						cwConversionIntToBytes		(unsigned char *buffer, int *from, int bias);
+void						cwConversionBytesToInt		(unsigned char *buffer, int *dest, int bias);
 void						cwReadFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
 void						cwReadFromArenaToBuf		(unsigned char *buffer, unsigned char *field, int data_location, int bias);
 void						cwWriteFromBufToReg			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
 void						cwWriteFromBufToArena		(unsigned char *buffer, unsigned char *field, int data_location, int bias);
-void						check_carry					(unsigned char *buffer, int *carry);
 void						live_exec					(corewar_t *game);
 void						ld_exec						(corewar_t *game);
 void						st_exec						(corewar_t *game);
@@ -266,5 +268,7 @@ void						initialization_players		(corewar_t *game, char **argv, int argc);
 void						initialization_carriages	(corewar_t *game);
 void						initialization_arena		(corewar_t *game);
 void						initialization_commands		(corewar_t *game);
+void						check_carry					(unsigned char *registers, int *carry, int reg_num);
+void						copy_reg					(unsigned char *from, unsigned char *to, int size);
 
 #endif

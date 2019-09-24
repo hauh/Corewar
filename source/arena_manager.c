@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/23 15:58:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 17:36:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			print_arena(corewar_t *game)
 	i		= 0;
 	while (i < MEM_SIZE)
 	{
-		printf("%.2x | ", game->arena->field[i]);
+		printf("%.2x ", game->arena->field[i]);
 		if ((i + 1) % border == 0 && i > 10)
 			printf("\n");
 		++i;
@@ -48,30 +48,26 @@ void			print_arena(corewar_t *game)
 
 void			arrange_units(corewar_t *game)
 {
-	player_t	*tmp;
-	carriage_t 	*tmp2;
+	player_t	*iter;
 	int			player_location;
 	int			memory_step;
 	int			code_iter;
-	int			iter;
+	int			test;
 
-	iter = 0;
 	memory_step = MEM_SIZE / game->players_amount;
-	tmp = game->players;
-	tmp2 = game->carriages;
-	while (iter < game->players_amount)
+	iter = game->players;
+	test = 0;
+	while (iter)
 	{
 		code_iter = 0;
-		player_location = memory_step * iter;
+		player_location = memory_step * test;
 		game->carriages->current_location = player_location;
-		while (player_location < memory_step * iter + CHAMP_MAX_SIZE)
-			game->arena->field[player_location++] = game->players->code[code_iter++];
-		game->players = game->players->next;
-		game->carriages = game->carriages->next;
-		++iter;
+		while (player_location < memory_step * test + CHAMP_MAX_SIZE)
+			game->arena->field[player_location++] = iter->code[code_iter++];
+		iter = iter->next;
+		game->carriages = game->carriages->prev;
+		++test;
 	}
-	game->players = tmp;
-	game->carriages = tmp2;
 }
 
 void			initialization_arena(corewar_t *game)
@@ -82,10 +78,19 @@ void			initialization_arena(corewar_t *game)
 		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
 	if (!(new_arena->field = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
 		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+	if (!(new_arena->value_buf1 = (unsigned char *)malloc(sizeof(unsigned char) * REG_SIZE)))
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+	if (!(new_arena->value_buf2 = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+	if (!(new_arena->value_buf3 = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+	if (!(new_arena->address_buf = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
+		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
 	ft_memset(new_arena->field, 0, MEM_SIZE);
 	new_arena->last_survivor		= game->players;
-	new_arena->loop_amount 			= 0;
-	new_arena->live_amount_in_ctd	= 0;
+	new_arena->last_carriage		= game->carriages;
+	new_arena->cycle_amount 		= 0;
+	new_arena->live_amount			= 0;
 	new_arena->check_amount			= 0;
 	new_arena->cycle_to_die			= CYCLE_TO_DIE;
 	game->arena						= new_arena;
