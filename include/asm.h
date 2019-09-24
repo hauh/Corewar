@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/21 00:47:10 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 20:56:07 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void			error(char *err);
 char			*read_input(int fd);
 int				skip_whitespaces(char **line);
 int				ft_printf(const char *line, ...);
+void			process_file(char *arg, int flag);
 
 t_warrior		*parse_file(int fd);
 int				parse_title(t_warrior *warrior, int fd);
@@ -100,6 +101,6 @@ t_opcode_param	*parse_parameter(char *line);
 
 void			analyze_sizes(t_warrior *list);
 void			assemble(t_warrior *warrior);
-void			disassemble(int fd);
+void			disassemble(int fd, int fd_out);
 
 #endif
