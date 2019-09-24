@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/09/24 16:38:05 by vrichese         ###   ########.fr        #
+#    Updated: 2019/09/24 18:25:55 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,15 +18,21 @@ DIR_SOURCE		:=		source/
 DIR_INCLUDE		:=		include/
 DIR_BIN			:=		bin/
 
-SOURCE			:=		arena_manager.c\
-							game_on.c\
-							corewar.c\
-							error_manager.c\
-							memory_manager.c\
-							player_manager.c\
-							command_manager.c\
-							carriage_manager.c\
-							support_commands.c
+SOURCE			:=		arena_manager.c \
+						cr_vis_buildmap.c \
+						cr_vis_printinfo.c \
+						memory_manager.c \
+						carriage_manager.c \
+						cr_vis_control.c \
+						cr_vis_updatemap.c \
+						player_manager.c \
+						command_manager.c \
+						cr_vis_init.c \
+						error_manager.c \
+						support_commands.c \
+						corewar.c \
+						cr_vis_main.c \
+						game_on.c
 
 HEADERS			:=		corewar.h op.h
 
@@ -44,7 +50,7 @@ vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
-	gcc $(OBJ_WITH_DIR) -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+	gcc $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 
 $(OBJ):%.o:%.c $(HEADERS) | $(DIR_BIN)
 	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
@@ -72,4 +78,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re
-#.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
+.SILENT: all $(NAME) $(OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re

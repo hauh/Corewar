@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 17:38:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:45:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,54 @@ int				main(int argc, char **argv)
 	initialization_carriages	(game);
 	initialization_arena		(game);
 	initialization_commands		(game);
+	//ft_memset(game->arena->field, 0, MEM_SIZE);
+	//game->carriages->current_location	= 0;
+	//game->arena->field[0] 				= 6;
+	//game->arena->field[1] 				= 212;
+	//game->arena->field[2] 				= 0;
+	//game->arena->field[3] 				= 100;
+	//game->arena->field[4] 				= 11;
+	//game->arena->field[5] 				= 15;
+	//game->arena->field[6] 				= 11;
+	//game->arena->field[7] 				= 15;
+	//game->arena->field[8] 				= 0;
+	//game->arena->field[9] 				= 80;
+	//game->arena->field[100]				= 0;
+	//game->arena->field[101]				= 0;
+	//game->arena->field[102]				= 3;
+	//game->arena->field[103]				= 32;
+	//int test;
+	//int one;
+	//int two;
+	//one = 800;
+	//two = 777;
+	//REQUEST_REGISTER = 15;
+	//cwConversionIntToBytes(game->arena->value_buf1, &one, 0);
+	//cwWriteFromBufToReg(game->arena->value_buf1, game->carriages->registers, 7, 0);
+	//cwConversionIntToBytes(game->arena->value_buf1, &two, 0);
+	//cwWriteFromBufToReg(game->arena->value_buf1, game->carriages->registers, 11, 0);
+	//game->carriages->current_command	= game->commands[6];
+	//game->carriages->current_command->function(game);
+	//game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
+	//cwReadFromRegToBuf(game->arena->value_buf1, game->carriages->registers, 15, 0);
+	//cwConversionBytesToInt(game->arena->value_buf1, &test, 0);
+	//printf("%d\n", one & two);
+	//printf(">>>%d\n", test);
+	//printf("%d\n", game->carriages->current_location);
+	//printf("%d\n", game->carriages->carry);
+	//game->carriages->current_command   	= game->commands[3];
+	////game->carriages->current_command->function(game);
+	////print_arena(game);
+	//exit(1);
+	//cwTypeHandler(game);
+	//printf("%d %d %d\n", game->carriages->current_command->first_arg, game->carriages->current_command->second_arg, game->carriages->current_command->third_arg);
+	//printf("%d\n", game->carriages->current_location);
+	//cwArgsHandler(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
+	//exit(1);
+//
+	////cwArgsHandler(game, game->arena->value_buf1, CW_WRITING_MODE, TRUE, SECOND_ARG);
+//	//cr_vis_main					(game, V_INIT);
 	introduce_players			(game);
-	print_arena					(game);
-	//here_we_go					(game);
+	here_we_go					(game);
 	return (0);
 }

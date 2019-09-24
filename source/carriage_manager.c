@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 16:17:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:03:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,17 @@ void			initialization_carriage(corewar_t *game, player_t *owner)
 
 void			initialization_carriages(corewar_t *game)
 {
-	player_t	*player_iter;
+	int			iter;
 	int			owner_id;
 
-	player_iter	= game->players;
-	while (player_iter->next)
-		player_iter = player_iter->next;
-	while (player_iter)
+	iter = 0;
+	while (iter < game->players_amount)
 	{
-		owner_id = -player_iter->id;
-		initialization_carriage(game, player_iter);
+		owner_id = game->players->id;
+		initialization_carriage(game, game->players);
 		cwConversionIntToBytes(game->carriages->prev->registers, &owner_id, 0);
-		player_iter = player_iter->prev;
+		game->players = game->players->next;
+		++iter;
 	}
-	game->carriages = game->carriages->prev;
 	game->destructor->carriages_detect = TRUE;
 }

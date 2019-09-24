@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 16:19:13 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 20:35:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,52 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "ft_printf.h"
+# include <ncurses.h>
+# include <locale.h>
+# include <time.h>
+
+/*
+** ---------------------------
+** Visual defines
+*/
+
+# define V_W 260
+# define V_H 68
+# define V_BSYM "\xe2\x96\x88"
+# define V_SEP 200
+
+/*
+** ---------------------------
+*/
+
+/*
+** ---------------------------
+** Visual typedefs
+*/
+
+enum						e_vis_act
+{
+	V_INIT,
+	V_CONTROL,
+	V_UPDATE,
+	V_INFO,
+	V_CLEANUP
+};
+
+typedef struct				s_vis
+{
+	int						flow;
+	int						step;
+	int						exit;
+	int						tick;
+	int						fpsdiv;
+	unsigned char			*field;
+	long int				time;
+}							t_vis;
+
+/*
+** ---------------------------
+*/
 
 #define REQUEST_REGISTER	game->carriages->current_register
 #define CARRIAGE_LOCATION	game->carriages->current_location
@@ -136,6 +182,7 @@ typedef enum				byte_blocks_e
 #define CW_READING_MODE		1
 #define CW_WRITING_MODE		2
 
+
 typedef struct	corewar_s corewar_t;
 
 typedef struct				player_s
@@ -171,7 +218,7 @@ typedef struct				carriage_s
 	int						jump;
 	int						carry;
 	int						save_point;
-	int						last_cycle;				// -> lst-live
+	int						last_cycle;
 	int						waiting_time;
 	int						error_occured;
 	int						current_location;
@@ -227,6 +274,7 @@ typedef struct				corewar_s
 	int						carriages_amount;
 	int						commands_amount;
 	int						pause;
+	t_vis					*vis;
 	key_t					*keys;
 	arena_t					*arena;
 	player_t				*players;
@@ -234,6 +282,7 @@ typedef struct				corewar_s
 	carriage_t				*carriages;
 	destructor_t			*destructor;
 }							corewar_t;
+
 
 void						validate_player				(player_t *player);
 void						build_player				(player_t *player);
@@ -271,4 +320,31 @@ void						initialization_commands		(corewar_t *game);
 void						check_carry					(unsigned char *registers, int *carry, int reg_num);
 void						copy_reg					(unsigned char *from, unsigned char *to, int size);
 
+//cr_vis_putx(число, индекс в массиве, цвет(индекс игрока), 1)
+
+
+/*
+** ---------------------------
+** Visual declarations
+*/
+
+int							cr_vis_main					(corewar_t *cr, int act);
+int							cr_vis_cleanup				(corewar_t *cr);
+int							cr_vis_printattr			(int y, int x, char *str, int colour, int reverse);
+int							cr_vis_initvis				(corewar_t *cr);
+int							cr_vis_initcolour			(void);
+int							cr_vis_initterm				(void);
+void						cr_vis_putx					(int num, int i, int colour, int rev);
+int							cr_vis_drawborder			(void);
+int							cr_vis_printmap				(unsigned char *f, int f_len, corewar_t *cr);
+int							cr_vis_timer				(t_vis	*vis);
+int							cr_vis_keys					(t_vis *vis);
+int							cr_vis_updatemap			(corewar_t *cr);
+int							cr_vis_printinfo			(corewar_t *cr);
+
+/*
+** ---------------------------
+*/
+void		cwTypeHandler(corewar_t *game);
+void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int div_mod, int input_arg);
 #endif

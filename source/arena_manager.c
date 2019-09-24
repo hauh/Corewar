@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 17:36:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:01:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 
 void			introduce_players(corewar_t *game)
 {
-	player_t	*tmp;
-	int iter;
+	int			iter;
 
 	iter = 0;
-	tmp = game->players;
 	printf("Introducing contestants...\n");
-	while (game->players)
+	while (iter < game->players_amount)
 	{
-		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
-		game->players->id, game->players->code_size,
-		game->players->name, game->players->comment);
+		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n", game->players->id, game->players->code_size, game->players->name, game->players->comment);
 		game->players = game->players->next;
 		++iter;
 	}
@@ -48,25 +44,23 @@ void			print_arena(corewar_t *game)
 
 void			arrange_units(corewar_t *game)
 {
-	player_t	*iter;
+	int			iter;
 	int			player_location;
 	int			memory_step;
 	int			code_iter;
-	int			test;
 
 	memory_step = MEM_SIZE / game->players_amount;
-	iter = game->players;
-	test = 0;
-	while (iter)
+	iter = 0;
+	while (iter < game->players_amount)
 	{
 		code_iter = 0;
-		player_location = memory_step * test;
+		player_location = memory_step * iter;
 		game->carriages->current_location = player_location;
-		while (player_location < memory_step * test + CHAMP_MAX_SIZE)
-			game->arena->field[player_location++] = iter->code[code_iter++];
-		iter = iter->next;
-		game->carriages = game->carriages->prev;
-		++test;
+		while (player_location < memory_step * iter + CHAMP_MAX_SIZE)
+			game->arena->field[player_location++] = game->players->code[code_iter++];
+		game->players = game->players->next;
+		game->carriages = game->carriages->next;
+		++iter;
 	}
 }
 

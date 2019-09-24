@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 16:18:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:21:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_carry(unsigned char *registers, int *carry, int reg_num)
 	int iter;
 
 	iter = --reg_num * REG_SIZE;
-	while (iter < REG_SIZE)
+	while (iter < reg_num * REG_SIZE + REG_SIZE)
 	{
 		if (registers[iter] != 0)
 		{

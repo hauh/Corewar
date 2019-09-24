@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 14:14:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 21:03:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void			validate_player(player_t *player)
 void		initialization_player(corewar_t *game)
 {
 	player_t	*new_player;
+	player_t	*tmp;
 
 	if (!(new_player			= (player_t *)malloc(sizeof(player_t))))
 		error_catcher(MEMORY_ALLOC_ERROR, PLAYER);
@@ -49,15 +50,18 @@ void		initialization_player(corewar_t *game)
 	new_player->code_size		= 0;
 	new_player->carriage_id		= 0;
 	new_player->binary_label	= 0;
-	new_player->next			= NULL;
-	new_player->prev			= NULL;
 	if (!game->players)
+	{
 		game->players = new_player;
+		game->players->next = game->players;
+		game->players->prev = game->players;
+	}
 	else
 	{
+		new_player->prev = game->players->prev;
+		new_player->next = game->players;
+		game->players->prev->next = new_player;
 		game->players->prev = new_player;
-		game->players->prev->next = game->players;
-		game->players = game->players->prev;
 	}
 }
 
@@ -100,10 +104,10 @@ void			initialization_players(corewar_t *game, char **argv, int argc)
 			initialization_player(game);
 			if ((fd = open(argv[iter], O_RDONLY)) < 0)
 				error_catcher(OPEN_FILE_ERROR, PLAYER);
-			if (read(fd, game->players->source, CODE) < 0)
+			if (read(fd, game->players->prev->source, CODE) < 0)
 				error_catcher(READ_FILE_ERROR, PLAYER);
-			build_player(game->players);
-			validate_player(game->players);
+			build_player(game->players->prev);
+			validate_player(game->players->prev);
 			close(fd);
 		}
 		++iter;

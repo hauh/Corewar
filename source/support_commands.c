@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 17:24:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/24 22:07:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ void		cwReadAndValidateReg(corewar_t *game)
 
 	current_register = game->arena->field[CARRIAGE_LOCATION];
 	if (current_register < 1 || current_register > 16)
-		REQUEST_REGISTER = ERROR;
+		game->carriages->error_occured = TRUE;
 	else
 		REQUEST_REGISTER = current_register;
 }
 
 void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int div_mod, int input_arg)
 {
+	int save_point;
+
 	if (mode == CW_READING_MODE)
 	{
 		if (input_arg == REG_CODE)
 		{
 			cwReadAndValidateReg(game);
-			if (REQUEST_REGISTER == ERROR)
-				return;
+			if (game->carriages->error_occured)
+				error_catcher(CHEAT_DETECT, COMMAND);
 			cwReadFromRegToBuf(read_write_dst, game->carriages->registers, REQUEST_REGISTER, 0);
 			CARRIAGE_LOCATION += REGISTR_SIZE;
 		}
@@ -65,9 +67,19 @@ void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int
 			cwReadFromArenaToBuf(game->arena->address_buf, game->arena->field, CARRIAGE_LOCATION, 2);
 			cwConversionBytesToInt(game->arena->address_buf, &game->arena->tmp_value1, 2);
 			if (div_mod == TRUE)
-				cwReadFromArenaToBuf(read_write_dst, game->arena->field, (CARRIAGE_LOCATION + (game->arena->tmp_value1 % IDX_MOD)) % MEM_SIZE, 0);
+			{
+				save_point = CARRIAGE_LOCATION;
+				CARRIAGE_LOCATION = (game->carriages->save_point + (game->arena->tmp_value1 % IDX_MOD)) % MEM_SIZE;
+				cwReadFromArenaToBuf(read_write_dst, game->arena->field, CARRIAGE_LOCATION, 0);
+				CARRIAGE_LOCATION = save_point;
+			}
 			else
-				cwReadFromArenaToBuf(read_write_dst, game->arena->field, (CARRIAGE_LOCATION + game->arena->tmp_value1) % MEM_SIZE, 0);
+			{
+				save_point = CARRIAGE_LOCATION;
+				CARRIAGE_LOCATION = (game->carriages->save_point + game->arena->tmp_value1) % MEM_SIZE;
+				cwReadFromArenaToBuf(read_write_dst, game->arena->field, CARRIAGE_LOCATION, 0);
+				CARRIAGE_LOCATION = save_point;
+			}
 			CARRIAGE_LOCATION += IND_SIZE;
 		}
 	}
@@ -76,8 +88,8 @@ void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int
 		if (input_arg == REG_CODE)
 		{
 			cwReadAndValidateReg(game);
-			if (REQUEST_REGISTER == ERROR)
-				return;
+			if (game->carriages->error_occured)
+				error_catcher(CHEAT_DETECT, COMMAND);
 			cwWriteFromBufToReg(read_write_dst, game->carriages->registers, REQUEST_REGISTER, 0);
 			CARRIAGE_LOCATION += REGISTR_SIZE;
 		}
@@ -91,9 +103,19 @@ void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int
 			cwReadFromArenaToBuf(game->arena->address_buf, game->arena->field, CARRIAGE_LOCATION, 2);
 			cwConversionBytesToInt(game->arena->address_buf, &game->arena->tmp_value1, 2);
 			if (div_mod == TRUE)
-				cwWriteFromBufToArena(read_write_dst, game->arena->field, (CARRIAGE_LOCATION + (game->arena->tmp_value1 % IDX_MOD)) % MEM_SIZE, 0);
+			{
+				save_point = CARRIAGE_LOCATION;
+				CARRIAGE_LOCATION = (game->carriages->save_point + (game->arena->tmp_value1 % IDX_MOD)) % MEM_SIZE;
+				cwWriteFromBufToArena(read_write_dst, game->arena->field, CARRIAGE_LOCATION, 0);
+				CARRIAGE_LOCATION = save_point;
+			}
 			else
-				cwWriteFromBufToArena(read_write_dst, game->arena->field, (CARRIAGE_LOCATION + game->arena->tmp_value1) % MEM_SIZE, 0);
+			{
+				save_point = CARRIAGE_LOCATION;
+				CARRIAGE_LOCATION = (game->carriages->save_point + game->arena->tmp_value1) % MEM_SIZE;
+				cwWriteFromBufToArena(read_write_dst, game->arena->field, CARRIAGE_LOCATION, 0);
+				CARRIAGE_LOCATION = save_point;
+			}
 			CARRIAGE_LOCATION += IND_SIZE;
 		}
 	}
@@ -106,11 +128,9 @@ void		live_exec(corewar_t *game)
 
 	cwTypeHandler					(game);
 	cwArgsHandler					(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	if (REQUEST_REGISTER == ERROR)
-		return;
+	cwConversionBytesToInt			(game->arena->value_buf1, &input, 0);
 	cwReadFromRegToBuf				(game->arena->value_buf2, game->carriages->registers, R1, 0);
 	cwConversionBytesToInt			(game->arena->value_buf2, &reference, 0);
-	cwConversionBytesToInt			(game->arena->value_buf1, &input, 0);
 	if (-input == reference)
 		game->arena->last_survivor	= game->carriages->owner;
 	game->carriages->jump			= CARRIAGE_LOCATION - game->carriages->save_point;
@@ -245,13 +265,15 @@ void		xor_exec(corewar_t *game)
 
 void		zjmp_exec(corewar_t *game)
 {
-	int 	jump;
+	short	jump;
+	int		test;
 
 	cwTypeHandler				(game);
 	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
 	cwConversionBytesToInt		(game->arena->value_buf1, &jump, 0);
+	printf("%d\n", jump % IDX_MOD);
 	if (game->carriages->carry)
-		game->carriages->jump = jump;
+		game->carriages->jump = jump % IDX_MOD;
 	else
 		game->carriages->jump = CARRIAGE_LOCATION - game->carriages->save_point;
 	CARRIAGE_LOCATION = game->carriages->save_point;
@@ -293,11 +315,11 @@ void	sti_exec(corewar_t *game)
 	cwConversionBytesToInt		(game->arena->value_buf1, &data, 0);
 	cwConversionBytesToInt		(game->arena->value_buf2, &second_arg, 0);
 	cwConversionBytesToInt		(game->arena->value_buf3, &third_arg, 0);
-	total_address = (second_arg + third_arg) % IDX_MOD;
+	total_address = (second_arg + third_arg);
 	cwConversionIntToBytes		(game->arena->address_buf, &total_address, 0);
 	game->carriages->jump		= CARRIAGE_LOCATION - game->carriages->save_point;
 	CARRIAGE_LOCATION			= game->carriages->save_point;
-	cwWriteFromBufToArena		(game->arena->address_buf, game->arena->field, (CARRIAGE_LOCATION + total_address) % MEM_SIZE, 0);
+	cwWriteFromBufToArena		(game->arena->address_buf, game->arena->field, (CARRIAGE_LOCATION + total_address % IDX_MOD) % MEM_SIZE, 0);
 	if (game->carriages->current_command->change_carry)
 		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
 }
