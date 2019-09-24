@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/19 00:35:39 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/24 16:45:58 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static t_opcode_type	get_opcode_type(char **line, int *x)
 {
-	const char	*types[17] = {NULL, "live", "ld", "st", "add", "sub",
-							"and", "or", "xor", "zjmp", "ldi", "sti",
-							"fork", "lld", "lldi", "lfork", "aff"};
-	size_t		size;
-	int			i;
+	static const char	*types[17] = {NULL, "live", "ld", "st", "add", "sub",
+									"and", "or", "xor", "zjmp", "ldi", "sti",
+									"fork", "lld", "lldi", "lfork", "aff"};
+	size_t				size;
+	int					i;
 
 	i = 17;
 	while (--i)
