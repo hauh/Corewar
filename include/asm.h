@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 22:59:09 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 00:29:05 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,15 @@ typedef struct	s_opcode_param
 	int				value;
 }				t_opcode_param;
 
+typedef struct	s_label
+{
+	char			*label_name;
+	struct s_labels	*next;
+}				t_label;
+
 typedef struct	s_opcode
 {
-	char			*label;
+	t_label			*labels;
 	t_opcode_param	*param[3];
 	t_opcode_type	type;
 	size_t			size;

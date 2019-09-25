@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:11:10 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 00:43:48 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	find_label(t_opcode *head, char *label_name)
 {
 	t_opcode	*prog;
+	t_label		*list;
 	int			bytes;
 
 	prog = head->prev;
@@ -22,8 +23,13 @@ static int	find_label(t_opcode *head, char *label_name)
 	while (prog)
 	{
 		bytes -= prog->size;
-		if (prog->label && ft_strequ(prog->label, label_name))
-			return (bytes);
+		list = prog->labels; 
+		while (list)
+		{
+			if (prog->labels && ft_strequ(prog->labels, label_name))
+				return (bytes);
+			//stub
+		}
 		prog = prog->prev;
 	}
 	prog = head;
@@ -35,7 +41,7 @@ static int	find_label(t_opcode *head, char *label_name)
 		bytes += prog->size;
 		prog = prog->next;
 	}
-	ft_printf("Label %s ");
+	ft_printf("Label \"%s\" ", label_name);
 	error("not found", 0);
 	return (0);
 }

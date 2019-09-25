@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 23:08:37 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:33:15 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/25 00:21:01 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static t_opcode_type	get_opcode_type(char **line)
 
 static int				validate_parameters(t_opcode_type type, int code)
 {
-	if ((type == crw_live || type == crw_aff || type == crw_fork
-					|| type == crw_lfork) && code != 128)
+	if ((type == crw_live || type == crw_fork || type == crw_lfork)
+		&& code != 128)
 		return (0);
 	if ((type == crw_ld || type == crw_lld) && code != 144 && code != 208)
 		return (0);

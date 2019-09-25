@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:38:54 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 00:26:30 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_opcode	*new_element(t_opcode **program)
 	if (!(new = (t_opcode *)malloc(sizeof(t_opcode))))
 		error(strerror(errno), 0);
 	new->next = NULL;
-	new->label = NULL;
+	new->labels = NULL;
 	new->type = crw_undef_code;
 	new->param_code = 0;
 	if ((new->prev = *program))
