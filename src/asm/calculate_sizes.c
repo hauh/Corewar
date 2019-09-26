@@ -1,21 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   analyze_sizes.c                                    :+:      :+:    :+:   */
+/*   calculate_sizes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 00:43:48 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 19:31:56 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int	find_label(t_opcode *head, char *label_name)
+static int	check_labels(t_label *list, char *label_link)
+{
+	while (list)
+	{
+		if (ft_strequ(list->label_name, label_link))
+			return (1);
+		list = list->next;
+	}
+	return (0);
+}
+
+static int	find_label(t_opcode *head, char *label_link)
 {
 	t_opcode	*prog;
-	t_label		*list;
 	int			bytes;
 
 	prog = head->prev;
@@ -23,25 +33,20 @@ static int	find_label(t_opcode *head, char *label_name)
 	while (prog)
 	{
 		bytes -= prog->size;
-		list = prog->labels; 
-		while (list)
-		{
-			if (prog->labels && ft_strequ(prog->labels, label_name))
-				return (bytes);
-			//stub
-		}
+		if (check_labels(prog->labels, label_link))
+			return (bytes);
 		prog = prog->prev;
 	}
 	prog = head;
 	bytes = 0;
 	while (prog)
 	{
-		if (prog->label && ft_strequ(prog->label, label_name))
+		if (check_labels(prog->labels, label_link))
 			return (bytes);
 		bytes += prog->size;
 		prog = prog->next;
 	}
-	ft_printf("Label \"%s\" ", label_name);
+	ft_printf("Label \"%s\" ", label_link);
 	error("not found", 0);
 	return (0);
 }
@@ -91,24 +96,18 @@ static int	params_size(t_opcode_param **params, t_opcode_type type)
 	return (size);
 }
 
-static int	calculate_sizes(t_opcode *prog)
+void		calculate_sizes(t_warrior *warrior)
 {
-	size_t total;
+	t_opcode	*prog;
 
-	total = 0;
+	prog = warrior->program;
 	while (prog)
 	{
 		prog->size = 1 + (prog->type != crw_live && prog->type != crw_zjmp
 						&& prog->type != crw_fork && prog->type != crw_lfork);
 		prog->size += params_size(prog->param, prog->type);
-		total += prog->size;
+		warrior->code_size += prog->size;
 		prog = prog->next;
 	}
-	return (total);
-}
-
-void		analyze_sizes(t_warrior *warrior)
-{
-	warrior->code_size = calculate_sizes(warrior->program);
 	set_links_values(warrior->program);
 }

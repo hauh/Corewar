@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:01:27 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 19:36:09 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			main(int argc, char **argv)
 		flag = argv[i][0] == '-' ? get_flag(argv[i++]) : 0;
 		if (i == argc)
 			error("File not specified", 0);
-		process_file(argv[i], flag);
+		process_argument(argv[i], flag);
 		++i;
 	}
 	return (0);

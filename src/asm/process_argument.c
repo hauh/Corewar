@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_file.c                                     :+:      :+:    :+:   */
+/*   process_argument.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 18:11:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 22:47:56 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 19:36:22 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,24 @@ static int	build_file(t_warrior *warrior, char *name, int flag)
 
 static void	cleanup(t_warrior *warrior)
 {
-	t_opcode *clean;
+	void *clean;
 
 	while (warrior->program)
 	{
-		clean = warrior->program;
+		while (warrior->program->labels)
+		{
+			clean = (t_label *)warrior->program->labels;
+			warrior->program->labels = warrior->program->labels->next;
+			free(clean);
+		}
+		if (warrior->program->param[0])
+			free(warrior->program->param[0]);
+		if (warrior->program->param[1])
+			free(warrior->program->param[1]);
+		if (warrior->program->param[2])
+			free(warrior->program->param[2]);
+		clean = (t_opcode *)warrior->program;
 		warrior->program = warrior->program->next;
-		if (clean->label)
-			free(clean->label);
-		if (clean->param[0])
-			free(clean->param[0]);
-		if (clean->param[1])
-			free(clean->param[1]);
-		if (clean->param[2])
-			free(clean->param[2]);
 		free(clean);
 	}
 	free(warrior->name);
@@ -96,14 +100,14 @@ static void	cleanup(t_warrior *warrior)
 	free(warrior);
 }
 
-void		process_file(char *arg, int flag)
+void		process_argument(char *arg, int flag)
 {
 	t_warrior *warrior;
 
 	if (!(flag & 1))
 	{
 		warrior = parse_file(open_file(arg, flag));
-		analyze_sizes(warrior);
+		calculate_sizes(warrior);
 		assemble(warrior);
 		build_file(warrior, arg, flag);
 		cleanup(warrior);

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 00:29:05 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 19:35:43 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct	s_opcode_param
 typedef struct	s_label
 {
 	char			*label_name;
-	struct s_labels	*next;
+	struct s_label	*next;
 }				t_label;
 
 typedef struct	s_opcode
@@ -92,7 +92,7 @@ typedef struct	s_warrior
 char			*read_input(int fd);
 void			skip_whitespaces(char **line);
 int				ft_printf(const char *line, ...);
-void			process_file(char *arg, int flag);
+void			process_argument(char *arg, int flag);
 void			error(char *err, int type);
 
 t_warrior		*parse_file(int fd);
@@ -101,7 +101,7 @@ void			parse_label(t_opcode *program, char **line);
 void			parse_opcode(t_opcode *new, char *line);
 t_opcode_param	*parse_parameter(char *line);
 
-void			analyze_sizes(t_warrior *list);
+void			calculate_sizes(t_warrior *list);
 void			assemble(t_warrior *warrior);
 void			disassemble(int fd, int fd_out);
 
