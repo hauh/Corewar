@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 20:20:13 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:02:01 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 23:04:33 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,15 @@ static char	*get_string(int fd)
 	return (s);
 }
 
-static int	check_token(const char *s, size_t size, int fd)
+static int	check_token(const char *s, ssize_t size, int fd)
 {
-	char buf[size + 1];
+	char	buf[size + 1];
+	int		rd;
 
-	if (read(fd, buf, size) < 0)
+	if ((rd = read(fd, buf, size)) < 0)
 		error(strerror(errno), 0);
+	if (rd != size)
+		error("Syntax error: wrong title", 0);
 	buf[size] = 0;
 	if (ft_strequ(s, buf))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 23:31:41 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 21:58:38 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ static int		get_registry_value(char *line)
 	return (val);
 }
 
+static int		get_numeric_value(char *line)
+{
+	char *check;
+
+	check = line;
+	if (*check == '-' || *check == '+')
+		++check;
+	if (!IS_DIGIT(*check))
+		error("Syntax error: empty parameter value", 1);
+	while (*check && *check != SEPARATOR_CHAR && !IS_BLANK(*check))
+		if (!IS_DIGIT(*check++))
+			error("Lexical error: non-digits in parameter value", 1);
+	return (ft_atoi(line));
+}
+
 static void		get_parameter(t_opcode_param *param, char *line)
 {
 	if (*line == REGISTRY_CHAR)
@@ -69,7 +84,7 @@ static void		get_parameter(t_opcode_param *param, char *line)
 	if (*line == LABEL_CHAR)
 		param->link = get_label_link(line + 1);
 	else
-		param->value = ft_atoi(line);
+		param->value = get_numeric_value(line);
 }
 
 t_opcode_param	*parse_parameter(char *line)

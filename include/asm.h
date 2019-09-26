@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:21:24 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 19:35:43 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 22:05:22 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 
 # define IS_BLANK(c) (c == ' ' || c == '\t')
 # define IS_DIGIT(c) (c >= '0' && c <= '9')
+
+# define F_DISASSEMBLE 1
+# define F_OUTPUT_LOCAL 2
 
 extern int		g_cur_line;
 extern int		g_cur_col;

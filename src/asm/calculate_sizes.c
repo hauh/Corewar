@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 19:31:56 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 19:51:40 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,17 @@ void		calculate_sizes(t_warrior *warrior)
 {
 	t_opcode	*prog;
 
+	warrior->code_size = 0;
 	prog = warrior->program;
 	while (prog)
 	{
-		prog->size = 1 + (prog->type != crw_live && prog->type != crw_zjmp
+		if (prog->type != crw_undef_code)
+		{
+			prog->size = 1 + (prog->type != crw_live && prog->type != crw_zjmp
 						&& prog->type != crw_fork && prog->type != crw_lfork);
-		prog->size += params_size(prog->param, prog->type);
-		warrior->code_size += prog->size;
+			prog->size += params_size(prog->param, prog->type);
+			warrior->code_size += prog->size;
+		}
 		prog = prog->next;
 	}
 	set_links_values(warrior->program);

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 18:11:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 19:36:22 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 22:53:28 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	open_file(char *file_name, int flag)
 	p = file_name;
 	while (*p)
 		++p;
-	if (flag & 1 ?
+	if (flag & F_DISASSEMBLE ?
 		p - file_name < 5 || !ft_strequ(p - 4, ".cor")
 		: p - file_name < 3 || !ft_strequ(p - 2, ".s"))
 		error("Wrong filename (need .s or .cor with -d flag)", 0);
@@ -36,8 +36,8 @@ static char	*get_new_filename(char *file_name, int flag)
 	new = file_name;
 	while (*new)
 		++new;
-	*(new - (flag & 1 ? 4 : 2)) = 0;
-	if (flag & 2)
+	*(new - (flag & F_DISASSEMBLE ? 4 : 2)) = 0;
+	if (flag & F_OUTPUT_LOCAL)
 	{
 		while (new != file_name && *new != '/')
 			--new;
@@ -45,7 +45,7 @@ static char	*get_new_filename(char *file_name, int flag)
 			++new;
 		file_name = new;
 	}
-	if (!(new = ft_strjoin(file_name, flag & 1 ? ".s" : ".cor")))
+	if (!(new = ft_strjoin(file_name, flag & F_DISASSEMBLE ? ".s" : ".cor")))
 		error(strerror(errno), 0);
 	return (new);
 }
@@ -60,14 +60,14 @@ static int	build_file(t_warrior *warrior, char *name, int flag)
 	new_file = get_new_filename(name, flag);
 	if ((fd = open(new_file, O_CREAT | O_WRONLY | O_TRUNC, mode)) < 0)
 		error(strerror(errno), 0);
-	if (!(flag & 1))
+	if (flag & F_DISASSEMBLE)
+		ft_printf("Writing output champion to %s\n", new_file);
+	else
 	{
 		write(fd, warrior->byte_code, warrior->code_size);
 		close(fd);
 		ft_printf("Writing output program to %s\n", new_file);
 	}
-	else
-		ft_printf("Writing output champion to %s\n", new_file);
 	free(new_file);
 	return (fd);
 }
@@ -104,7 +104,9 @@ void		process_argument(char *arg, int flag)
 {
 	t_warrior *warrior;
 
-	if (!(flag & 1))
+	if (flag & F_DISASSEMBLE)
+		disassemble(open_file(arg, flag), build_file(NULL, arg, flag));
+	else
 	{
 		warrior = parse_file(open_file(arg, flag));
 		calculate_sizes(warrior);
@@ -112,6 +114,4 @@ void		process_argument(char *arg, int flag)
 		build_file(warrior, arg, flag);
 		cleanup(warrior);
 	}
-	else
-		disassemble(open_file(arg, flag), build_file(NULL, arg, flag));
 }

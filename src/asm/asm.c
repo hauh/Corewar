@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 23:32:36 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 19:36:09 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 22:05:35 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int g_cur_col;
 void		error(char *err, int type)
 {
 	if (type)
-		ft_printf("%s in line %d, col %d\n", err, g_cur_line, g_cur_col);
+		ft_printf("%s [%d:%d]\n", err, g_cur_line, g_cur_col);
 	else
 		ft_printf("%s\n", err);
-	exit(-1);
+	exit(11);
 }
 
 static void	usage(void)
@@ -42,9 +42,9 @@ static int	get_flag(char *arg)
 	while (*arg)
 	{
 		if (*arg == 'd')
-			flag |= 1;
+			flag |= F_DISASSEMBLE;
 		else if (*arg == 'f')
-			flag |= 2;
+			flag |= F_OUTPUT_LOCAL;
 		else
 			usage();
 		++arg;

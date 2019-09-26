@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 21:12:14 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 00:26:30 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 21:03:07 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static t_opcode	*new_element(t_opcode **program)
 	new->next = NULL;
 	new->labels = NULL;
 	new->type = crw_undef_code;
+	new->size = 0;
 	new->param_code = 0;
 	if ((new->prev = *program))
 		(*program)->next = new;
@@ -78,6 +79,8 @@ t_warrior		*parse_file(int fd)
 		++g_cur_line;
 	}
 	close(fd);
+	if (!program)
+		error("Error: empty champion", 0);
 	while (program->prev)
 		program = program->prev;
 	warrior->program = program;
