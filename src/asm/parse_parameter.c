@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/16 23:31:59 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 21:58:38 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/27 00:36:27 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@ static int		get_numeric_value(char *line)
 	check = line;
 	if (*check == '-' || *check == '+')
 		++check;
-	if (!IS_DIGIT(*check))
-		error("Syntax error: empty parameter value", 1);
-	while (*check && *check != SEPARATOR_CHAR && !IS_BLANK(*check))
-		if (!IS_DIGIT(*check++))
-			error("Lexical error: non-digits in parameter value", 1);
+	while (IS_DIGIT(*check))
+		++check;
+	if (*check && *check != SEPARATOR_CHAR && !IS_BLANK(*check))
+		error("Lexical error: incorrect parameter value", 1);
 	return (ft_atoi(line));
 }
 
