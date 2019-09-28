@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 21:45:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/28 20:31:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,48 +61,48 @@ void		start_checking(corewar_t *game)
 void		here_we_go(corewar_t *game)
 {
 	int		carriage_iter;
+	char	flag;
 
 	while (game->carriages)
 	{
 		carriage_iter = 0;
-		//cr_vis_main(game, V_CONTROL);
- 		//cr_vis_main(game, V_INFO);
-		//if ((game->vis->step || game->vis->flow) && game->vis->tick)
-	//	{
-			while (carriage_iter < game->carriages_amount)
+		while (carriage_iter < game->carriages_amount)
+		{
+			if (!game->carriages->waiting_time)
 			{
-				if (!game->carriages->waiting_time)
+				if (game->arena->field[game->carriages->current_location] > 0 && game->arena->field[game->carriages->current_location] < 17)
 				{
-					if (game->arena->field[game->carriages->current_location] > 0 && game->arena->field[game->carriages->current_location] < 17)
-					{
-						game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
- 						game->carriages->waiting_time = game->carriages->current_command->waiting_time;
-					}
- 					else
- 					{
- 						game->carriages->current_location = (game->carriages->current_location + 1) % MEM_SIZE;
- 						continue;
- 					}
+					game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
+						game->carriages->waiting_time = game->carriages->current_command->waiting_time;
 				}
-				if (game->carriages->waiting_time)
-					--game->carriages->waiting_time;
-				if (!game->carriages->waiting_time)
+				else
 				{
-					game->carriages->current_command->function(game);
-					game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
-				}
-				//cr_vis_main(game, V_UPDATE);
-				game->carriages = game->carriages->prev;
-				++carriage_iter;
+					game->carriages->current_location = (game->carriages->current_location + 1) % MEM_SIZE;
+ 					continue;
+ 				}
 			}
-			if (++game->arena->cycle_amount >= 5000)
+			if (game->carriages->waiting_time)
+				--game->carriages->waiting_time;
+			if (!game->carriages->waiting_time)
 			{
-				print_arena(game);
-				exit(1);
+				game->carriages->current_command->function(game);
+				game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
+				if (game->carriages->current_location < 0)
+					game->carriages->current_location = -game->carriages->current_location;
+				while (flag != '1')
+					read(0, &flag, 1);
+				flag = '0';
 			}
- 			if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
- 				start_checking(game);
-		//}
+			game->carriages = game->carriages->prev;
+			++carriage_iter;
+		}
+		if (++game->arena->cycle_amount >= 5000)
+		{
+			print_arena(game);
+			exit(1);
+		}
+ 		if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
+ 			start_checking(game);
 	}
  	printf("Player %s number %d is WIN!!!\n", game->arena->last_survivor->name, game->arena->last_survivor->id);
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 20:35:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/26 15:53:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,8 @@ typedef struct				carriage_s
 typedef struct				arena_s
 {
 	int						tmp_value1;
-	int						tmp_value2;
-	int						tmp_value3;
+	short					tmp_value2;
+	char					tmp_value3;
 	int						live_amount;
 	int						check_amount;
 	int						cycle_to_die;
