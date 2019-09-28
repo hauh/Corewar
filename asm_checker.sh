@@ -1,6 +1,6 @@
 #!/bin/bash
 
-S_FILES=./checker/tests/asm/error/
+S_DIR=./vm_champs/champs/championships/*/*/
 MY_ASM=./asm
 OG_ASM=./vm_champs/asm
 GREEN="\e[32m"
@@ -8,29 +8,29 @@ RED="\e[31m"
 YELLOW="\e[1;33m"
 EOC="\e[0m"
 
-for s in ${S_FILES}*.s ; do
-	${MY_ASM} $s >/dev/null
-	COR="${s%".s"}.cor"
+for S_FILE in ${S_DIR}*.s ; do
+	${MY_ASM} ${S_FILE} >/dev/null
+	COR="${S_FILE%".s"}.cor"
 	if [[ -e ${COR} ]] ; then
-		mv ${COR} my_champ
+		mv ${COR} my_champ.cor
 	fi
-	${OG_ASM} $s >/dev/null
+	${OG_ASM} ${S_FILE} >/dev/null
 	if [[ -e ${COR} ]] ; then
-		mv ${COR} og_champ
+		mv ${COR} og_champ.cor
 	fi
-	if [[ -e my_champ ]] && [[ -e og_champ ]] ; then
-		if [[ $( diff "my_champ" "og_champ" ) ]]
+	if [[ -e my_champ.cor ]] && [[ -e og_champ.cor ]] ; then
+		if [[ $( diff "my_champ.cor" "og_champ.cor" ) ]]
 			then printf "${RED}KO${EOC} ${COR}\n"
 			else printf "${GREEN}OK${EOC} ${COR}\n"
 		fi
-		rm my_champ
-		rm og_champ
-	elif [[ -e my_champ ]] ; then
-		printf "${YELLOW}ERROR${EOC} og_champ was not created, but my_champ was ${s}\n"
-		rm my_champ ;
-	elif [[ -e og_champ ]] ; then
-		printf "${YELLOW}ERROR${EOC} my_champ was not created, but og_champ was ${s}\n"
-		rm og_champ
+		rm my_champ.cor
+		rm og_champ.cor
+	elif [[ -e my_champ.cor ]] ; then
+		printf "${YELLOW}ERROR${EOC} og_champ was not created, but my_champ was ${S_FILE}\n"
+		rm my_champ.cor ;
+	elif [[ -e og_champ.cor ]] ; then
+		printf "${YELLOW}ERROR${EOC} my_champ was not created, but og_champ was ${S_FILE}\n"
+		rm og_champ.cor
 	else
 		printf "${YELLOW}ERROR${EOC} incorrect file ${s}\n"
 	fi

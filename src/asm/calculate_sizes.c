@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 19:44:05 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/26 19:51:40 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/28 17:11:17 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ static int	params_size(t_opcode_param **params, t_opcode_type type)
 		{
 			if (params[i]->type == crw_registry)
 				size += T_REG;
-			else if (params[i]->type == crw_indirect
-				|| type == crw_zjmp || type == crw_ldi || type == crw_sti
-				|| type == crw_fork || type == crw_lld || type == crw_lfork)
+			else if (params[i]->type == crw_indirect || type == crw_zjmp
+				|| type == crw_ldi || type == crw_sti || type == crw_fork
+				|| type == crw_lld || type == crw_lldi || type == crw_lfork)
 				size += T_DIR;
 			else
 				size += T_IND;

@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:55:25 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/24 22:41:29 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/28 17:10:32 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static void	assemble_params(unsigned char **code,
 		{
 			if (params[i]->type == crw_registry)
 				*(*code)++ = params[i]->value;
-			else if (params[i]->type == crw_indirect
-				|| type == crw_zjmp || type == crw_ldi || type == crw_sti
-				|| type == crw_fork || type == crw_lld || type == crw_lfork)
+			else if (params[i]->type == crw_indirect || type == crw_zjmp
+				|| type == crw_ldi || type == crw_sti || type == crw_fork
+				|| type == crw_lld || type == crw_lldi || type == crw_lfork)
 			{
 				*(*code)++ = params[i]->value >> 8;
 				*(*code)++ = params[i]->value & 0xff;
