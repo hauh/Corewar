@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/26 15:53:13 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 21:11:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,18 @@ typedef struct				s_vis
 ** ---------------------------
 */
 
-#define REQUEST_REGISTER	game->carriages->current_register
-#define CARRIAGE_LOCATION	game->carriages->current_location
-#define DYNAMIC_SIZE_DIR	4 - game->carriages->current_command->dir_size
+#define CW_DYNAMIC_SIZE_DIR		4 - game->carriages->current_command->dir_size
+#define CW_CARRIAGE_SAVE_POINT	game->carriages->save_point
+#define CW_AVAILABILITY_TYPES	game->carriages->current_command->availability_types
+#define CW_REQUESTING_REGISTER	game->carriages->current_register
+#define CW_CARRIAGE_LOCATION	game->carriages->current_location
+#define CW_GAME_ARENA			game->arena->field
+#define CW_CURRENT_COMMAND		game->carriages->current_command
+#define CW_FIRST_ARG			game->carriages->current_command->first_arg
+#define CW_SECOND_ARG			game->carriages->current_command->second_arg
+#define CW_THIRD_ARG			game->carriages->current_command->third_arg
+#define CW_CARRIAGE_REGISTERS	game->carriages->registers
+#define CW_BUFFER_SET			game->arena->buffer_set
 
 typedef enum				byte_blocks_e
 {
@@ -81,6 +90,17 @@ typedef enum				byte_blocks_e
 	COMMENT					= CODE_SIZE + COMMENT_LENGTH,
 	CODE					= COMMENT + NULL_SEPARATOR + CHAMP_MAX_SIZE
 }							byte_blocks_t;
+
+#define CW_REG_CODE			1
+#define CW_DIR_CODE			2
+#define CW_IND_CODE			3
+
+#define CW_CHAR				1
+#define CW_SHORT			2
+#define CW_INT				4
+#define CW_CHAR_BIAS		3
+#define CW_SHORT_BIAS		2
+#define CW_INT_BIAS			0
 
 #define	R1					1
 #define	R2					2
@@ -103,7 +123,7 @@ typedef enum				byte_blocks_e
 #define DIRECTION_SIZE		4
 #define SHORT_DIR_SIZE		2
 #define OVERSTEP_NAME		1
-#define REGISTR_SIZE		1
+#define CW_REGISTER_SIZE	1
 #define TO_FIRST_ARG		1
 #define ERROR				-335
 
@@ -130,31 +150,33 @@ typedef enum				byte_blocks_e
 **	Defines for error_catcher
 */
 
-#define MEMORY_ALLOC_ERROR	1
-#define NOT_VALID_ARG		2
-#define OPEN_FILE_ERROR		3
-#define READ_FILE_ERROR		4
-#define INCORRECT_BINARY	5
-#define TOO_BIG_SIZE		6
-#define CHEAT_DETECT		7
-#define ARGS_AMOUN_ERROR	8
-#define INVALID_PLAYERS		9
+#define CW_NOT_ALLOCATED	1
+#define CW_NOT_VALID_KEY	2
+#define CW_OPEN_FILE_ERROR	3
+#define CW_READ_FILE_ERROR	4
+#define CW_INCORRECT_BINARY	5
+#define CW_TOO_BIG_SIZE		6
+#define CW_CHEAT_DETECT		7
+#define CW_ARGS_AMOUN_ERROR	8
+#define CW_INVALID_PLAYERS	9
 
-#define DESTRUCTOR			"Destructor"
-#define GAME				"Game"
-#define KEYS				"Keys"
-#define PLAYER				"Player"
-#define CARRIAGE			"Carriage"
-#define ARENA				"Arena"
-#define COMMAND				"Command"
-#define INIT				"Initialization"
+#define CW_DESTRUCTOR		"Destructor"
+#define CW_GAME				"Game"
+#define CW_KEYS				"Keys"
+#define CW_PLAYER			"Player"
+#define CW_CARRIAGE			"Carriage"
+#define CW_ARENA			"Arena"
+#define CW_COMMAND			"Command"
+#define CW_INIT				"Initialization"
 
 /*
 ** ---------------------------
 */
 
-#define TRUE				1
-#define FALSE				0
+#define CW_BEGIN_FROM_ZERO	0
+#define CW_BEGIN_FROM_ONE	1
+#define CW_TRUE				1
+#define CW_FALSE			0
 #define CARRIAGE_ID_STEP	10
 
 #define LIVE				0x01
@@ -174,9 +196,6 @@ typedef enum				byte_blocks_e
 #define LFORK				0x0f
 #define AFF					0x10
 
-#define FIRST_ARG			game->carriages->current_command->first_arg
-#define SECOND_ARG			game->carriages->current_command->second_arg
-#define THIRD_ARG			game->carriages->current_command->third_arg
 
 #define ONE_MORE_LIVE		1
 #define CW_READING_MODE		1
@@ -184,6 +203,24 @@ typedef enum				byte_blocks_e
 
 
 typedef struct	corewar_s corewar_t;
+
+typedef enum				set_buffer_e
+{
+	CW_VALUE_BUF_1,
+	CW_VALUE_BUF_2,
+	CW_VALUE_BUF_3,
+	CW_SYSTEM_BUF,
+	CW_SPARE_BUF,
+	CW_BUFFER_AMOUNT
+}							set_buffer_t;
+
+typedef struct 				buffer_s
+{
+	int						int_value;
+	char					char_value;
+	short					short_value;
+	unsigned char			*data;
+}							buffer_t;
 
 typedef struct				player_s
 {
@@ -232,26 +269,19 @@ typedef struct				carriage_s
 
 typedef struct				arena_s
 {
-	int						tmp_value1;
-	short					tmp_value2;
-	char					tmp_value3;
 	int						live_amount;
 	int						check_amount;
 	int						cycle_to_die;
-	player_t				*last_survivor;
-	carriage_t				*last_carriage;
 	unsigned long			cycle_amount;
 	unsigned char			*field;
-	unsigned char			*value_buf1;
-	unsigned char			*value_buf2;
-	unsigned char			*value_buf3;
-	unsigned char			*address_buf;
+	carriage_t				*last_carriage;
+	player_t				*last_survivor;
+	buffer_t				*buffer_set[CW_BUFFER_AMOUNT];
 }							arena_t;
 
 typedef struct				destructor_s
 {
 	int						keys_detect;
-	int						self_detect;
 	int						game_detect;
 	int						arena_detect;
 	int						players_detect;
@@ -261,19 +291,16 @@ typedef struct				destructor_s
 
 typedef struct				key_s
 {
+	unsigned int			load_dump;
 	unsigned int			custom_id;
-	unsigned int			concurance_cpu;
-	unsigned int			concurance_gpu;
 	unsigned int			visualizator;
-	unsigned int			extended_param;
 }							key_t;
 
 typedef struct				corewar_s
 {
 	int						players_amount;
-	int						carriages_amount;
 	int						commands_amount;
-	int						pause;
+	int						carriages_amount;
 	t_vis					*vis;
 	key_t					*keys;
 	arena_t					*arena;
@@ -284,12 +311,9 @@ typedef struct				corewar_s
 }							corewar_t;
 
 
-void						validate_player				(player_t *player);
-void						build_player				(player_t *player);
-void						arrange_units				(corewar_t *game);
-void						introduce_players			(corewar_t *game);
-void						here_we_go					(corewar_t *game);
-void						print_arena					(corewar_t *game);
+void						cwIntroducePlayers			(corewar_t *game);
+void						cwHereWeGo					(corewar_t *game);
+void						cwPrintArena				(corewar_t *game);
 void						cwConversionIntToBytes		(unsigned char *buffer, int *from, int bias);
 void						cwConversionBytesToInt		(unsigned char *buffer, int *dest, int bias);
 void						cwReadFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
@@ -312,12 +336,12 @@ void						lld_exec					(corewar_t *game);
 void						lldi_exec					(corewar_t *game);
 void						lfork_exec					(corewar_t *game);
 void						aff_exec					(corewar_t *game);
-void						error_catcher				(int error_code, const char *section);
-void						initialization_players		(corewar_t *game, char **argv, int argc);
-void						initialization_carriages	(corewar_t *game);
-void						initialization_arena		(corewar_t *game);
-void						initialization_commands		(corewar_t *game);
-void						check_carry					(unsigned char *registers, int *carry, int reg_num);
+void						cwErrorCatcher				(int error_code, const char *section);
+void						cwInitializationPlayers		(corewar_t *game, char **argv, int argc);
+void						cwInitializationCarriages	(corewar_t *game);
+void						cwInitializationArena		(corewar_t *game);
+void						cwInitializationCommands	(corewar_t *game);
+void						cwCheckCarry				(unsigned char *registers, int *carry, int reg_num);
 void						copy_reg					(unsigned char *from, unsigned char *to, int size);
 
 //cr_vis_putx(число, индекс в массиве, цвет(индекс игрока), 1)

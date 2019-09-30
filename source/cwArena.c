@@ -1,48 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arena_manager.c                                    :+:      :+:    :+:   */
+/*   cwArena.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 21:01:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 19:57:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void			introduce_players(corewar_t *game)
+void			cwIntroducePlayers(corewar_t *game)
 {
 	int			iter;
 
-	iter = 0;
+	iter = CW_BEGIN_FROM_ZERO;
 	printf("Introducing contestants...\n");
 	while (iter < game->players_amount)
 	{
-		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n", game->players->id, game->players->code_size, game->players->name, game->players->comment);
+		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
+		game->players->id,
+		game->players->code_size,
+		game->players->name,
+		game->players->comment);
 		game->players = game->players->next;
 		++iter;
 	}
 }
 
-void			print_arena(corewar_t *game)
+void			cwPrintArena(corewar_t *game)
 {
 	int			border;
 	int			i;
 
 	border	= sqrt(MEM_SIZE);
-	i		= 0;
+	i		= CW_BEGIN_FROM_ZERO;
+	printf("%4d: ", 0);
 	while (i < MEM_SIZE)
 	{
 		printf("%.2x ", game->arena->field[i]);
-		if ((i + 1) % border == 0 && i > 10)
-			printf("\n");
+		if ((i + 1) % border == 0)
+			printf("\n%4d: ", i + 1);
 		++i;
 	}
+	printf("\n");
 }
 
-void			arrange_units(corewar_t *game)
+void			cwArrangeUnits(corewar_t *game)
 {
 	int			iter;
 	int			player_location;
@@ -50,10 +56,10 @@ void			arrange_units(corewar_t *game)
 	int			code_iter;
 
 	memory_step = MEM_SIZE / game->players_amount;
-	iter = 0;
+	iter = CW_BEGIN_FROM_ZERO;
 	while (iter < game->players_amount)
 	{
-		code_iter = 0;
+		code_iter = CW_BEGIN_FROM_ZERO;
 		player_location = memory_step * iter;
 		game->carriages->current_location = player_location;
 		while (player_location < memory_step * iter + CHAMP_MAX_SIZE)
@@ -64,22 +70,24 @@ void			arrange_units(corewar_t *game)
 	}
 }
 
-void			initialization_arena(corewar_t *game)
+void			cwInitializationArena(corewar_t *game)
 {
 	arena_t		*new_arena;
+	int			buf_iter;
 
+	buf_iter = CW_BEGIN_FROM_ZERO;
 	if (!(new_arena = (arena_t *)malloc(sizeof(arena_t))))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
 	if (!(new_arena->field = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
-	if (!(new_arena->value_buf1 = (unsigned char *)malloc(sizeof(unsigned char) * REG_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
-	if (!(new_arena->value_buf2 = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
-	if (!(new_arena->value_buf3 = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
-	if (!(new_arena->address_buf = (unsigned char *)malloc(sizeof(unsigned char ) * REG_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, ARENA);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
+	while (buf_iter < CW_BUFFER_AMOUNT)
+	{
+		if (!(new_arena->buffer_set[buf_iter] = (buffer_t *)malloc(sizeof(buffer_t))))
+			cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
+		if (!(new_arena->buffer_set[buf_iter]->data = (unsigned char *)malloc(sizeof(unsigned char) * REG_SIZE)))
+			cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
+		++buf_iter;
+	}
 	ft_memset(new_arena->field, 0, MEM_SIZE);
 	new_arena->last_survivor		= game->players;
 	new_arena->last_carriage		= game->carriages;
@@ -87,7 +95,7 @@ void			initialization_arena(corewar_t *game)
 	new_arena->live_amount			= 0;
 	new_arena->check_amount			= 0;
 	new_arena->cycle_to_die			= CYCLE_TO_DIE;
-	game->arena						= new_arena;
 	game->destructor->arena_detect	= TRUE;
-	arrange_units					(game);
+	game->arena						= new_arena;
+	cwArrangeUnits					(game);
 }

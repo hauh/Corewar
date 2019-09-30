@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   carriage_manager.c                                 :+:      :+:    :+:   */
+/*   cwCarriage.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 21:03:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 18:57:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void			initialization_carriage(corewar_t *game, player_t *owner)
+void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 {
 	carriage_t	*new_carriage;
 
 	if (!(new_carriage = (carriage_t *)malloc(sizeof(carriage_t))))
-		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+		error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	if (!(new_carriage->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * REG_SIZE)))
-		error_catcher(MEMORY_ALLOC_ERROR, CARRIAGE);
+		error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	ft_memset(new_carriage->registers, 0, REG_NUMBER * REG_SIZE);
 	new_carriage->id					= ++game->carriages_amount;
-	new_carriage->jump					= FALSE;
+	new_carriage->jump					= CW_FALSE;
 	new_carriage->owner					= owner;
-	new_carriage->carry					= FALSE;
-	new_carriage->last_cycle			= FALSE;
-	new_carriage->waiting_time			= FALSE;
-	new_carriage->error_occured			= FALSE;
+	new_carriage->carry					= CW_FALSE;
+	new_carriage->last_cycle			= CW_FALSE;
+	new_carriage->waiting_time			= CW_FALSE;
+	new_carriage->error_occured			= CW_FALSE;
 	new_carriage->current_command		= NULL;
-	new_carriage->current_location 		= FALSE;
+	new_carriage->current_location 		= CW_FALSE;
 	if (!game->carriages)
 	{
 		game->carriages = new_carriage;
@@ -45,19 +45,19 @@ void			initialization_carriage(corewar_t *game, player_t *owner)
 	}
 }
 
-void			initialization_carriages(corewar_t *game)
+void			cwInitializationCarriages(corewar_t *game)
 {
 	int			iter;
 	int			owner_id;
 
-	iter = 0;
+	iter = CW_BEGIN_FROM_ZERO;
 	while (iter < game->players_amount)
 	{
-		owner_id = game->players->id;
-		initialization_carriage(game, game->players);
+		owner_id = -game->players->id;
+		cwInitializationCarriage(game, game->players);
 		cwConversionIntToBytes(game->carriages->prev->registers, &owner_id, 0);
 		game->players = game->players->next;
 		++iter;
 	}
-	game->destructor->carriages_detect = TRUE;
+	game->destructor->carriages_detect = CW_TRUE;
 }

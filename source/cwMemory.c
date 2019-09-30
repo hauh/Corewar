@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memory_manager.c                                   :+:      :+:    :+:   */
+/*   cwMemory.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/24 21:21:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 21:13:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,7 @@ void	cwReadFromArenaToBuf(unsigned char *buffer, unsigned char *field, int data_
 void	cwWriteFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
 {
 	while (bias < REG_SIZE)
-	{
-		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias];
-		++bias;
-	}
+		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias++];
 }
 
 void	cwWriteFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)

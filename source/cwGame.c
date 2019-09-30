@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/28 20:31:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 17:29:30 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void		here_we_go(corewar_t *game)
 				--game->carriages->waiting_time;
 			if (!game->carriages->waiting_time)
 			{
+				printf("cycle: %d carriage: %d\n", game->arena->cycle_amount, game->carriages->id);
 				game->carriages->current_command->function(game);
 				game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
 				if (game->carriages->current_location < 0)
@@ -98,7 +99,7 @@ void		here_we_go(corewar_t *game)
 		}
 		if (++game->arena->cycle_amount >= 5000)
 		{
-			print_arena(game);
+			//print_arena(game);
 			exit(1);
 		}
  		if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
