@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 21:11:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/09/30 21:17:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef enum				byte_blocks_e
 #define SHORT_DIR_SIZE		2
 #define OVERSTEP_NAME		1
 #define CW_REGISTER_SIZE	1
+#define CW_IND_SIZE			2
 #define TO_FIRST_ARG		1
 #define ERROR				-335
 
@@ -195,12 +196,6 @@ typedef enum				byte_blocks_e
 #define LLDI				0x0e
 #define LFORK				0x0f
 #define AFF					0x10
-
-
-#define ONE_MORE_LIVE		1
-#define CW_READING_MODE		1
-#define CW_WRITING_MODE		2
-
 
 typedef struct	corewar_s corewar_t;
 
