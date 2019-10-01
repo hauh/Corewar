@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_on.c                                          :+:      :+:    :+:   */
+/*   cwGame.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 17:29:30 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 18:04:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ void		start_checking(corewar_t *game)
 	game->arena->live_amount = 0;
 }
 
-void		here_we_go(corewar_t *game)
+void		cwHereWeGo(corewar_t *game)
 {
 	int		carriage_iter;
-	char	flag;
 
 	while (game->carriages)
 	{
@@ -73,7 +72,7 @@ void		here_we_go(corewar_t *game)
 				if (game->arena->field[game->carriages->current_location] > 0 && game->arena->field[game->carriages->current_location] < 17)
 				{
 					game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
-						game->carriages->waiting_time = game->carriages->current_command->waiting_time;
+					game->carriages->waiting_time = game->carriages->current_command->waiting_time;
 				}
 				else
 				{
@@ -85,25 +84,18 @@ void		here_we_go(corewar_t *game)
 				--game->carriages->waiting_time;
 			if (!game->carriages->waiting_time)
 			{
-				printf("cycle: %d carriage: %d\n", game->arena->cycle_amount, game->carriages->id);
+				logging(game, 0);
 				game->carriages->current_command->function(game);
 				game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
 				if (game->carriages->current_location < 0)
 					game->carriages->current_location = -game->carriages->current_location;
-				while (flag != '1')
-					read(0, &flag, 1);
-				flag = '0';
+				logging(game, 1);
 			}
 			game->carriages = game->carriages->prev;
 			++carriage_iter;
 		}
-		if (++game->arena->cycle_amount >= 5000)
-		{
-			//print_arena(game);
-			exit(1);
-		}
  		if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
  			start_checking(game);
 	}
- 	printf("Player %s number %d is WIN!!!\n", game->arena->last_survivor->name, game->arena->last_survivor->id);
+ 	printf("Player %s under number %d is WINNER!!!\n", game->arena->last_survivor->name, game->arena->last_survivor->id);
 }

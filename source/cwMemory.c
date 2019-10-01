@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 21:13:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:27:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	copy_reg(unsigned char *from, unsigned char *to, int size)
+void	cwCopyReg(unsigned char *from, unsigned char *to, int size)
 {
 	int iter;
 
@@ -24,7 +24,7 @@ void	copy_reg(unsigned char *from, unsigned char *to, int size)
 	}
 }
 
-void	check_carry(unsigned char *registers, int *carry, int reg_num)
+void	cwCheckCarry(unsigned char *registers, int *carry, int reg_num)
 {
 	int iter;
 

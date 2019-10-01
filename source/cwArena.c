@@ -6,11 +6,17 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 19:57:35 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:17:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Arena initialization is here. At the beginning we are create the game arena
+** that includes field, temporary buffers and so on. Rules of game here too.
+** Thera are also function to arrange all units to field.
+*/
 
 void			cwIntroducePlayers(corewar_t *game)
 {

@@ -6,11 +6,19 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 18:55:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:27:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** In this file describes some function for key handler. All flags(keys)
+** handled here. Supporting keys is -n -d -v. -n is flag to assign custom
+** number of players. -d need for load dump in the screen,
+** -v flag for visualization. Further will be added some another flags to handle
+** concurance compute on gpu or cpu, but not exactly.
+*/
 
 void			cwValidateArguments(corewar_t *game, char **argv, int argc)
 {

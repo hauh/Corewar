@@ -6,11 +6,18 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 18:55:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:16:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** In this chapter we are handling players. To this action we need to read the name,
+** comment, code and some small bytes between it. Players writes in list that
+** biconnected and looped. It is made for convenience and compatibility with
+** carriage list that similar at players list.
+*/
 
 void			cwValidatePlayer(player_t *player)
 {
@@ -18,13 +25,13 @@ void			cwValidatePlayer(player_t *player)
 
 	check_size = CHAMP_MAX_SIZE - 1;
 	if (player->binary_label != COREWAR_EXEC_MAGIC)
-		cwErrorHandler(CW_INCORRECT_BINARY, CW_PLAYER);
+		cwErrorCatcher(CW_INCORRECT_BINARY, CW_PLAYER);
 	if (player->code_size > CHAMP_MAX_SIZE)
-		cwErrorHandler(CW_TOO_BIG_SIZE, CW_PLAYER);
+		cwErrorCatcher(CW_TOO_BIG_SIZE, CW_PLAYER);
 	while (!player->code[check_size])
 		--check_size;
 	if (player->code_size != check_size + 1)
-		cwErrorHandler(CW_CHEAT_DETECT, CW_PLAYER);
+		cwErrorCatcher(CW_CHEAT_DETECT, CW_PLAYER);
 }
 
 void		cwBuildPlayer(player_t *player)
@@ -58,15 +65,15 @@ void			cwInitializationPlayer(corewar_t *game)
 	player_t	*new_player;
 
 	if (!(new_player			= (player_t *)malloc(sizeof(player_t))))
-		cwErrorHandler(CW_NOT_ALLOCATED, CW_PLAYER);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
 	if (!(new_player->source	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
-		cwErrorHandler(CW_NOT_ALLOCATED, CW_PLAYER);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
 	if (!(new_player->code		= (unsigned char *)malloc(sizeof(unsigned char) * CHAMP_MAX_SIZE)))
-		cwErrorHandler(CW_NOT_ALLOCATED, CW_PLAYER);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
 	if (!(new_player->comment	= (unsigned char *)malloc(sizeof(unsigned char) * COMMENT_LENGTH)))
-		cwErrorHandler(CW_NOT_ALLOCATED, CW_PLAYER);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
 	if (!(new_player->name		= (unsigned char *)malloc(sizeof(unsigned char) * PROG_NAME_LENGTH)))
-		cwErrorHandler(CW_NOT_ALLOCATED, CW_PLAYER);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
 	ft_memset(new_player->source, 0, CODE);
 	ft_memset(new_player->code, 0, CHAMP_MAX_SIZE);
 	ft_memset(new_player->comment, 0, COMMENT_LENGTH);

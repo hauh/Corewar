@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 21:17:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 18:02:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "libft.h"
-#include "ft_printf.h"
+//#include "ft_printf.h"
 # include <ncurses.h>
 # include <locale.h>
 # include <time.h>
@@ -198,6 +198,7 @@ typedef enum				byte_blocks_e
 #define AFF					0x10
 
 typedef struct	corewar_s corewar_t;
+typedef char flag_t;
 
 typedef enum				set_buffer_e
 {
@@ -336,11 +337,11 @@ void						cwInitializationPlayers		(corewar_t *game, char **argv, int argc);
 void						cwInitializationCarriages	(corewar_t *game);
 void						cwInitializationArena		(corewar_t *game);
 void						cwInitializationCommands	(corewar_t *game);
+void						cwInitializationDestructor	(corewar_t *game);
+void						cwInitializationKeys		(corewar_t *game, char **argv, int argc);
 void						cwCheckCarry				(unsigned char *registers, int *carry, int reg_num);
-void						copy_reg					(unsigned char *from, unsigned char *to, int size);
-
-//cr_vis_putx(число, индекс в массиве, цвет(индекс игрока), 1)
-
+void						cwCopyReg					(unsigned char *from, unsigned char *to, int size);
+void	logging(corewar_t *game, flag_t flag);
 
 /*
 ** ---------------------------
@@ -364,6 +365,5 @@ int							cr_vis_printinfo			(corewar_t *cr);
 /*
 ** ---------------------------
 */
-void		cwTypeHandler(corewar_t *game);
-void	cwArgsHandler(corewar_t *game, unsigned char *read_write_dst, int mode, int div_mod, int input_arg);
+
 #endif

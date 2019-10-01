@@ -6,20 +6,27 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 18:57:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:17:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** In this file we are continue to initialization of game part. These functions
+** need to handle and attach every players to carraige. Cause every players must
+** have one(ore more) carriage at least in the beginning. List for storage carriages
+** very similiar(or same) with players list and it biconnected and looped too(convenience :))
+*/
 
 void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 {
 	carriage_t	*new_carriage;
 
 	if (!(new_carriage = (carriage_t *)malloc(sizeof(carriage_t))))
-		error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	if (!(new_carriage->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * REG_SIZE)))
-		error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	ft_memset(new_carriage->registers, 0, REG_NUMBER * REG_SIZE);
 	new_carriage->id					= ++game->carriages_amount;
 	new_carriage->jump					= CW_FALSE;

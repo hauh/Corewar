@@ -6,11 +6,18 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 21:26:09 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:17:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Thist part is most important of corewar project. There are describes functions
+** for working with game commands that have several levels of abstract.
+** This file contains a lot of definens. I think that it make reading code easier.
+** !!!!!!!!Attention, this module working incorrect, need fix bug!!!!!!!!!!!!!!!!<<<---
+*/
 
 void		cwTypeHandler(corewar_t *game)
 {
@@ -32,27 +39,16 @@ void		cwTypeHandler(corewar_t *game)
 	CW_CARRIAGE_LOCATION += TO_FIRST_ARG;
 }
 
-void		cwReadAndValidateReg(corewar_t *game)
-{
-	int		current_register;
-
-	current_register = game->arena->field[CW_CARRIAGE_LOCATION];
-	if (current_register > 0 && current_register < 17)
-		CW_REQUESTING_REGISTER = current_register;
-	else
-	{
-		game->carriages->error_occured = TRUE;
-		cwErrorCatcher(CW_CHEAT_DETECT, CW_COMMAND);
-	}
-}
-
-void		cwWriteOperaion(corewar_t *game, unsigned char *buffer, int idx_mod, int input_arg)
+void		cwWriteOperation(corewar_t *game, unsigned char *buffer, int idx_mod, int input_arg)
 {
 	int		save_point;
 
 	if (input_arg == CW_REG_CODE)
 	{
-		cwReadAndValidateReg(game);
+		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
+		else
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_COMMAND);
 		cwWriteFromBufToReg(buffer, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
 		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
 	}
@@ -64,8 +60,8 @@ void		cwWriteOperaion(corewar_t *game, unsigned char *buffer, int idx_mod, int i
 	else if (input_arg == CW_IND_CODE)
 	{
 		save_point = CW_CARRIAGE_LOCATION;
-		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF], CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
-		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF], &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS);
+		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
+		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS);
 		if (idx_mod == TRUE)
 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
 		else
@@ -81,7 +77,10 @@ void		cwReadOperation(corewar_t *game, unsigned char *buffer, int idx_mod, int i
 
 	if (input_arg == CW_REG_CODE)
 	{
-		cwReadAndValidateReg(game);
+		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
+		else
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_COMMAND);
 		cwReadFromRegToBuf(buffer, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
 		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
 	}
@@ -106,205 +105,167 @@ void		cwReadOperation(corewar_t *game, unsigned char *buffer, int idx_mod, int i
 
 void		live_exec(corewar_t *game)
 {
-	int		reference;
-	int		input;
-
-	cwTypeHandler					(game);
-	cwReadOperation					(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
-	cwReadFromRegToBuf				(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, game->carriages->registers, R1, 0);
-	cwConversionBytesToInt			(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->int_value, 0);
-	cwConversionBytesToInt			(game->arena->value_buf2, &reference, 0);
-	if (-input == reference)
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadFromRegToBuf		(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_CARRIAGE_REGISTERS, R1, 0);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, 0);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, 0);
+	if (CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value == -CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value)
 		game->arena->last_survivor	= game->carriages->owner;
-	game->carriages->jump			= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION				= CW_CARRIAGE_SAVE_POINT;
+	game->carriages->jump			= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
 	game->carriages->last_cycle		= game->arena->cycle_amount;
 	game->arena->live_amount		+= 1;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		ld_exec(corewar_t *game)
 {
 	cwTypeHandler			(game);
-	cwReadOperation			(game, game->arena->value_buf1, CW_TRUE, FIRST_ARG);
-	cwWriteOperaion			(game, game->arena->value_buf1, CW_FALSE, SECOND_ARG);
-	game->carriages->jump	= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION		= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_TRUE, CW_FIRST_ARG);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_SECOND_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		st_exec(corewar_t *game)
 {
 	cwTypeHandler			(game);
-	cwReadOperation			(game, game->arena->value_buf1, CW_FALSE, FIRST_ARG);
-	cwWriteOperaion			(game, game->arena->value_buf1, CW_TRUE, SECOND_ARG);
-	game->carriages->jump	= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION		= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_TRUE, CW_SECOND_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		add_exec(corewar_t *game)
 {
-	int		left_operand;
-	int		right_operand;
-	int		result;
-
-	ft_printf("Executing command: add\n");
-	ft_printf("Before update: %d\n", game->carriages->current_location);
-	print_arena(game);
-	cwTypeHandler				(game);
-	printf("one: %d two: %d three %d\n", game->carriages->current_command->first_arg, game->carriages->current_command->second_arg, game->carriages->current_command->third_arg);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, FALSE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &left_operand, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &right_operand, 0);
-	result = left_operand + right_operand;
-	cwConversionIntToBytes		(game->arena->value_buf3, &result, 0);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
-	ft_printf("After update: %d\n", game->carriages->current_location);
-	print_arena(game);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_FALSE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value + CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value;
+	cwConversionIntToBytes	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		sub_exec(corewar_t *game)
 {
-	int		left_operand;
-	int		right_operand;
-	int		result;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, FALSE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &left_operand, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &right_operand, 0);
-	result = left_operand - right_operand;
-	cwConversionIntToBytes		(game->arena->value_buf3, &result, 0);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_FALSE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value - CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value;
+	cwConversionIntToBytes	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		and_exec(corewar_t *game)
 {
-	int		left_operand;
-	int		right_operand;
-	int		result;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &left_operand, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &right_operand, 0);
-	result = left_operand & right_operand;
-	cwConversionIntToBytes		(game->arena->value_buf3, &result, 0);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
-	ft_printf("After update: %d\n", game->carriages->current_location);
-	print_arena(game);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_FALSE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value & CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value;
+	cwConversionIntToBytes	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		or_exec(corewar_t *game)
 {
-	int		left_operand;
-	int		right_operand;
-	int		result;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &left_operand, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &right_operand, 0);
-	result = left_operand | right_operand;
-	cwConversionIntToBytes		(game->arena->value_buf3, &result, 0);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_FALSE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value | CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value;
+	cwConversionIntToBytes	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		xor_exec(corewar_t *game)
 {
-	int		left_operand;
-	int		right_operand;
-	int		result;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &left_operand, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &right_operand, 0);
-	result = left_operand ^ right_operand;
-	cwConversionIntToBytes		(game->arena->value_buf3, &result, 0);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_FALSE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value ^ CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value;
+	cwConversionIntToBytes	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		zjmp_exec(corewar_t *game)
 {
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &game->arena->tmp_value2, 0);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
 	if (game->carriages->carry)
-		game->carriages->jump = game->arena->tmp_value2 % IDX_MOD;
+		game->carriages->jump = CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value % IDX_MOD;
 	else
-		game->carriages->jump = CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION = CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+		game->carriages->jump = CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION = CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		ldi_exec(corewar_t *game)
 {
-	int		first_arg;
-	int		second_arg;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &first_arg, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &second_arg, 0);
-	first_arg += second_arg;
-	cwConversionIntToBytes		(game->arena->address_buf, &first_arg, 0);
-	cwArgsHandler				(game, game->arena->address_buf, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_TRUE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_TRUE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value + CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value) % IDX_MOD;
+	cwReadFromArenaToBuf	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_GAME_ARENA, CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value % MEM_SIZE, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		sti_exec(corewar_t *game)
 {
-	int		second_arg;
-	int		third_arg;
-	int		total_address;
-
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwArgsHandler				(game, game->arena->value_buf3, CW_READING_MODE, TRUE, THIRD_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf2, &second_arg, 0);
-	cwConversionBytesToInt		(game->arena->value_buf3, &third_arg, 0);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	total_address = (CARRIAGE_LOCATION  + second_arg + third_arg) % IDX_MOD;
-	cwWriteFromBufToArena		(game->arena->value_buf1, game->arena->field, total_address % MEM_SIZE, 0);
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_TRUE, CW_SECOND_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_TRUE, CW_THIRD_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, &CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value + CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value) % IDX_MOD;
+	cwWriteFromBufToArena	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_GAME_ARENA, CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value % MEM_SIZE, CW_INT_BIAS);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void			fork_exec(corewar_t *game)
@@ -315,121 +276,100 @@ void			fork_exec(corewar_t *game)
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	if (!(new_carriage->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * REG_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
-	copy_reg							(game->carriages->registers, new_carriage->registers, REG_NUMBER * REG_SIZE);
-	new_carriage->id					= game->carriages->id;
-	new_carriage->jump					= FALSE;
-	new_carriage->owner					= game->carriages->owner;
-	new_carriage->carry					= game->carriages->carry;
-	new_carriage->last_cycle			= game->carriages->last_cycle;
-	new_carriage->waiting_time			= FALSE;
-	new_carriage->error_occured			= FALSE;
-	new_carriage->current_command		= NULL;
-	cwTypeHandler						(game);
-	cwArgsHandler						(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwConversionBytesToInt				(game->arena->value_buf1, &game->arena->tmp_value1, 0);
-	new_carriage->current_location 		= game->arena->tmp_value1 % IDX_MOD;
-	new_carriage->prev					= game->arena->last_carriage;
-	new_carriage->next					= game->arena->last_carriage->next;
-	game->arena->last_carriage->next 	= new_carriage;
-	game->arena->last_carriage			= new_carriage;
-	game->carriages_amount				+= 1;
-	game->carriages->jump				= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION					= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwCopyReg						(CW_CARRIAGE_REGISTERS, new_carriage->registers, REG_NUMBER * REG_SIZE);
+	new_carriage->id				= game->carriages->id;
+	new_carriage->jump				= CW_FALSE;
+	new_carriage->owner				= game->carriages->owner;
+	new_carriage->carry				= game->carriages->carry;
+	new_carriage->last_cycle		= game->carriages->last_cycle;
+	new_carriage->waiting_time		= CW_FALSE;
+	new_carriage->error_occured		= CW_FALSE;
+	new_carriage->current_command	= NULL;
+	cwTypeHandler					(game);
+	cwReadOperation					(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwConversionBytesToInt			(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	new_carriage->current_location 	= CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value % IDX_MOD;
+	new_carriage->prev				= game->arena->last_carriage;
+	new_carriage->next				= game->arena->last_carriage->next;
+	game->arena->last_carriage->next= new_carriage;
+	game->arena->last_carriage		= new_carriage;
+	game->carriages_amount			+= 1;
+	game->carriages->jump			= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void	lld_exec(corewar_t *game)
 {
-	ft_printf("Executing command: lld\n");
-	ft_printf("Before update: %d\n", game->carriages->current_location);
-	print_arena(game);
-	cwTypeHandler				(game);
-	printf("one: %d two: %d three %d\n", game->carriages->current_command->first_arg, game->carriages->current_command->second_arg, game->carriages->current_command->third_arg);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_WRITING_MODE, FALSE, SECOND_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
-	ft_printf("After update: %d\n", game->carriages->current_location);
-	print_arena(game);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_SECOND_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void	lldi_exec(corewar_t *game)
 {
-	int		first_arg;
-	int		second_arg;
-	int		total_address;
-
-	ft_printf("Executing command: lldi\n");
-	ft_printf("Before update: %d\n", game->carriages->current_location);
-	print_arena(game);
-	cwTypeHandler				(game);
-	printf("one: %d two: %d three %d\n", game->carriages->current_command->first_arg, game->carriages->current_command->second_arg, game->carriages->current_command->third_arg);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, TRUE, FIRST_ARG);
-	cwArgsHandler				(game, game->arena->value_buf2, CW_READING_MODE, TRUE, SECOND_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &first_arg, 0);
-	cwConversionBytesToInt		(game->arena->value_buf2, &second_arg, 0);
-	total_address = (first_arg + second_arg);
-	cwConversionIntToBytes		(game->arena->address_buf, &total_address, 0);
-	cwArgsHandler				(game, game->arena->address_buf, CW_WRITING_MODE, FALSE, THIRD_ARG);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
-	ft_printf("After update: %d\n", game->carriages->current_location);
-	print_arena(game);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_TRUE, CW_FIRST_ARG);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_2]->data, CW_TRUE, CW_SECOND_ARG);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	cwConversionBytesToInt	(CW_BUFFER_SET[CW_VALUE_BUF_2]->data, &CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value, CW_INT_BIAS);
+	CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value + CW_BUFFER_SET[CW_VALUE_BUF_2]->int_value);
+	cwReadFromArenaToBuf	(CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_GAME_ARENA, CW_BUFFER_SET[CW_VALUE_BUF_3]->int_value % MEM_SIZE, CW_INT_BIAS);
+	cwWriteOperation		(game, CW_BUFFER_SET[CW_VALUE_BUF_3]->data, CW_FALSE, CW_THIRD_ARG);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void	lfork_exec(corewar_t *game)
 {
 	carriage_t	*new_carriage;
-	int			total_address;
 
-	ft_printf("Executing command: lfork\n");
-	ft_printf("Before update: %d\n", game->carriages->current_location);
-	print_arena(game);
 	if (!(new_carriage = (carriage_t *)malloc(sizeof(carriage_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	if (!(new_carriage->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * REG_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
-	copy_reg(game->carriages->registers, new_carriage->registers, REG_NUMBER * REG_SIZE);
+	cwCopyReg						(CW_CARRIAGE_REGISTERS, new_carriage->registers, REG_NUMBER * REG_SIZE);
 	new_carriage->id				= game->carriages->id;
-	new_carriage->jump				= FALSE;
+	new_carriage->jump				= CW_FALSE;
 	new_carriage->owner				= game->carriages->owner;
 	new_carriage->carry				= game->carriages->carry;
 	new_carriage->last_cycle		= game->carriages->last_cycle;
-	new_carriage->waiting_time		= FALSE;
-	new_carriage->error_occured		= FALSE;
+	new_carriage->waiting_time		= CW_FALSE;
+	new_carriage->error_occured		= CW_FALSE;
 	new_carriage->current_command	= NULL;
 	cwTypeHandler					(game);
-	cwArgsHandler					(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwConversionBytesToInt			(game->arena->value_buf1, &total_address, 0);
-	new_carriage->current_location 	= total_address % MEM_SIZE;
+	cwReadOperation					(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	cwConversionBytesToInt			(CW_BUFFER_SET[CW_VALUE_BUF_1]->data, &CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value, CW_INT_BIAS);
+	new_carriage->current_location 	= CW_BUFFER_SET[CW_VALUE_BUF_1]->int_value % MEM_SIZE;
 	new_carriage->prev				= game->arena->last_carriage;
 	new_carriage->next				= game->arena->last_carriage->next;
-	game->arena->last_carriage->next = new_carriage;
+	game->arena->last_carriage->next= new_carriage;
 	game->arena->last_carriage		= new_carriage;
-	game->carriages_amount++;
-	game->carriages->jump			= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION				= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
-	ft_printf("After update: %d\n", game->carriages->current_location);
-	print_arena(game);
+	game->carriages_amount			+= 1;
+	game->carriages->jump			= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }
 
 void		aff_exec(corewar_t *game)
 {
-	int 	output;
+	int 	iter;
 
-	cwTypeHandler				(game);
-	cwArgsHandler				(game, game->arena->value_buf1, CW_READING_MODE, FALSE, FIRST_ARG);
-	cwConversionBytesToInt		(game->arena->value_buf1, &output, 0);
-	printf("%c", output);
-	game->carriages->jump		= CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
-	CARRIAGE_LOCATION			= CW_CARRIAGE_SAVE_POINT;
-	if (game->carriages->current_command->change_carry)
-		check_carry(game->carriages->registers, &game->carriages->carry, REQUEST_REGISTER);
+	cwTypeHandler			(game);
+	cwReadOperation			(game, CW_BUFFER_SET[CW_VALUE_BUF_1]->data, CW_FALSE, CW_FIRST_ARG);
+	iter = 0;
+	while (iter < REG_SIZE)
+		printf("%02x ", CW_BUFFER_SET[CW_VALUE_BUF_1]->data[iter++]);
+	game->carriages->jump	= CW_CARRIAGE_LOCATION - CW_CARRIAGE_SAVE_POINT;
+	CW_CARRIAGE_LOCATION	= CW_CARRIAGE_SAVE_POINT;
+	if (CW_CURRENT_COMMAND->change_carry)
+		cwCheckCarry(CW_CARRIAGE_REGISTERS, &game->carriages->carry, CW_REQUESTING_REGISTER);
 }

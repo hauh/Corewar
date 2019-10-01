@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 20:13:19 by vrichese          #+#    #+#             */
-/*   Updated: 2019/09/30 19:02:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 17:18:18 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,87 +47,87 @@ void			cwInitializationCommands(corewar_t *game)
 	while (iter <= COMMAND_AMOUNT)
 	{
 		if (!(new_command = (command_t *)malloc(sizeof(command_t))))
-			error_catcher(CW_NOT_ALLOCATED, CW_COMMAND);
+			cwErrorCatcher(CW_NOT_ALLOCATED, CW_COMMAND);
 		game->commands[iter] = new_command;
 		option = 0;
 		if (iter == LIVE)
 		{
-			put_option(&option, 10, DIRECTION_SIZE, LIVE, TRUE, FALSE, FALSE, FALSE, FALSE);
+			cwPutOption(&option, 10, DIRECTION_SIZE, LIVE, TRUE, FALSE, FALSE, FALSE, FALSE);
 			cwInitializationCommand(new_command, option, &live_exec);
 		}
 		else if (iter == LD)
 		{
-			put_option(&option, 5, DIRECTION_SIZE, LD, TRUE, TRUE, FALSE, TRUE, TRUE);
+			cwPutOption(&option, 5, DIRECTION_SIZE, LD, TRUE, TRUE, FALSE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &ld_exec);
 		}
 		else if (iter == ST)
 		{
-			put_option(&option, 5, DIRECTION_SIZE, ST, TRUE, TRUE, FALSE, FALSE, TRUE);
+			cwPutOption(&option, 5, DIRECTION_SIZE, ST, TRUE, TRUE, FALSE, FALSE, TRUE);
 			cwInitializationCommand(new_command, option, &st_exec);
 		}
 		else if (iter == ADD)
 		{
-			put_option(&option, 10, DIRECTION_SIZE, ADD, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 10, DIRECTION_SIZE, ADD, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &add_exec);
 		}
 		else if (iter == SUB)
 		{
-			put_option(&option, 10, DIRECTION_SIZE, SUB, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 10, DIRECTION_SIZE, SUB, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &sub_exec);
 		}
 		else if (iter == AND)
 		{
-			put_option(&option, 6, DIRECTION_SIZE, AND, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 6, DIRECTION_SIZE, AND, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &and_exec);
 		}
 		else if (iter == OR)
 		{
-			put_option(&option, 6, DIRECTION_SIZE, OR, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 6, DIRECTION_SIZE, OR, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &or_exec);
 		}
 		else if (iter == XOR)
 		{
-			put_option(&option, 6, DIRECTION_SIZE, XOR, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 6, DIRECTION_SIZE, XOR, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &xor_exec);
 		}
 		else if (iter == ZJMP)
 		{
-			put_option(&option, 20, SHORT_DIR_SIZE, ZJMP, TRUE, FALSE, FALSE, FALSE, FALSE);
+			cwPutOption(&option, 20, SHORT_DIR_SIZE, ZJMP, TRUE, FALSE, FALSE, FALSE, FALSE);
 			cwInitializationCommand(new_command, option, &zjmp_exec);
 		}
 		else if (iter == LDI)
 		{
-			put_option(&option, 25, SHORT_DIR_SIZE, LDI, TRUE, TRUE, TRUE, FALSE, TRUE);
+			cwPutOption(&option, 25, SHORT_DIR_SIZE, LDI, TRUE, TRUE, TRUE, FALSE, TRUE);
 			cwInitializationCommand(new_command, option, &ldi_exec);
 		}
 		else if (iter == STI)
 		{
-			put_option(&option, 25, SHORT_DIR_SIZE, STI, TRUE, TRUE, TRUE, FALSE, TRUE);
+			cwPutOption(&option, 25, SHORT_DIR_SIZE, STI, TRUE, TRUE, TRUE, FALSE, TRUE);
 			cwInitializationCommand(new_command, option, &sti_exec);
 		}
 		else if (iter == FORK)
 		{
-			put_option(&option, 800, SHORT_DIR_SIZE, FORK, TRUE, FALSE, FALSE, FALSE, FALSE);
+			cwPutOption(&option, 800, SHORT_DIR_SIZE, FORK, TRUE, FALSE, FALSE, FALSE, FALSE);
 			cwInitializationCommand(new_command, option, &fork_exec);
 		}
 		else if (iter == LLD)
 		{
-			put_option(&option, 10, DIRECTION_SIZE, LLD, TRUE, TRUE, FALSE, TRUE, TRUE);
+			cwPutOption(&option, 10, DIRECTION_SIZE, LLD, TRUE, TRUE, FALSE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &lld_exec);
 		}
 		else if (iter == LLDI)
 		{
-			put_option(&option, 50, SHORT_DIR_SIZE, STI, TRUE, TRUE, TRUE, TRUE, TRUE);
+			cwPutOption(&option, 50, SHORT_DIR_SIZE, STI, TRUE, TRUE, TRUE, TRUE, TRUE);
 			cwInitializationCommand(new_command, option, &lldi_exec);
 		}
 		else if (iter == LFORK)
 		{
-			put_option(&option, 1000, SHORT_DIR_SIZE, LFORK, TRUE, FALSE, FALSE, FALSE, FALSE);
+			cwPutOption(&option, 1000, SHORT_DIR_SIZE, LFORK, TRUE, FALSE, FALSE, FALSE, FALSE);
 			cwInitializationCommand(new_command, option, &lfork_exec);
 		}
 		else if (iter == AFF)
 		{
-			put_option(&option, 2, DIRECTION_SIZE, AFF, TRUE, FALSE, FALSE, FALSE, TRUE);
+			cwPutOption(&option, 2, DIRECTION_SIZE, AFF, TRUE, FALSE, FALSE, FALSE, TRUE);
 			cwInitializationCommand(new_command, option, &aff_exec);
 		}
 		++iter;
