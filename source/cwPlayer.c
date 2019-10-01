@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 17:16:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 18:58:59 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ void		cwBuildPlayer(player_t *player)
 
 	global_iter	= 0;
 	while (global_iter < BINARY_LABEL)
-		player->binary_label |= player->source[global_iter] << ((sizeof(int) - ++global_iter) * 8);
+	{
+		player->binary_label |= player->source[global_iter] << ((sizeof(int) - global_iter - 1) * 8);
+		++global_iter;
+	}
 	local_iter	= 0;
 	while (global_iter < NAME)
 		player->name[local_iter++] = player->source[global_iter++];

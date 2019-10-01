@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 17:17:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 19:44:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 	new_carriage->error_occured			= CW_FALSE;
 	new_carriage->current_command		= NULL;
 	new_carriage->current_location 		= CW_FALSE;
+	new_carriage->copy					= CW_FALSE;
 	if (!game->carriages)
 	{
 		game->carriages = new_carriage;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 18:02:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 19:43:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "libft.h"
-//#include "ft_printf.h"
+//# include "ft_printf.h"
 # include <ncurses.h>
 # include <locale.h>
 # include <time.h>
@@ -256,6 +256,7 @@ typedef struct				carriage_s
 	int						error_occured;
 	int						current_location;
 	int						current_register;
+	int						copy;
 	player_t				*owner;
 	command_t				*current_command;
 	unsigned char			*registers;
@@ -311,7 +312,7 @@ void						cwIntroducePlayers			(corewar_t *game);
 void						cwHereWeGo					(corewar_t *game);
 void						cwPrintArena				(corewar_t *game);
 void						cwConversionIntToBytes		(unsigned char *buffer, int *from, int bias);
-void						cwConversionBytesToInt		(unsigned char *buffer, int *dest, int bias);
+void						cwConversionBytesToInt		(unsigned char *buffer, void *dest, int bias, int type);
 void						cwReadFromRegToBuf			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);
 void						cwReadFromArenaToBuf		(unsigned char *buffer, unsigned char *field, int data_location, int bias);
 void						cwWriteFromBufToReg			(unsigned char *buffer, unsigned char *registers, int reg_num, int bias);

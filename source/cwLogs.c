@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 17:27:58 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 18:05:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 19:52:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	logging(corewar_t *game, flag_t flag)
 			live_amount: %d\n     \
 			check_amount: %d\n     \
 			cycle_to_die: %d\n     \
-			cycle_amount: %d\n     \
+			cycle_amount: %lu\n     \
 			players_amount: %d\n     \
 			carriages_amount: %d\n     \
 			last_survivor: %d %s\n     \
@@ -34,15 +34,16 @@ void	logging(corewar_t *game, flag_t flag)
 			game->arena->last_carriage->id);
 		printf("Current time information:\n     \
 			current_command: %d\n     \
-			carriage_location before: %d\n", game->carriages->current_command->id,
-			game->carriages->current_location);
+			carriage_location before: %d\n     \
+			carriage_copy: %d\n", game->carriages->current_command->id,
+			game->carriages->current_location, game->carriages->copy);
 		cwPrintArena(game);
 	}
 	else if (flag == 1)
 	{
-		printf("carriage_location after: %d\n", game->carriages->current_location);
+		printf("carriage_location after: %d %d\n", game->carriages->current_location, game->carriages->copy);
 		cwPrintArena(game);
 		while (in != '1')
-			read(0, &in, 0);
+			read(0, &in, 1);
 	}
 }

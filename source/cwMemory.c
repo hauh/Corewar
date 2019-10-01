@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:01:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 17:27:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 18:58:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,41 @@ void	cwConversionIntToBytes(unsigned char *buffer, int *from, int bias)
 	}
 }
 
-void	cwConversionBytesToInt(unsigned char *buffer, int *dest, int bias)
+void	cwConversionBytesToInt(unsigned char *buffer, void *dest, int bias, int type)
 {
-	*dest = 0;
-	while (bias < REG_SIZE)
+	char 	*char_value;
+	short 	*short_value;
+	int		*int_value;
+
+	if (type == CW_CHAR)
 	{
-		*dest |= buffer[bias] << ((3 - bias) * 8);
-		++bias;
+		char_value = (char *)dest;
+		*char_value = 0;
+		while (bias < REG_SIZE)
+		{
+			*char_value |= buffer[bias] << ((3 - bias) * 8);
+			++bias;
+		}
+	}
+	else if (type == CW_SHORT)
+	{
+		short_value = (short *)dest;
+		*short_value = 0;
+		while (bias < REG_SIZE)
+		{
+			*short_value |= buffer[bias] << ((3 - bias) * 8);
+			++bias;
+		}
+	}
+	else if (type == CW_INT)
+	{
+		int_value = (int *)dest;
+		*int_value = 0;
+		while (bias < REG_SIZE)
+		{
+			*int_value |= buffer[bias] << ((3 - bias) * 8);
+			++bias;
+		}
 	}
 }
 
@@ -81,7 +109,10 @@ void	cwReadFromArenaToBuf(unsigned char *buffer, unsigned char *field, int data_
 void	cwWriteFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
 {
 	while (bias < REG_SIZE)
-		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias++];
+	{
+		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias];
+		++bias;
+	}
 }
 
 void	cwWriteFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)

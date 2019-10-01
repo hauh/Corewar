@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 18:04:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/01 19:43:03 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void		cwHereWeGo(corewar_t *game)
 			game->carriages = game->carriages->prev;
 			++carriage_iter;
 		}
+		++game->arena->cycle_amount;
  		if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
  			start_checking(game);
 	}
