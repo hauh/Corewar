@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 21:08:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 18:44:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input
 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
 		else
 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+		if (CW_CARRIAGE_LOCATION < 0)
+			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
 		cwWriteFromBufToArena(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
 		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
 	}
@@ -102,6 +104,8 @@ void		cwReadOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_
 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
 		else
 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+		if (CW_CARRIAGE_LOCATION < 0)
+			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
 		cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
 		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_SHORT_BIAS, CW_SHORT);
 		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
@@ -274,9 +278,8 @@ void			fork_exec(corewar_t *game)
 	new_carriage->carry				= game->carriages->carry;
 	new_carriage->last_cycle		= game->carriages->last_cycle;
 	new_carriage->waiting_time		= CW_FALSE;
-	new_carriage->error_occured		= CW_FALSE;
+	new_carriage->current_location 	= CW_FALSE;
 	new_carriage->current_command	= NULL;
-	new_carriage->copy				= CW_TRUE;
 	cwTypeHandler					(game);
 	cwReadOperation					(game, CW_BUFFER_SET[CW_VALUE_BUF_1], CW_FALSE, CW_FIRST_ARG);
 	new_carriage->current_location 	= CW_BUFFER_SET[CW_VALUE_BUF_1]->short_value % IDX_MOD;
@@ -336,9 +339,8 @@ void	lfork_exec(corewar_t *game)
 	new_carriage->carry				= game->carriages->carry;
 	new_carriage->last_cycle		= game->carriages->last_cycle;
 	new_carriage->waiting_time		= CW_FALSE;
-	new_carriage->error_occured		= CW_FALSE;
+	new_carriage->current_location 	= CW_FALSE;
 	new_carriage->current_command	= NULL;
-	new_carriage->copy				= CW_TRUE;
 	cwTypeHandler					(game);
 	cwReadOperation					(game, CW_BUFFER_SET[CW_VALUE_BUF_1], CW_FALSE, CW_FIRST_ARG);
 	new_carriage->current_location 	= CW_BUFFER_SET[CW_VALUE_BUF_1]->short_value % MEM_SIZE;

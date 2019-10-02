@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 17:27:58 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 19:52:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 18:51:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,13 @@ void	logging(corewar_t *game, flag_t flag)
 			game->arena->last_carriage->id);
 		printf("Current time information:\n     \
 			current_command: %d\n     \
-			carriage_location before: %d\n     \
-			carriage_copy: %d\n", game->carriages->current_command->id,
-			game->carriages->current_location, game->carriages->copy);
+			carriage_location before: %d\n", game->carriages->current_command->id,
+			game->carriages->current_location);
 		cwPrintArena(game);
 	}
 	else if (flag == 1)
 	{
-		printf("carriage_location after: %d %d\n", game->carriages->current_location, game->carriages->copy);
+		printf("carriage_location after: %d\n", game->carriages->current_location);
 		cwPrintArena(game);
 		while (in != '1')
 			read(0, &in, 1);

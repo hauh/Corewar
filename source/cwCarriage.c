@@ -6,18 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 19:44:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 18:52:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-
-/*
-** In this file we are continue to initialization of game part. These functions
-** need to handle and attach every players to carraige. Cause every players must
-** have one(ore more) carriage at least in the beginning. List for storage carriages
-** very similiar(or same) with players list and it biconnected and looped too(convenience :))
-*/
 
 void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 {
@@ -28,16 +21,15 @@ void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 	if (!(new_carriage->registers = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * REG_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	ft_memset(new_carriage->registers, 0, REG_NUMBER * REG_SIZE);
-	new_carriage->id					= ++game->carriages_amount;
-	new_carriage->jump					= CW_FALSE;
-	new_carriage->owner					= owner;
-	new_carriage->carry					= CW_FALSE;
-	new_carriage->last_cycle			= CW_FALSE;
-	new_carriage->waiting_time			= CW_FALSE;
-	new_carriage->error_occured			= CW_FALSE;
-	new_carriage->current_command		= NULL;
-	new_carriage->current_location 		= CW_FALSE;
-	new_carriage->copy					= CW_FALSE;
+	new_carriage->id				= ++game->carriages_amount;
+	new_carriage->jump				= CW_FALSE;
+	new_carriage->owner				= owner;
+	new_carriage->carry				= CW_FALSE;
+	new_carriage->last_cycle		= CW_FALSE;
+	new_carriage->waiting_time		= CW_FALSE;
+	new_carriage->error_occured		= CW_FALSE;
+	new_carriage->current_command	= NULL;
+	new_carriage->current_location 	= CW_FALSE;
 	if (!game->carriages)
 	{
 		game->carriages = new_carriage;

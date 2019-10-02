@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 16:56:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 19:43:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 18:53:03 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,36 @@ void		start_checking(corewar_t *game)
 	game->arena->live_amount = 0;
 }
 
+void			cwReduceWaitingTime(corewar_t *game)
+{
+	CW_WAITING_TIME -= 1;
+	CW_WAITING_TIME < 0 ? cwErrorCatcher(CW_KERNEL_ERROR, CW_CARRIAGE) : CW_FALSE;
+}
+
+void			cwExecCommand(corewar_t *game)
+{
+	logging(game, 0);
+	CW_CURRENT_COMMAND->function(game);
+	CW_CARRIAGE_LOCATION = (CW_CARRIAGE_LOCATION + game->carriages->jump) % MEM_SIZE;
+	if (CW_CARRIAGE_LOCATION < 0)
+		CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+	logging(game, 1);
+}
+
+void			cwSetCommand(corewar_t *game)
+{
+	if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+	{
+		CW_CURRENT_COMMAND		= game->commands[CW_GAME_ARENA[CW_CARRIAGE_LOCATION]];
+		CW_WAITING_TIME			= CW_CURRENT_COMMAND->waiting_time;
+	}
+	else
+	{
+		CW_CARRIAGE_LOCATION 	= (CW_CARRIAGE_LOCATION + 1) % MEM_SIZE;
+		game->carriages->error_occured = CW_TRUE;
+	}
+}
+
 void		cwHereWeGo(corewar_t *game)
 {
 	int		carriage_iter;
@@ -68,34 +98,21 @@ void		cwHereWeGo(corewar_t *game)
 		while (carriage_iter < game->carriages_amount)
 		{
 			if (!game->carriages->waiting_time)
+				cwSetCommand(game);
+			if (game->carriages->error_occured == CW_TRUE)
 			{
-				if (game->arena->field[game->carriages->current_location] > 0 && game->arena->field[game->carriages->current_location] < 17)
-				{
-					game->carriages->current_command = game->commands[game->arena->field[game->carriages->current_location]];
-					game->carriages->waiting_time = game->carriages->current_command->waiting_time;
-				}
-				else
-				{
-					game->carriages->current_location = (game->carriages->current_location + 1) % MEM_SIZE;
- 					continue;
- 				}
+				game->carriages->error_occured = CW_FALSE;
+				continue;
 			}
 			if (game->carriages->waiting_time)
-				--game->carriages->waiting_time;
+				cwReduceWaitingTime(game);
 			if (!game->carriages->waiting_time)
-			{
-				logging(game, 0);
-				game->carriages->current_command->function(game);
-				game->carriages->current_location = (game->carriages->current_location + game->carriages->jump) % MEM_SIZE;
-				if (game->carriages->current_location < 0)
-					game->carriages->current_location = -game->carriages->current_location;
-				logging(game, 1);
-			}
+				cwExecCommand(game);
 			game->carriages = game->carriages->prev;
 			++carriage_iter;
 		}
 		++game->arena->cycle_amount;
- 		if (!(game->arena->cycle_amount % game->arena->cycle_to_die) || game->arena->cycle_to_die <= 0)
+ 		if (game->arena->cycle_to_die <= 0 || !(game->arena->cycle_amount % game->arena->cycle_to_die))
  			start_checking(game);
 	}
  	printf("Player %s under number %d is WINNER!!!\n", game->arena->last_survivor->name, game->arena->last_survivor->id);

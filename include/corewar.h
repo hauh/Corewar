@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 19:43:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 18:52:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct				s_vis
 ** ---------------------------
 */
 
+#define CW_WAITING_TIME			game->carriages->waiting_time
 #define CW_DYNAMIC_SIZE_DIR		4 - game->carriages->current_command->dir_size
 #define CW_CARRIAGE_SAVE_POINT	game->carriages->save_point
 #define CW_AVAILABILITY_TYPES	game->carriages->current_command->availability_types
@@ -160,6 +161,7 @@ typedef enum				byte_blocks_e
 #define CW_CHEAT_DETECT		7
 #define CW_ARGS_AMOUN_ERROR	8
 #define CW_INVALID_PLAYERS	9
+#define CW_KERNEL_ERROR		10
 
 #define CW_DESTRUCTOR		"Destructor"
 #define CW_GAME				"Game"
@@ -245,6 +247,10 @@ typedef struct				command_s
 	void					(*function)(corewar_t *);
 }							command_t;
 
+/*
+** Carriage object;
+*/
+
 typedef struct				carriage_s
 {
 	int						id;
@@ -253,16 +259,19 @@ typedef struct				carriage_s
 	int						save_point;
 	int						last_cycle;
 	int						waiting_time;
-	int						error_occured;
 	int						current_location;
 	int						current_register;
-	int						copy;
+	int						error_occured;
 	player_t				*owner;
 	command_t				*current_command;
 	unsigned char			*registers;
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
 }							carriage_t;
+
+/*
+**-------------------------------------
+*/
 
 typedef struct				arena_s
 {
