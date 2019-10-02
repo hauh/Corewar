@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 18:44:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 20:42:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,6 @@
 ** !!!!!!!!Attention, this module working incorrect, need fix bug!!!!!!!!!!!!!!!!<<<---
 */
 
-void		cwTypeHandler(corewar_t *game)
-{
-	CW_CARRIAGE_SAVE_POINT = CW_CARRIAGE_LOCATION;
-	CW_CARRIAGE_LOCATION += CW_AVAILABILITY_TYPES;
-	if (CW_AVAILABILITY_TYPES)
-	{
-		CW_FIRST_ARG	= (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] & 0xc0) >> 6;
-		CW_SECOND_ARG	= (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] & 0x30) >> 4;
-		CW_THIRD_ARG	= (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] & 0x0c) >> 2;
-	}
-	else
-	{
-		CW_FIRST_ARG	= DIR_CODE;
-		CW_SECOND_ARG	= CW_FALSE;
-		CW_THIRD_ARG	= CW_FALSE;
-	}
-	CW_CARRIAGE_LOCATION += TO_FIRST_ARG;
-}
-
 void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
 {
 	int		save_point;
@@ -47,7 +28,7 @@ void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input
 		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
 			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
 		else
-			cwErrorCatcher(CW_CHEAT_DETECT, CW_COMMAND);
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
 		cwWriteFromBufToReg(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
 		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
 	}
@@ -81,7 +62,7 @@ void		cwReadOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_
 		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
 			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
 		else
-			cwErrorCatcher(CW_CHEAT_DETECT, CW_COMMAND);
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
 		cwReadFromRegToBuf(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
 		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
 		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 18:52:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 20:48:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ typedef enum				byte_blocks_e
 #define CW_ARENA			"Arena"
 #define CW_COMMAND			"Command"
 #define CW_INIT				"Initialization"
+#define CW_EXEC_ERROR		"In Exec error"
 
 /*
 ** ---------------------------
@@ -244,7 +245,7 @@ typedef struct				command_s
 	unsigned int			change_carry;
 	unsigned int			waiting_time;
 	unsigned int			availability_types;
-	void					(*function)(corewar_t *);
+	void					(*call)(corewar_t *);
 }							command_t;
 
 /*
@@ -265,6 +266,13 @@ typedef struct				carriage_s
 	player_t				*owner;
 	command_t				*current_command;
 	unsigned char			*registers;
+
+	void					(*cwReduceWaitingTime)	(carriage_t *);
+	void					(*cwExecCommand)		(carriage_t *);
+	void					(*cwSetCommand)			(carriage_t *);
+	void					(*cwMoveTo)				(carriage_t *, int);
+	void					(*cwSaveLocation)		(carriage_t *);
+
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
 }							carriage_t;

@@ -6,11 +6,76 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 18:52:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 20:55:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+void			cwComputJump(carriage_t *self_carriage)
+{
+
+}
+
+void			cwSaveLocation(carriage_t *self_carriage)
+{
+	self_carriage->save_point = self_carriage->current_location;
+}
+
+void			cwMoveTo(carriage_t *self_carriage, int step)
+{
+	self_carriage->current_location += step;
+}
+
+void		cwTypeHandler(carriage_t *carriage, arena_t *arena)
+{
+	carriage->cwSaveLocation	(carriage);
+	carriage->cwMoveTo			(carriage, carriage->current_command->availability_types);
+	if (carriage->current_command->availability_types)
+	{
+		carriage->current_command->first_arg	= (arena->field[carriage->current_location] & 0xc0) >> 6;
+		carriage->current_command->second_arg	= (arena->field[carriage->current_location] & 0x30) >> 4;
+		carriage->current_command->third_arg	= (arena->field[carriage->current_location] & 0x0c) >> 2;
+	}
+	else
+	{
+		carriage->current_command->first_arg	= CW_DIR_CODE;
+		carriage->current_command->second_arg	= CW_FALSE;
+		carriage->current_command->third_arg	= CW_FALSE;
+	}
+	carriage->cwMoveTo			(carriage, )
+}
+
+
+void			cwReduceWaitingTime(corewar_t *game)
+{
+	CW_WAITING_TIME -= 1;
+	CW_WAITING_TIME < 0 ? cwErrorCatcher(CW_KERNEL_ERROR, CW_CARRIAGE) : CW_FALSE;
+}
+
+void			cwExecCommand(corewar_t *game)
+{
+	if (CW_CURRENT_COMMAND)
+	{
+		CW_CURRENT_COMMAND->call(game);
+		CW_CARRIAGE_LOCATION = (CW_CARRIAGE_LOCATION + game->carriages->jump) % MEM_SIZE;
+		if (CW_CARRIAGE_LOCATION < 0)
+			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+	}
+	else
+		CW_CARRIAGE_LOCATION = (CW_CARRIAGE_LOCATION + 1) % MEM_SIZE;
+}
+
+void			cwSetCommand(corewar_t *game)
+{
+	if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+	{
+		CW_CURRENT_COMMAND	= game->commands[CW_GAME_ARENA[CW_CARRIAGE_LOCATION]];
+		CW_WAITING_TIME		= CW_CURRENT_COMMAND->waiting_time;
+	}
+	else
+		CW_CURRENT_COMMAND	= NULL;
+}
 
 void			cwInitializationCarriage(corewar_t *game, player_t *owner)
 {

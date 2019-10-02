@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 17:27:58 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 18:51:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/02 19:09:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	logging(corewar_t *game, flag_t flag)
 	in = '0';
 	if (flag == 0)
 	{
+		cwPrintArena(game);
 		printf("Common information about game:\n     \
 			live_amount: %d\n     \
 			check_amount: %d\n     \
@@ -36,7 +37,6 @@ void	logging(corewar_t *game, flag_t flag)
 			current_command: %d\n     \
 			carriage_location before: %d\n", game->carriages->current_command->id,
 			game->carriages->current_location);
-		cwPrintArena(game);
 	}
 	else if (flag == 1)
 	{
