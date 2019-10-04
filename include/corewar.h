@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 20:48:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/04 20:01:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,49 +25,6 @@
 # include <ncurses.h>
 # include <locale.h>
 # include <time.h>
-
-/*
-** ---------------------------
-** Visual defines
-*/
-
-# define V_W 260
-# define V_H 68
-# define V_BSYM "\xe2\x96\x88"
-# define V_SEP 200
-
-/*
-** ---------------------------
-*/
-
-/*
-** ---------------------------
-** Visual typedefs
-*/
-
-enum						e_vis_act
-{
-	V_INIT,
-	V_CONTROL,
-	V_UPDATE,
-	V_INFO,
-	V_CLEANUP
-};
-
-typedef struct				s_vis
-{
-	int						flow;
-	int						step;
-	int						exit;
-	int						tick;
-	int						fpsdiv;
-	unsigned char			*field;
-	long int				time;
-}							t_vis;
-
-/*
-** ---------------------------
-*/
 
 #define CW_WAITING_TIME			game->carriages->waiting_time
 #define CW_DYNAMIC_SIZE_DIR		4 - game->carriages->current_command->dir_size
@@ -96,6 +53,9 @@ typedef enum				byte_blocks_e
 #define CW_DIR_CODE			2
 #define CW_IND_CODE			3
 
+#define CW_ACROSS_NAME		carriageInstance->current_command->availability_types
+#define CW_ACROSS_TYPE		1
+
 #define CW_CHAR				1
 #define CW_SHORT			2
 #define CW_INT				4
@@ -120,7 +80,7 @@ typedef enum				byte_blocks_e
 #define	R15					15
 #define	R16					16
 
-#define	COMMAND_AMOUNT		16
+#define	COMMAND_AMOUNT		16 + 1
 #define DIRECTION_SIZE		4
 #define SHORT_DIR_SIZE		2
 #define OVERSTEP_NAME		1
@@ -233,6 +193,12 @@ typedef struct				player_s
 	unsigned char			*comment;
 	struct player_s			*next;
 	struct player_s			*prev;
+
+	const void				(*cwConstructorPlayer)	(player_t *);
+	const void				(*cwBuildPlayer)		(player_t *);
+	const void				(*cwValidatePlayer)		(player_t *);
+	const void				(*cwReadFile)			(player_t *, const char *);
+	const void				(*cwDestructorPlayer)	(player_t *);
 }							player_t;
 
 typedef struct				command_s
@@ -257,24 +223,33 @@ typedef struct				carriage_s
 	int						id;
 	int						jump;
 	int						carry;
-	int						save_point;
-	int						last_cycle;
-	int						waiting_time;
-	int						current_location;
-	int						current_register;
-	int						error_occured;
-	player_t				*owner;
-	command_t				*current_command;
-	unsigned char			*registers;
+	int						savePoint;
+	int						waitingTime;
+	int						lastSpeakCycle;
+	int						currentLocation;
+	int						currentRegister;
 
-	void					(*cwReduceWaitingTime)	(carriage_t *);
-	void					(*cwExecCommand)		(carriage_t *);
-	void					(*cwSetCommand)			(carriage_t *);
-	void					(*cwMoveTo)				(carriage_t *, int);
-	void					(*cwSaveLocation)		(carriage_t *);
+	unsigned char			*registers;
 
 	struct carriage_s		*next;
 	struct carriage_s		*prev;
+
+	command_t				*currentCommand;
+	player_t				*ownerCarriage;
+
+	const void				(*cwConstructorCarriage)(carriage_t *);
+	const void				(*cwReduceWaitingTime)	(carriage_t *);
+	const void				(*cwExecCommand)		(carriage_t *);
+	const void				(*cwSetCommand)			(carriage_t *);
+	const void				(*cwSavePos)			(carriage_t *);
+	const void				(*cwMoveTo)				(carriage_t *, int);
+	const void				(*cwComputeJump)		(carriage_t *);
+	const void				(*cwParseTypes)			(carriage_t *);
+	const void				(*cwReadOperation)		(carriage_t *);
+	const void				(*cwWriteOperation)		(carriage_t *);
+	const void				(*cwValidateCommand)	(carriage_t *);
+	const void				(*cwValidateTypes)		(carriage_t *);
+	const void				(*cwDestructorCarriage) (carriage_t *);
 }							carriage_t;
 
 /*
@@ -293,35 +268,41 @@ typedef struct				arena_s
 	buffer_t				*buffer_set[CW_BUFFER_AMOUNT];
 }							arena_t;
 
-typedef struct				destructor_s
-{
-	int						keys_detect;
-	int						game_detect;
-	int						arena_detect;
-	int						players_detect;
-	int						commands_detect;
-	int						carriages_detect;
-}							destructor_t;
-
 typedef struct				key_s
 {
 	unsigned int			load_dump;
 	unsigned int			custom_id;
 	unsigned int			visualizator;
+
+	const void				(*cwConstructorKey)		(key_t *);
+	const void				(*cwValidateArgs)		(key_t *, int, char **);
+	const void				(*cwReadKeys)			(key_t *, int, char **);
+	const void				(*cwDestructorKey)		(key_t *);
 }							key_t;
 
 typedef struct				corewar_s
 {
-	int						players_amount;
-	int						commands_amount;
-	int						carriages_amount;
-	t_vis					*vis;
-	key_t					*keys;
-	arena_t					*arena;
-	player_t				*players;
-	command_t				*commands[COMMAND_AMOUNT + 1];
-	carriage_t				*carriages;
-	destructor_t			*destructor;
+	int						playersAmount;
+	int						commandsAmount;
+	int						carriagesAmount;
+
+	carriage_t				*pCarriageObject;
+	command_t				*commands[COMMAND_AMOUNT];
+	player_t				*pPlayerObject;
+	arena_t					*pArenaObject;
+	key_t					*pKeyObject;
+
+	const void				(*cwConstructorGame)	(corewar_t *);
+	const void				(*cwKeyObjectInit)		(corewar_t *, int, char **);
+	const void				(*cwPlayerObjectInit)	(corewar_t *, int, char **);
+	const void				(*cwCarraigeObjectInit)	(corewar_t *);
+	const void				(*cwArenaObjectInit)	(corewar_t *);
+	const void				(*cwCommandObjectInit)	(corewar_t *);
+	const void				(*cwIntroducePlayers)	(corewar_t *);
+	const void				(*cwStartGame)			(corewar_t *);
+	const void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
+	const void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *);
+	const void				(*cwDestructorGame)		(corewar_t *);
 }							corewar_t;
 
 
@@ -359,29 +340,6 @@ void						cwInitializationDestructor	(corewar_t *game);
 void						cwInitializationKeys		(corewar_t *game, char **argv, int argc);
 void						cwCheckCarry				(unsigned char *registers, int *carry, int reg_num);
 void						cwCopyReg					(unsigned char *from, unsigned char *to, int size);
-void	logging(corewar_t *game, flag_t flag);
-
-/*
-** ---------------------------
-** Visual declarations
-*/
-
-int							cr_vis_main					(corewar_t *cr, int act);
-int							cr_vis_cleanup				(corewar_t *cr);
-int							cr_vis_printattr			(int y, int x, char *str, int colour, int reverse);
-int							cr_vis_initvis				(corewar_t *cr);
-int							cr_vis_initcolour			(void);
-int							cr_vis_initterm				(void);
-void						cr_vis_putx					(int num, int i, int colour, int rev);
-int							cr_vis_drawborder			(void);
-int							cr_vis_printmap				(unsigned char *f, int f_len, corewar_t *cr);
-int							cr_vis_timer				(t_vis	*vis);
-int							cr_vis_keys					(t_vis *vis);
-int							cr_vis_updatemap			(corewar_t *cr);
-int							cr_vis_printinfo			(corewar_t *cr);
-
-/*
-** ---------------------------
-*/
+void						logging(corewar_t *game, flag_t flag);
 
 #endif

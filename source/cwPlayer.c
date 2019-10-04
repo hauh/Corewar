@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 18:58:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/04 20:01:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,20 @@
 ** carriage list that similar at players list.
 */
 
-void			cwValidatePlayer(player_t *player)
+void	cwReadFile(player_t *playerInstance, const char *file)
 {
-	int			check_size;
+	int fd;
+
+	if ((fd = open(file, O_RDONLY)) < 0)
+		cwErrorCatcher(CW_OPEN_FILE_ERROR, CW_PLAYER);
+	if (read(fd, playerInstance->source, CODE) < 0)
+		cwErrorCatcher(CW_READ_FILE_ERROR, CW_PLAYER);
+	close(fd);
+}
+
+void		cwValidatePlayer(player_t *player)
+{
+	int		check_size;
 
 	check_size = CHAMP_MAX_SIZE - 1;
 	if (player->binary_label != COREWAR_EXEC_MAGIC)
@@ -34,7 +45,7 @@ void			cwValidatePlayer(player_t *player)
 		cwErrorCatcher(CW_CHEAT_DETECT, CW_PLAYER);
 }
 
-void		cwBuildPlayer(player_t *player)
+void		cwBuildPlayer(player_t *playerInstane)
 {
 	int		global_iter;
 	int		local_iter;
@@ -42,86 +53,64 @@ void		cwBuildPlayer(player_t *player)
 	global_iter	= 0;
 	while (global_iter < BINARY_LABEL)
 	{
-		player->binary_label |= player->source[global_iter] << ((sizeof(int) - global_iter - 1) * 8);
+		playerInstane->binary_label |= playerInstane->source[global_iter] << ((sizeof(int) - global_iter - 1) * 8);
 		++global_iter;
 	}
 	local_iter	= 0;
 	while (global_iter < NAME)
-		player->name[local_iter++] = player->source[global_iter++];
-	player->name[local_iter] = 0;
+		playerInstane->name[local_iter++] = playerInstane->source[global_iter++];
+	playerInstane->name[local_iter] = 0;
 	global_iter += NULL_SEPARATOR;
 	local_iter	= 0;
 	while (global_iter < CODE_SIZE)
-		player->code_size |= player->source[global_iter++] << ((sizeof(int) - ++local_iter) * 8);
+		playerInstane->code_size |= playerInstane->source[global_iter++] << ((sizeof(int) - ++local_iter) * 8);
 	local_iter	= 0;
 	while (global_iter < COMMENT)
-		player->comment[local_iter++] = player->source[global_iter++];
-	player->comment[local_iter] = 0;
+		playerInstane->comment[local_iter++] = playerInstane->source[global_iter++];
+	playerInstane->comment[local_iter] = 0;
 	global_iter	+= NULL_SEPARATOR;
 	local_iter	= 0;
 	while (global_iter < CODE)
-		player->code[local_iter++] = player->source[global_iter++];
+		playerInstane->code[local_iter++] = playerInstane->source[global_iter++];
 }
 
-void			cwInitializationPlayer(corewar_t *game)
+void	cwDestructorPlayer(player_t *playerInstance)
 {
-	player_t	*new_player;
-
-	if (!(new_player			= (player_t *)malloc(sizeof(player_t))))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(new_player->source	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(new_player->code		= (unsigned char *)malloc(sizeof(unsigned char) * CHAMP_MAX_SIZE)))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(new_player->comment	= (unsigned char *)malloc(sizeof(unsigned char) * COMMENT_LENGTH)))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(new_player->name		= (unsigned char *)malloc(sizeof(unsigned char) * PROG_NAME_LENGTH)))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	ft_memset(new_player->source, 0, CODE);
-	ft_memset(new_player->code, 0, CHAMP_MAX_SIZE);
-	ft_memset(new_player->comment, 0, COMMENT_LENGTH);
-	ft_memset(new_player->name, 0, PROG_NAME_LENGTH);
-	new_player->binary_label	= 0;
-	new_player->carriage_id		= 0;
-	new_player->code_size		= 0;
-	new_player->id				= ++game->players_amount;
-	if (!game->players)
-	{
-		game->players = new_player;
-		game->players->next = game->players;
-		game->players->prev = game->players;
-	}
-	else
-	{
-		new_player->prev = game->players->prev;
-		new_player->next = game->players;
-		game->players->prev->next = new_player;
-		game->players->prev = new_player;
-	}
+	free(playerInstance->source);
+	free(playerInstance->code);
+	free(playerInstance->comment);
+	free(playerInstance->name);
+	free(playerInstance);
 }
 
-void			cwInitializationPlayers(corewar_t *game, char **argv, int argc)
+void	cwConstructorPlayer(player_t *playerInstance)
 {
-	int			iter;
-	int			fd;
+	if (!(playerInstance->source	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
+	if (!(playerInstance->code		= (unsigned char *)malloc(sizeof(unsigned char) * CHAMP_MAX_SIZE)))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
+	if (!(playerInstance->comment	= (unsigned char *)malloc(sizeof(unsigned char) * COMMENT_LENGTH)))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
+	if (!(playerInstance->name		= (unsigned char *)malloc(sizeof(unsigned char) * PROG_NAME_LENGTH)))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
+	ft_memset(playerInstance->source, 0, CODE);
+	ft_memset(playerInstance->code, 0, CHAMP_MAX_SIZE);
+	ft_memset(playerInstance->comment, 0, COMMENT_LENGTH);
+	ft_memset(playerInstance->name, 0, PROG_NAME_LENGTH);
+	playerInstance->binary_label		= 0;
+	playerInstance->carriage_id			= 0;
+	playerInstance->code_size			= 0;
+	playerInstance->cwBuildPlayer		= &cwBuildPlayer;
+	playerInstance->cwValidatePlayer	= &cwValidatePlayer;
+	playerInstance->cwReadFile			= &cwReadFile;
+	playerInstance->next				= NULL;
+	playerInstance->prev				= NULL;
+}
 
-	iter = CW_BEGIN_FROM_ONE;
-	while (iter < argc)
-	{
-		if (argv[iter][0] != '*')
-		{
-			cwInitializationPlayer(game);
-			if ((fd = open(argv[iter], O_RDONLY)) < 0)
-				cwErrorCatcher(CW_OPEN_FILE_ERROR, CW_PLAYER);
-			if (read(fd, game->players->prev->source, CODE) < 0)
-				cwErrorCatcher(CW_READ_FILE_ERROR, CW_PLAYER);
-			cwBuildPlayer(game->players->prev);
-			cwValidatePlayer(game->players->prev);
-			close(fd);
-		}
-		++iter;
-	}
-	if (game->players_amount < 1)
-		cwErrorCatcher(CW_INVALID_PLAYERS, CW_PLAYER);
-	game->destructor->players_detect = CW_TRUE;
+void	cwCreateInstancePlayer(player_t **playerObj)
+{
+	if (!(*playerObj = (player_t *)malloc(sizeof(player_t))))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
+	(*playerObj)->cwConstructorPlayer	= &cwConstructorPlayer;
+	(*playerObj)->cwDestructorPlayer	= &cwDestructorPlayer;
 }

@@ -6,58 +6,67 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/01 17:27:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/04 20:01:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-/*
-** In this file describes some function for key handler. All flags(keys)
-** handled here. Supporting keys is -n -d -v. -n is flag to assign custom
-** number of players. -d need for load dump in the screen,
-** -v flag for visualization. Further will be added some another flags to handle
-** concurance compute on gpu or cpu, but not exactly.
-*/
-
-void			cwValidateArguments(corewar_t *game, char **argv, int argc)
+void	cwValidateArgs(corewar_t *game, char **argv, int argc)
 {
+	/*
+	**	Stub
+	*/
 	return ;
 }
 
-void			cwInitializationKeys(corewar_t *game, char **argv, int argc)
+void	cwReadKeys(key_t *keyInstance, int argc, char **argv)
 {
-	key_t		*new_keys;
-	int			arg_iter;
-	int			str_iter;
+	int	argIter;
+	int	strIter;
 
-	if (!(new_keys	= (key_t *)malloc(sizeof(key_t))))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_KEYS);
-	new_keys->load_dump				= CW_FALSE;
-	new_keys->custom_id				= CW_FALSE;
-	new_keys->visualizator			= CW_FALSE;
-	arg_iter						= CW_BEGIN_FROM_ONE;
-	while (arg_iter < argc)
+	argIter = CW_BEGIN_FROM_ONE;
+	while (argIter < argc)
 	{
-		if (argv[arg_iter][0] == '-')
+		if (argv[argIter][0] == '-')
 		{
-			str_iter = CW_BEGIN_FROM_ONE;
-			while (argv[arg_iter][str_iter])
+			strIter = CW_BEGIN_FROM_ONE;
+			while (argv[argIter][strIter])
 			{
-				if (argv[arg_iter][str_iter]		== 'n')
-					new_keys->custom_id		= CW_TRUE;
-				else if (argv[arg_iter][str_iter]	== 'd')
-					new_keys->load_dump		= CW_TRUE;
-				else if (argv[arg_iter][str_iter]	== 'v')
-					new_keys->visualizator	= CW_TRUE;
+				if (argv[argIter][strIter]		== 'n')
+					keyInstance->custom_id		= CW_TRUE;
+				else if (argv[argIter][strIter]	== 'd')
+					keyInstance->load_dump		= CW_TRUE;
+				else if (argv[argIter][strIter]	== 'v')
+					keyInstance->visualizator	= CW_TRUE;
 				else
 					cwErrorCatcher(CW_NOT_VALID_KEY, CW_KEYS);
-				++str_iter;
+				++strIter;
 			}
-			argv[arg_iter][0] = '*';
+			argv[argIter][0] = '*';
 		}
-		++arg_iter;
+		++argIter;
 	}
-	game->destructor->keys_detect	= CW_TRUE;
-	game->keys						= new_keys;
+}
+
+void	cwDestructorKey(key_t *keyInstance)
+{
+	free(keyInstance);
+}
+
+void	cwConstructorKey(key_t *keyInstance)
+{
+	keyInstance->load_dump		= CW_FALSE;
+	keyInstance->custom_id		= CW_FALSE;
+	keyInstance->visualizator	= CW_FALSE;
+	keyInstance->cwReadKeys		= &cwReadKeys;
+	keyInstance->cwValidateArgs	= &cwValidateArgs;
+}
+
+void	cwCreateInstanceKey(key_t **keyObj)
+{
+	if (!(*keyObj = (key_t *)malloc(sizeof(key_t))))
+		cwErrorCatcher(CW_NOT_ALLOCATED, CW_KEYS);
+	(*keyObj)->cwConstructorKey	= &cwConstructorKey;
+	(*keyObj)->cwDestructorKey	= &CW_DESTRUCTOR;
 }
