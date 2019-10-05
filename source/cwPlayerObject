@@ -6,18 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/04 20:01:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/05 17:50:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-
-/*
-** In this chapter we are handling players. To this action we need to read the name,
-** comment, code and some small bytes between it. Players writes in list that
-** biconnected and looped. It is made for convenience and compatibility with
-** carriage list that similar at players list.
-*/
 
 void	cwReadFile(player_t *playerInstance, const char *file)
 {
@@ -32,46 +25,46 @@ void	cwReadFile(player_t *playerInstance, const char *file)
 
 void		cwValidatePlayer(player_t *player)
 {
-	int		check_size;
+	int		checkSize;
 
-	check_size = CHAMP_MAX_SIZE - 1;
-	if (player->binary_label != COREWAR_EXEC_MAGIC)
+	checkSize = CHAMP_MAX_SIZE - 1;
+	if (player->binaryLabel != COREWAR_EXEC_MAGIC)
 		cwErrorCatcher(CW_INCORRECT_BINARY, CW_PLAYER);
-	if (player->code_size > CHAMP_MAX_SIZE)
+	if (player->codeSize > CHAMP_MAX_SIZE)
 		cwErrorCatcher(CW_TOO_BIG_SIZE, CW_PLAYER);
-	while (!player->code[check_size])
-		--check_size;
-	if (player->code_size != check_size + 1)
+	while (!player->code[checkSize])
+		--checkSize;
+	if (player->codeSize != checkSize + 1)
 		cwErrorCatcher(CW_CHEAT_DETECT, CW_PLAYER);
 }
 
 void		cwBuildPlayer(player_t *playerInstane)
 {
-	int		global_iter;
-	int		local_iter;
+	int		globalIter;
+	int		localIter;
 
-	global_iter	= 0;
-	while (global_iter < BINARY_LABEL)
+	globalIter = 0;
+	while (globalIter < BINARY_LABEL)
 	{
-		playerInstane->binary_label |= playerInstane->source[global_iter] << ((sizeof(int) - global_iter - 1) * 8);
-		++global_iter;
+		playerInstane->binaryLabel |= playerInstane->source[globalIter] << ((sizeof(int) - globalIter - 1) * 8);
+		++globalIter;
 	}
-	local_iter	= 0;
-	while (global_iter < NAME)
-		playerInstane->name[local_iter++] = playerInstane->source[global_iter++];
-	playerInstane->name[local_iter] = 0;
-	global_iter += NULL_SEPARATOR;
-	local_iter	= 0;
-	while (global_iter < CODE_SIZE)
-		playerInstane->code_size |= playerInstane->source[global_iter++] << ((sizeof(int) - ++local_iter) * 8);
-	local_iter	= 0;
-	while (global_iter < COMMENT)
-		playerInstane->comment[local_iter++] = playerInstane->source[global_iter++];
-	playerInstane->comment[local_iter] = 0;
-	global_iter	+= NULL_SEPARATOR;
-	local_iter	= 0;
-	while (global_iter < CODE)
-		playerInstane->code[local_iter++] = playerInstane->source[global_iter++];
+	localIter = 0;
+	while (globalIter < NAME)
+		playerInstane->name[localIter++] = playerInstane->source[globalIter++];
+	playerInstane->name[localIter] = 0;
+	globalIter += NULL_SEPARATOR;
+	localIter = 0;
+	while (globalIter < CODE_SIZE)
+		playerInstane->codeSize |= playerInstane->source[globalIter++] << ((sizeof(int) - ++localIter) * 8);
+	localIter = 0;
+	while (globalIter < COMMENT)
+		playerInstane->comment[localIter++] = playerInstane->source[globalIter++];
+	playerInstane->comment[localIter] = 0;
+	globalIter += NULL_SEPARATOR;
+	localIter = 0;
+	while (globalIter < CODE)
+		playerInstane->code[localIter++] = playerInstane->source[globalIter++];
 }
 
 void	cwDestructorPlayer(player_t *playerInstance)
@@ -97,9 +90,9 @@ void	cwConstructorPlayer(player_t *playerInstance)
 	ft_memset(playerInstance->code, 0, CHAMP_MAX_SIZE);
 	ft_memset(playerInstance->comment, 0, COMMENT_LENGTH);
 	ft_memset(playerInstance->name, 0, PROG_NAME_LENGTH);
-	playerInstance->binary_label		= 0;
-	playerInstance->carriage_id			= 0;
-	playerInstance->code_size			= 0;
+	playerInstance->binaryLabel			= 0;
+	playerInstance->carriageId			= 0;
+	playerInstance->codeSize			= 0;
 	playerInstance->cwBuildPlayer		= &cwBuildPlayer;
 	playerInstance->cwValidatePlayer	= &cwValidatePlayer;
 	playerInstance->cwReadFile			= &cwReadFile;

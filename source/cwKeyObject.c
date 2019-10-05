@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/04 20:01:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/05 17:48:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void	cwReadKeys(key_t *keyInstance, int argc, char **argv)
 			while (argv[argIter][strIter])
 			{
 				if (argv[argIter][strIter]		== 'n')
-					keyInstance->custom_id		= CW_TRUE;
+					keyInstance->customId		= CW_TRUE;
 				else if (argv[argIter][strIter]	== 'd')
-					keyInstance->load_dump		= CW_TRUE;
+					keyInstance->loadDump		= CW_TRUE;
 				else if (argv[argIter][strIter]	== 'v')
 					keyInstance->visualizator	= CW_TRUE;
 				else
@@ -56,8 +56,8 @@ void	cwDestructorKey(key_t *keyInstance)
 
 void	cwConstructorKey(key_t *keyInstance)
 {
-	keyInstance->load_dump		= CW_FALSE;
-	keyInstance->custom_id		= CW_FALSE;
+	keyInstance->loadDump		= CW_FALSE;
+	keyInstance->customId		= CW_FALSE;
 	keyInstance->visualizator	= CW_FALSE;
 	keyInstance->cwReadKeys		= &cwReadKeys;
 	keyInstance->cwValidateArgs	= &cwValidateArgs;

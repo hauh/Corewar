@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/04 20:01:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/05 18:04:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,18 +175,22 @@ typedef enum				set_buffer_e
 
 typedef struct 				buffer_s
 {
-	int						int_value;
-	char					char_value;
-	short					short_value;
+	int						intValue;
+	char					charValue;
+	short					shortValue;
+
 	unsigned char			*data;
+
+	const void				(*cwConstructorBuffer)	(buffer_t *);
+	const void				(*cwDestructorBuffer)	(buffer_t *);
 }							buffer_t;
 
 typedef struct				player_s
 {
 	int						id;
-	int						code_size;
-	int						carriage_id;
-	int						binary_label;
+	int						codeSize;
+	int						carriageId;
+	int						binaryLabel;
 	unsigned char			*code;
 	unsigned char			*name;
 	unsigned char			*source;
@@ -212,6 +216,9 @@ typedef struct				command_s
 	unsigned int			waiting_time;
 	unsigned int			availability_types;
 	void					(*call)(corewar_t *);
+
+	const void				(*cwConstructorCommand)	(command_t *);
+	const void				(*cwDestructorCommand)	(command_t *);
 }							command_t;
 
 /*
@@ -262,16 +269,23 @@ typedef struct				arena_s
 	int						check_amount;
 	int						cycle_to_die;
 	unsigned long			cycle_amount;
+
 	unsigned char			*field;
-	carriage_t				*last_carriage;
-	player_t				*last_survivor;
-	buffer_t				*buffer_set[CW_BUFFER_AMOUNT];
+
+	carriage_t				*lastCarriage;
+	player_t				*lastSurvivor;
+	buffer_t				*bufferSet[CW_BUFFER_AMOUNT];
+
+	const void				(*cwConstructorArena)	(arena_t *);
+	const void				(*cwPrintField)			(arena_t *);
+	const void				(*cwBufferInit)			(arena_t *);
+	const void				(*cwDestructorArena)	(arena_t *);
 }							arena_t;
 
 typedef struct				key_s
 {
-	unsigned int			load_dump;
-	unsigned int			custom_id;
+	unsigned int			loadDump;
+	unsigned int			customId;
 	unsigned int			visualizator;
 
 	const void				(*cwConstructorKey)		(key_t *);
@@ -302,6 +316,9 @@ typedef struct				corewar_s
 	const void				(*cwStartGame)			(corewar_t *);
 	const void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
 	const void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *);
+	const void				(*cwArrangeUnitsOnField)(corewar_t *);
+	const void				(*cwFreeAllPlayers)		(corewar_t *);
+	const void				(*cwFreeAllCarriages)	(corewar_t *);
 	const void				(*cwDestructorGame)		(corewar_t *);
 }							corewar_t;
 

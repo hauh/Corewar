@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/04 20:01:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/05 17:56:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int				main(int argc, char **argv)
 	gameObj->cwArenaObjectInit		(gameObj);
 	gameObj->cwCommandObjectInit	(gameObj);
 	gameObj->cwIntroducePlayers		(gameObj);
+	gameObj->cwArrangeUnitsOnField	(gameObj);
 	gameObj->cwStartGame			(gameObj);
 	gameObj->cwDestructorGame		(gameObj);
 	return (0);
