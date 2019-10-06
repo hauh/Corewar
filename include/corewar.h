@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 18:07:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 19:31:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,7 @@ void						lld_exec				(corewar_t *game);
 void						lldi_exec				(corewar_t *game);
 void						lfork_exec				(corewar_t *game);
 void						aff_exec				(corewar_t *game);
+
+void						cwStartGame				(corewar_t *game);
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cwKey.c                                            :+:      :+:    :+:   */
+/*   cwKeyObject.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 17:48:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 19:56:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,20 @@ void	cwReadKeys(key_t *keyInstance, int argc, char **argv)
 			strIter = CW_BEGIN_FROM_ONE;
 			while (argv[argIter][strIter])
 			{
-				if (argv[argIter][strIter]		== 'n')
-					keyInstance->customId		= CW_TRUE;
+				if (argv[argIter][strIter]	== 'n')
+				{
+					keyInstance->customId	= CW_TRUE;
+					keyInstance->userId		= ft_atoi(argv[argIter + 1]);
+					argv[argIter + 1][0]	= '*';
+				}
 				else if (argv[argIter][strIter]	== 'd')
-					keyInstance->loadDump		= CW_TRUE;
+				{
+					keyInstance->loadDump	= CW_TRUE;
+					keyInstance->userDump	= ft_atoi(argv[argIter + 1]);
+					argv[argIter + 1][0] 	= '*';
+				}
 				else if (argv[argIter][strIter]	== 'v')
-					keyInstance->visualizator	= CW_TRUE;
+					keyInstance->graphics	= CW_TRUE;
 				else
 					cwErrorCatcher(CW_NOT_VALID_KEY, CW_KEYS);
 				++strIter;
@@ -49,18 +57,19 @@ void	cwReadKeys(key_t *keyInstance, int argc, char **argv)
 	}
 }
 
-void	cwDestructorKey(key_t *keyInstance)
+void	cwDestructorKey(key_t **keyInstance)
 {
-	free(keyInstance);
+	free(*keyInstance);
+	*keyInstance = NULL;
 }
 
-void	cwConstructorKey(key_t *keyInstance)
+void	cwConstructorKey(key_t **keyInstance)
 {
-	keyInstance->loadDump		= CW_FALSE;
-	keyInstance->customId		= CW_FALSE;
-	keyInstance->visualizator	= CW_FALSE;
-	keyInstance->cwReadKeys		= &cwReadKeys;
-	keyInstance->cwValidateArgs	= &cwValidateArgs;
+	(*keyInstance)->loadDump		= CW_FALSE;
+	(*keyInstance)->customId		= CW_FALSE;
+	(*keyInstance)->graphics		= CW_FALSE;
+	(*keyInstance)->cwReadKeys		= &cwReadKeys;
+	(*keyInstance)->cwValidateArgs	= &cwValidateArgs;
 }
 
 void	cwCreateInstanceKey(key_t **keyObj)

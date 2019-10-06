@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 17:50:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 19:36:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ typedef enum				set_buffer_e
 
 typedef struct				arena_s
 {
-	int						live_amount;
-	int						check_amount;
-	int						cycle_to_die;
-	unsigned long			cycle_amount;
+	int						liveAmount;
+	int						checkAmount;
+	int						cycleToDie;
+	unsigned long			cycleAmount;
 
-	unsigned char			*field;
+	unsigned char			*pField;
 
-	carriage_t				*lastCarriage;
-	player_t				*lastSurvivor;
-	buffer_t				*bufferSet[CW_BUFFER_AMOUNT];
+	carriage_t				*pLastCarriage;
+	player_t				*pLastSurvivor;
+	buffer_t				*paBufferSet[CW_BUFFER_AMOUNT];
 
 	const void				(*cwConstructorArena)	(arena_t *);
 	const void				(*cwPrintField)			(arena_t *);

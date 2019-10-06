@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 18:07:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 19:28:56 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int				main(int argc, char **argv)
 	corewar_t	*gameObj;
 
 	cwCreateInstanceGame			(&gameObj);
-	gameObj->cwConstructorGame		(gameObj);
+	gameObj->cwConstructorGame		(&gameObj);
 	gameObj->cwKeyObjectInit		(gameObj, argc, argv);
 	gameObj->cwPlayerObjectInit		(gameObj, argc, argv);
 	gameObj->cwCarraigeObjectInit	(gameObj);
@@ -26,6 +26,6 @@ int				main(int argc, char **argv)
 	gameObj->cwIntroducePlayers		(gameObj);
 	gameObj->cwArrangeUnitsOnField	(gameObj);
 	gameObj->cwStartGame			(gameObj);
-	gameObj->cwDestructorGame		(gameObj);
+	gameObj->cwDestructorGame		(&gameObj);
 	return (0);
 }

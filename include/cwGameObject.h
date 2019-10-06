@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 18:09:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 19:37:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct				corewar_s
 	arena_t					*pArenaObject;
 	key_t					*pKeyObject;
 
-	const void				(*cwConstructorGame)	(corewar_t *);
+	const void				(*cwConstructorGame)	(corewar_t **);
 	const void				(*cwKeyObjectInit)		(corewar_t *, int, char **);
 	const void				(*cwPlayerObjectInit)	(corewar_t *, int, char **);
 	const void				(*cwCarraigeObjectInit)	(corewar_t *);
@@ -43,7 +43,7 @@ typedef struct				corewar_s
 	const void				(*cwFreeAllPlayers)		(corewar_t *);
 	const void				(*cwFreeAllCarriages)	(corewar_t *);
 	const void 				(*cwFreeAllCommand)		(corewar_t *);
-	const void				(*cwDestructorGame)		(corewar_t *);
+	const void				(*cwDestructorGame)		(corewar_t **);
 }							corewar_t;
 
 #endif
