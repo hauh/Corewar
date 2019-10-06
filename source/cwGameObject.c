@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 18:04:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 18:11:18 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			cwArrangeUnits(corewar_t *gameInstance)
 
 	memoryStep = MEM_SIZE / gameInstance->playersAmount;
 	iter = CW_BEGIN_FROM_ZERO;
-	while (iter < gameInstance->playersAmount)
+	while (iter < gameInstance->playebbrsAmount)
 	{
 		codeIter = CW_BEGIN_FROM_ZERO;
 		playerLocation = memoryStep * iter;
@@ -86,6 +86,22 @@ void	cwAddPlayerToList(corewar_t *gameInstance, player_t *playerAdding)
 	}
 }
 
+void			cwCommandObjectInit(corewar_t *gameInstance)
+{
+	command_t	*commandObj;
+	int			iter;
+
+	iter = CW_BEGIN_FROM_ONE;
+	while (iter < CW_COMMAND_AMOUNT)
+	{
+		cwCreateInstanceCommand(&commandObj);
+		commandObj->cwConstructorCommand(commandObj);
+		commandObj->cwRecognizeCommand(commandObj, iter);
+		gameInstance->paCommands[iter] = commandObj;
+		++iter;
+	}
+}
+
 void			cwArenaObjectInit	(corewar_t *gameInstance)
 {
 	arena_t		*arenaObj;
@@ -93,7 +109,7 @@ void			cwArenaObjectInit	(corewar_t *gameInstance)
 	cwCreateInstanceArena		(&arenaObj);
 	arenaObj->cwConstructorArena(arenaObj);
 	arenaObj->cwBufferInit		(arenaObj);
-	gameInstance->pArenaObject	= arenaObj;
+	gameInstance->pArenaObject = arenaObj;
 }
 
 void			cwCarriageObjectInit(corewar_t *gameInstance)
@@ -108,8 +124,7 @@ void			cwCarriageObjectInit(corewar_t *gameInstance)
 		cwCreateInstanceCarriage(&carriageObj);
 		carriageObj->cwConstructorCarriage(carriageObj);
 		owner_id = -gameInstance->pPlayerObject->id;
-		cwConversionIntToBytes(game->carriages->prev->registers, &owner_id, 0);
-		game->players = game->players->next;
+		gameInstance->pPlayerObject = gameInstance->pPlayerObject->next;
 		++iter;
 	}
 }
@@ -119,8 +134,7 @@ void			cwPlayerObjectInit(corewar_t *gameInstance, char **argv, int argc)
 	player_t	*playerObj;
 	int			iter;
 
-	iter			= CW_BEGIN_FROM_ONE;
-	playerObj		= NULL;
+	iter = CW_BEGIN_FROM_ONE;
 	while (iter < argc)
 	{
 		if (argv[iter][0] != '*')
@@ -161,23 +175,22 @@ void			cwConstructorGame(corewar_t *gameInstance)
 	gameInstance->pKeyObject			= NULL;
 	gameInstance->cwKeyObjectInit		= &cwKeyObjectInit;
 	gameInstance->cwPlayerObjectInit	= &cwPlayerObjectInit;
-	gameInstance->cwCarraigeObjectInit	= NULL;
-	gameInstance->cwCommandObjectInit	= NULL;
-	gameInstance->cwArenaObjectInit		= NULL;
+	gameInstance->cwCarraigeObjectInit	= &cwCarriageObjectInit;
+	gameInstance->cwCommandObjectInit	= &cwCommandObjectInit;
+	gameInstance->cwArenaObjectInit		= &cwArenaObjectInit;
 	gameInstance->cwAddPlayerToList		= &cwAddPlayerToList;
 	gameInstance->cwAddCarriageToList	= &cwAddCarriageToList;
-	gameInstance->cwIntroducePlayers	= NULL;
-	gameInstance->cwStartGame			= NULL;
+	gameInstance->cwIntroducePlayers	= &cwIntroducePlayers;
+	gameInstance->cwStartGame			= &cwStartGame;
 }
 
 void			cwDestructorGame(corewar_t *gameInstance)
 {
 	free(gameInstance);
-	gameInstance->cwFreeAllCarriages(gameInstance);
-	gameInstance->cwFreeAllPlayers	(gameInstance);
+	gameInstance->cwFreeAllCarriages				(gameInstance);
+	gameInstance->cwFreeAllPlayers					(gameInstance);
 	gameInstance->pArenaObject->cwDestructorArena	(gameInstance->pArenaObject);
 	gameInstance->pKeyObject->cwDestructorKey		(gameInstance->pKeyObject);
-	gameInstance->p->cwDestructorArena	(gameInstance->pArenaObject);
 }
 
 void			cwCreateInstanceGame(corewar_t **gameObj)

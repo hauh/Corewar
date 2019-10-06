@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cwPlayer.c                                         :+:      :+:    :+:   */
+/*   cwPlayerObject.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 17:50:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/06 18:13:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	cwReadFile(player_t *playerInstance, const char *file)
 
 	if ((fd = open(file, O_RDONLY)) < 0)
 		cwErrorCatcher(CW_OPEN_FILE_ERROR, CW_PLAYER);
-	if (read(fd, playerInstance->source, CODE) < 0)
+	if (read(fd, playerInstance->pSource, CODE) < 0)
 		cwErrorCatcher(CW_READ_FILE_ERROR, CW_PLAYER);
 	close(fd);
 }
@@ -32,7 +32,7 @@ void		cwValidatePlayer(player_t *player)
 		cwErrorCatcher(CW_INCORRECT_BINARY, CW_PLAYER);
 	if (player->codeSize > CHAMP_MAX_SIZE)
 		cwErrorCatcher(CW_TOO_BIG_SIZE, CW_PLAYER);
-	while (!player->code[checkSize])
+	while (!player->pCode[checkSize])
 		--checkSize;
 	if (player->codeSize != checkSize + 1)
 		cwErrorCatcher(CW_CHEAT_DETECT, CW_PLAYER);
@@ -46,58 +46,58 @@ void		cwBuildPlayer(player_t *playerInstane)
 	globalIter = 0;
 	while (globalIter < BINARY_LABEL)
 	{
-		playerInstane->binaryLabel |= playerInstane->source[globalIter] << ((sizeof(int) - globalIter - 1) * 8);
+		playerInstane->binaryLabel |= playerInstane->pSource[globalIter] << ((sizeof(int) - globalIter - 1) * 8);
 		++globalIter;
 	}
 	localIter = 0;
 	while (globalIter < NAME)
-		playerInstane->name[localIter++] = playerInstane->source[globalIter++];
-	playerInstane->name[localIter] = 0;
+		playerInstane->pName[localIter++] = playerInstane->pSource[globalIter++];
+	playerInstane->pName[localIter] = 0;
 	globalIter += NULL_SEPARATOR;
 	localIter = 0;
 	while (globalIter < CODE_SIZE)
-		playerInstane->codeSize |= playerInstane->source[globalIter++] << ((sizeof(int) - ++localIter) * 8);
+		playerInstane->codeSize |= playerInstane->pSource[globalIter++] << ((sizeof(int) - ++localIter) * 8);
 	localIter = 0;
 	while (globalIter < COMMENT)
-		playerInstane->comment[localIter++] = playerInstane->source[globalIter++];
-	playerInstane->comment[localIter] = 0;
+		playerInstane->pComment[localIter++] = playerInstane->pSource[globalIter++];
+	playerInstane->pComment[localIter] = 0;
 	globalIter += NULL_SEPARATOR;
 	localIter = 0;
 	while (globalIter < CODE)
-		playerInstane->code[localIter++] = playerInstane->source[globalIter++];
+		playerInstane->pCode[localIter++] = playerInstane->pSource[globalIter++];
 }
 
 void	cwDestructorPlayer(player_t *playerInstance)
 {
-	free(playerInstance->source);
-	free(playerInstance->code);
-	free(playerInstance->comment);
-	free(playerInstance->name);
+	free(playerInstance->pSource);
+	free(playerInstance->pCode);
+	free(playerInstance->pComment);
+	free(playerInstance->pName);
 	free(playerInstance);
 }
 
 void	cwConstructorPlayer(player_t *playerInstance)
 {
-	if (!(playerInstance->source	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
+	if (!(playerInstance->pSource	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(playerInstance->code		= (unsigned char *)malloc(sizeof(unsigned char) * CHAMP_MAX_SIZE)))
+	if (!(playerInstance->pCode		= (unsigned char *)malloc(sizeof(unsigned char) * CHAMP_MAX_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(playerInstance->comment	= (unsigned char *)malloc(sizeof(unsigned char) * COMMENT_LENGTH)))
+	if (!(playerInstance->pComment	= (unsigned char *)malloc(sizeof(unsigned char) * COMMENT_LENGTH)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	if (!(playerInstance->name		= (unsigned char *)malloc(sizeof(unsigned char) * PROG_NAME_LENGTH)))
+	if (!(playerInstance->pName		= (unsigned char *)malloc(sizeof(unsigned char) * PROG_NAME_LENGTH)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	ft_memset(playerInstance->source, 0, CODE);
-	ft_memset(playerInstance->code, 0, CHAMP_MAX_SIZE);
-	ft_memset(playerInstance->comment, 0, COMMENT_LENGTH);
-	ft_memset(playerInstance->name, 0, PROG_NAME_LENGTH);
+	ft_memset(playerInstance->pSource, 0, CODE);
+	ft_memset(playerInstance->pCode, 0, CHAMP_MAX_SIZE);
+	ft_memset(playerInstance->pComment, 0, COMMENT_LENGTH);
+	ft_memset(playerInstance->pName, 0, PROG_NAME_LENGTH);
 	playerInstance->binaryLabel			= 0;
 	playerInstance->carriageId			= 0;
 	playerInstance->codeSize			= 0;
 	playerInstance->cwBuildPlayer		= &cwBuildPlayer;
 	playerInstance->cwValidatePlayer	= &cwValidatePlayer;
 	playerInstance->cwReadFile			= &cwReadFile;
-	playerInstance->next				= NULL;
-	playerInstance->prev				= NULL;
+	playerInstance->pNext				= NULL;
+	playerInstance->pPrev				= NULL;
 }
 
 void	cwCreateInstancePlayer(player_t **playerObj)
