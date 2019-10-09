@@ -6,92 +6,11 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/02 20:42:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 21:27:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-
-/*
-** Thist part is most important of corewar project. There are describes functions
-** for working with game commands that have several levels of abstract.
-** This file contains a lot of definens. I think that it make reading code easier.
-** !!!!!!!!Attention, this module working incorrect, need fix bug!!!!!!!!!!!!!!!!<<<---
-*/
-
-void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
-{
-	int		save_point;
-
-	if (input_arg == CW_REG_CODE)
-	{
-		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
-			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
-		else
-			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
-		cwWriteFromBufToReg(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
-		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
-	}
-	else if (input_arg == CW_DIR_CODE)
-	{
-		cwWriteFromBufToReg(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
-		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
-	}
-	else if (input_arg == CW_IND_CODE)
-	{
-		save_point = CW_CARRIAGE_LOCATION;
-		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
-		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
-		if (idx_mod == TRUE)
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
-		else
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
-		if (CW_CARRIAGE_LOCATION < 0)
-			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
-		cwWriteFromBufToArena(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
-		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
-	}
-}
-
-void		cwReadOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
-{
-	int		save_point;
-
-	if (input_arg == CW_REG_CODE)
-	{
-		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
-			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
-		else
-			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
-		cwReadFromRegToBuf(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
-		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
-		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
-	}
-	else if (input_arg == CW_DIR_CODE)
-	{
-		cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
-		if (CW_CURRENT_COMMAND->dir_size == SHORT_DIR_SIZE)
-			cwConversionBytesToInt(buffer->data, &buffer->short_value, CW_SHORT_BIAS, CW_SHORT);
-		else
-			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
-		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
-	}
-	else if (input_arg == CW_IND_CODE)
-	{
-		save_point = CW_CARRIAGE_LOCATION;
-		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
-		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
-		if (idx_mod == CW_TRUE)
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
-		else
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
-		if (CW_CARRIAGE_LOCATION < 0)
-			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
-		cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
-		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_SHORT_BIAS, CW_SHORT);
-		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
-	}
-}
 
 void		live_exec(corewar_t *game)
 {

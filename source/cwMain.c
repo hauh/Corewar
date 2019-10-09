@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 19:28:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 20:53:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,17 @@
 
 int				main(int argc, char **argv)
 {
-	corewar_t	*gameObj;
+	corewar_t	*pGameObj;
 
-	cwCreateInstanceGame			(&gameObj);
-	gameObj->cwConstructorGame		(&gameObj);
-	gameObj->cwKeyObjectInit		(gameObj, argc, argv);
-	gameObj->cwPlayerObjectInit		(gameObj, argc, argv);
-	gameObj->cwCarraigeObjectInit	(gameObj);
-	gameObj->cwArenaObjectInit		(gameObj);
-	gameObj->cwCommandObjectInit	(gameObj);
-	gameObj->cwIntroducePlayers		(gameObj);
-	gameObj->cwArrangeUnitsOnField	(gameObj);
-	gameObj->cwStartGame			(gameObj);
-	gameObj->cwDestructorGame		(&gameObj);
+	cwCreateInstanceGame			(&pGameObj);
+	pGameObj->cwKeyObjectInit		(pGameObj, argc, argv);
+	pGameObj->cwPlayerObjectInit	(pGameObj, argc, argv);
+	pGameObj->cwCarraigeObjectInit	(pGameObj);
+	pGameObj->cwArenaObjectInit		(pGameObj);
+	pGameObj->cwCommandObjectInit	(pGameObj);
+	pGameObj->cwIntroducePlayers	(pGameObj);
+	pGameObj->cwArrangeUnitsOnField	(pGameObj);
+	pGameObj->cwStartGame			(pGameObj);
+	pGameObj->cwDestructorGame		(&pGameObj);
 	return (0);
 }

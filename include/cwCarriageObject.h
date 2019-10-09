@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 19:01:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 21:31:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,19 @@ typedef struct				carriage_s
 	command_t				*pCurrentCommand;
 	player_t				*pOwnerCarriage;
 
-	const void				(*cwConstructorCarriage)(carriage_t *);
-	const void				(*cwReduceWaitingTime)	(carriage_t *);
-	const void				(*cwExecCommand)		(carriage_t *);
-	const void				(*cwSetCommand)			(carriage_t *);
+	const void				(*cwConstructorCarriage)(carriage_t **);
 	const void				(*cwSavePos)			(carriage_t *);
-	const void				(*cwMoveTo)				(carriage_t *, int);
-	const void				(*cwComputeJump)		(carriage_t *);
-	const void				(*cwParseTypes)			(carriage_t *);
+	const void				(*cwSetCommand)			(carriage_t *);
+	const void				(*cwExecCommand)		(carriage_t *);
 	const void				(*cwReadOperation)		(carriage_t *);
 	const void				(*cwWriteOperation)		(carriage_t *);
+	const void				(*cwReduceWaitingTime)	(carriage_t *);
 	const void				(*cwValidateCommand)	(carriage_t *);
 	const void				(*cwValidateTypes)		(carriage_t *);
-	const void				(*cwDestructorCarriage) (carriage_t *);
+	const void				(*cwComputeJump)		(carriage_t *);
+	const void				(*cwParseTypes)			(carriage_t *);
+	const void				(*cwMoveTo)				(carriage_t *, int);
+	const void				(*cwDestructorCarriage) (carriage_t **);
 }							carriage_t;
 
 #endif

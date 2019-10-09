@@ -6,11 +6,85 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 19:22:27 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 21:38:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
+{
+	int		save_point;
+
+	if (input_arg == CW_REG_CODE)
+	{
+		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
+		else
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
+		cwWriteFromBufToReg(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
+		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
+	}
+	else if (input_arg == CW_DIR_CODE)
+	{
+		cwWriteFromBufToReg(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
+		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
+	}
+	else if (input_arg == CW_IND_CODE)
+	{
+		save_point = CW_CARRIAGE_LOCATION;
+		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
+		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
+		if (idx_mod == TRUE)
+			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
+		else
+			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+		if (CW_CARRIAGE_LOCATION < 0)
+			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+		cwWriteFromBufToArena(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
+		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
+	}
+}
+
+void		cwReadOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
+{
+	int		save_point;
+
+	if (input_arg == CW_REG_CODE)
+	{
+		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
+		else
+			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
+		cwReadFromRegToBuf(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
+		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
+		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
+	}
+	else if (input_arg == CW_DIR_CODE)
+	{
+		cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
+		if (CW_CURRENT_COMMAND->dir_size == SHORT_DIR_SIZE)
+			cwConversionBytesToInt(buffer->data, &buffer->short_value, CW_SHORT_BIAS, CW_SHORT);
+		else
+			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
+		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
+	}
+	else if (input_arg == CW_IND_CODE)
+	{
+		save_point = CW_CARRIAGE_LOCATION;
+		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
+		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
+		if (idx_mod == CW_TRUE)
+			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
+		else
+			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+		if (CW_CARRIAGE_LOCATION < 0)
+			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+		cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
+		cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_SHORT_BIAS, CW_SHORT);
+		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
+	}
+}
 
 void	cwCopyReg(unsigned char *from, unsigned char *to, int size)
 {
@@ -126,16 +200,6 @@ void			cwComputeJump(carriage_t *carriageInstance)
 	carriageInstance->jump = carriageInstance->currentLocation - carriageInstance->savePoint;
 }
 
-void			cwSavePos(carriage_t *carriageInstance)
-{
-	carriageInstance->savePoint = carriageInstance->currentLocation;
-}
-
-void			cwMoveTo(carriage_t *carriageInstance, int step)
-{
-	carriageInstance->currentLocation += step;
-}
-
 void			cwTypeHandler(carriage_t *carriageInstance, unsigned char *field)
 {
 	if (carriageInstance->pCurrentCommand->typeByte)
@@ -167,41 +231,68 @@ void			cwExecCommand(carriage_t *carriageInstance, corewar_t *gameInstance)
 		carriageInstance->errorOcurred = CW_TRUE;
 }
 
-void			cwSetCommand(carriage_t *carriageInstance, arena_t *arenaInstance)
+void			cwSetCommand(carriage_t *pCarriageInstance, arena_t *pArenaInstance)
 {
-	if (arenaInstance->field[carriageInstance->currentLocation] > 0 &&
-		arenaInstance->field[carriageInstance->currentLocation] < 17)
-		carriageInstance->pCurrentCommand = arenaInstance->field[carriageInstance->currentLocation];
+	if (pArenaInstance->pField[pCarriageInstance->currentLocation] > 0 && pArenaInstance->pField[pCarriageInstance->currentLocation] < 17)
+		pCarriageInstance->pCurrentCommand	= pArenaInstance->pField[pCarriageInstance->currentLocation];
 	else
-		carriageInstance->errorOcurred = CW_TRUE;
+		pCarriageInstance->errorOcurred		= CW_TRUE;
 }
 
-void	cwConstructorCarriage(carriage_t *carriageInstance)
+static void			cwComputeJump(carriage_t *carriageInstance)
 {
-	if (!(carriageInstance->pRegisters = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * CW_REG_SIZE)))
+	carriageInstance->jump = carriageInstance->currentLocation - carriageInstance->savePoint;
+}
+
+static void			cwMoveTo(carriage_t *carriageInstance, int step)
+{
+	carriageInstance->currentLocation += step;
+}
+
+static void			cwSavePos(carriage_t *carriageInstance)
+{
+	carriageInstance->savePoint = carriageInstance->currentLocation;
+}
+
+/*
+** Low level function for initialization object;
+**--------------------------------------------------------------------------------------
+*/
+
+static void	cwConstructorCarriage(carriage_t **ppCarriageInstance)
+{
+	if (!((*ppCarriageInstance)->pRegisters = (unsigned char *)malloc(sizeof(unsigned char) * REG_NUMBER * CW_REG_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
-	ft_memset(carriageInstance->pRegisters, 0, REG_NUMBER * CW_REG_SIZE);
-	carriageInstance->jump				= 0;
-	carriageInstance->carry				= CW_FALSE;
-	carriageInstance->waitingTime		= 0;
-	carriageInstance->lastSpeakCycle	= 0;
-	carriageInstance->currentLocation 	= 0;
-	carriageInstance->pCurrentCommand	= NULL;
-	carriageInstance->pOwnerCarriage	= NULL;
-	carriageInstance->pNext				= NULL;
-	carriageInstance->pPrev				= NULL;
+	ft_memset((*ppCarriageInstance)->pRegisters, 0, REG_NUMBER * CW_REG_SIZE);
+	(*ppCarriageInstance)->jump				= 0;
+	(*ppCarriageInstance)->carry			= CW_FALSE;
+	(*ppCarriageInstance)->waitingTime		= 0;
+	(*ppCarriageInstance)->lastSpeakCycle	= 0;
+	(*ppCarriageInstance)->currentLocation 	= 0;
+	(*ppCarriageInstance)->pCurrentCommand	= NULL;
+	(*ppCarriageInstance)->pOwnerCarriage	= NULL;
+	(*ppCarriageInstance)->pNext			= NULL;
+	(*ppCarriageInstance)->pPrev			= NULL;
 }
 
-void	cwDestructorCarriage(carriage_t *carriageInstance)
+static void	cwDestructorCarriage(carriage_t **ppCarriageInstance)
 {
-	free(carriageInstance->pRegisters);
-	free(carriageInstance);
+	free((*ppCarriageInstance)->pRegisters);
+	free((*ppCarriageInstance));
+	*ppCarriageInstance = NULL;
 }
 
-void	cwCreateInstanceCarriage(carriage_t **carriageObj)
+void	cwCreateInstanceCarriage(carriage_t **ppCarriageObj)
 {
-	if (!(*carriageObj = (carriage_t *)malloc(sizeof(carriage_t))))
+	if (!(*ppCarriageObj = (carriage_t *)malloc(sizeof(carriage_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
-	(*carriageObj)->cwConstructorCarriage	= &cwConstructorCarriage;
-	(*carriageObj)->cwDestructorCarriage	= &cwDestructorCarriage;
+	(*ppCarriageObj)->cwConstructorCarriage	= &cwConstructorCarriage;
+	(*ppCarriageObj)->cwDestructorCarriage	= &cwDestructorCarriage;
+	(*ppCarriageObj)->cwSavePos				= &cwSavePos;
+	(*ppCarriageObj)->cwSetCommand			= &cwSetCommand;
+	(*ppCarriageObj)->cwReduceWaitingTime	= &cwReduceWaitingTime;
 }
+
+/*
+**--------------------------------------------------------------------------------------
+*/

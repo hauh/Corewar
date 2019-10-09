@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 19:38:40 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 21:39:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void		cwArrangeUnitsOnField(corewar_t *gameInstance)
 		playerLocation = memoryStep * iter;
 		gameInstance->pCarriageObject->currentLocation = playerLocation;
 		while (playerLocation < memoryStep * iter + CHAMP_MAX_SIZE)
-			gameInstance->pArenaObject->field[playerLocation++] = gameInstance->pPlayerObject->pCode[codeIter++];
+			gameInstance->pArenaObject->pField[playerLocation++] = gameInstance->pPlayerObject->pCode[codeIter++];
 		gameInstance->pPlayerObject		= gameInstance->pPlayerObject->pNext;
 		gameInstance->pCarriageObject	= gameInstance->pCarriageObject->pNext;
 		++iter;
@@ -69,20 +69,20 @@ static void		cwAddCarriageToList(corewar_t *gameInstance, carriage_t *carriageAd
 	}
 }
 
-static void		cwAddPlayerToList(corewar_t *gameInstance, player_t *playerAdding)
+static void		cwAddPlayerToList(corewar_t *pGameInstance, player_t *pPlayerAdding)
 {
-	if (!gameInstance->pPlayerObject)
+	if (!pGameInstance->pPlayerObject)
 	{
-		gameInstance->pPlayerObject				= playerAdding;
-		gameInstance->pPlayerObject->next		= playerAdding;
-		gameInstance->pPlayerObject->prev		= playerAdding;
+		pGameInstance->pPlayerObject		= pPlayerAdding;
+		pGameInstance->pPlayerObject->pNext	= pPlayerAdding;
+		pGameInstance->pPlayerObject->pPrev	= pPlayerAdding;
 	}
 	else
 	{
-		playerAdding->next						= gameInstance->pPlayerObject;
-		playerAdding->prev						= gameInstance->pPlayerObject->prev;
-		gameInstance->pPlayerObject->prev->next	= playerAdding;
-		gameInstance->pPlayerObject->prev		= playerAdding;
+		pPlayerAdding->pNext						= pGameInstance->pPlayerObject;
+		pPlayerAdding->pPrev						= pGameInstance->pPlayerObject->pPrev;
+		pGameInstance->pPlayerObject->pPrev->pNext	= pPlayerAdding;
+		pGameInstance->pPlayerObject->pPrev			= pPlayerAdding;
 	}
 }
 
@@ -137,10 +137,9 @@ static void		cwPlayerObjectInit(corewar_t *gameInstance, char **argv, int argc)
 	iter = CW_BEGIN_FROM_ONE;
 	while (iter < argc)
 	{
-		if (argv[iter][0] != '*')
+		if (argv[iter][0] != CW_CHECK_SEAL)
 		{
 			cwCreateInstancePlayer			(&playerObj);
-			playerObj->cwConstructorPlayer	(playerObj);
 			playerObj->cwReadFile			(playerObj, argv[iter]);
 			playerObj->cwBuildPlayer		(playerObj);
 			playerObj->cwValidatePlayer		(playerObj);
@@ -158,30 +157,25 @@ static void		cwKeyObjectInit(corewar_t *gameInstance, int argc, char **argv)
 	key_t		*keyObj;
 
 	cwCreateInstanceKey			(&keyObj);
-	keyObj->cwConstructorKey	(keyObj);
 	keyObj->cwValidateArgs		(keyObj, argc, argv);
 	keyObj->cwReadKeys			(keyObj, argc, argv);
 	gameInstance->pKeyObject	= keyObj;
 }
 
+/*
+** Low level function for initialization object;
+**--------------------------------------------------------------------------------------
+*/
+
 static void		cwConstructorGame(corewar_t **gameInstance)
 {
-	(*gameInstance)->playersAmount			= 0;
-	(*gameInstance)->commandsAmount			= 0;
-	(*gameInstance)->carriagesAmount		= 0;
-	(*gameInstance)->pCarriageObject		= NULL;
-	(*gameInstance)->pPlayerObject			= NULL;
-	(*gameInstance)->pArenaObject			= NULL;
-	(*gameInstance)->pKeyObject				= NULL;
-	(*gameInstance)->cwKeyObjectInit		= &cwKeyObjectInit;
-	(*gameInstance)->cwPlayerObjectInit		= &cwPlayerObjectInit;
-	(*gameInstance)->cwCarraigeObjectInit	= &cwCarriageObjectInit;
-	(*gameInstance)->cwCommandObjectInit	= &cwCommandObjectInit;
-	(*gameInstance)->cwArenaObjectInit		= &cwArenaObjectInit;
-	(*gameInstance)->cwAddPlayerToList		= &cwAddPlayerToList;
-	(*gameInstance)->cwAddCarriageToList	= &cwAddCarriageToList;
-	(*gameInstance)->cwIntroducePlayers		= &cwIntroducePlayers;
-	(*gameInstance)->cwStartGame			= &cwStartGame;
+	(*gameInstance)->playersAmount		= 0;
+	(*gameInstance)->commandsAmount		= 0;
+	(*gameInstance)->carriagesAmount	= 0;
+	(*gameInstance)->pCarriageObject	= NULL;
+	(*gameInstance)->pPlayerObject		= NULL;
+	(*gameInstance)->pArenaObject		= NULL;
+	(*gameInstance)->pKeyObject			= NULL;
 }
 
 static void		cwDestructorGame(corewar_t **gameInstance)
@@ -194,10 +188,24 @@ static void		cwDestructorGame(corewar_t **gameInstance)
 	*gameInstance = NULL;
 }
 
-void			cwCreateInstanceGame(corewar_t **gameObj)
+void			cwCreateInstanceGame(corewar_t **ppGameObj)
 {
-	if (!(*gameObj = (corewar_t *)malloc(sizeof(corewar_t))))
+	if (!(*ppGameObj = (corewar_t *)malloc(sizeof(corewar_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_GAME);
-	(*gameObj)->cwConstructorGame	= &cwConstructorGame;
-	(*gameObj)->cwDestructorGame	= &cwDestructorGame;
+	(*ppGameObj)->cwConstructorGame		= &cwConstructorGame;
+	(*ppGameObj)->cwDestructorGame		= &cwDestructorGame;
+	(*ppGameObj)->cwKeyObjectInit		= &cwKeyObjectInit;
+	(*ppGameObj)->cwPlayerObjectInit	= &cwPlayerObjectInit;
+	(*ppGameObj)->cwCarraigeObjectInit	= &cwCarriageObjectInit;
+	(*ppGameObj)->cwCommandObjectInit	= &cwCommandObjectInit;
+	(*ppGameObj)->cwArenaObjectInit		= &cwArenaObjectInit;
+	(*ppGameObj)->cwAddPlayerToList		= &cwAddPlayerToList;
+	(*ppGameObj)->cwAddCarriageToList	= &cwAddCarriageToList;
+	(*ppGameObj)->cwIntroducePlayers	= &cwIntroducePlayers;
+	(*ppGameObj)->cwStartGame			= &cwStartGame;
+	(*ppGameObj)->cwConstructorGame		(ppGameObj);
 }
+
+/*
+**--------------------------------------------------------------------------------------
+*/

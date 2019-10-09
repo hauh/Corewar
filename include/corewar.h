@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 19:31:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/09 21:07:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 # include "cwPlayerObject.h"
 
 /*
-** subject header
+** Subject's defines
+** -----------------------------------
 */
 
 #define MAX_ARGS_NUMBER			4
@@ -66,8 +67,6 @@ typedef enum				byte_blocks_e
 	CODE					= COMMENT + NULL_SEPARATOR + CHAMP_MAX_SIZE
 }							byte_blocks_t;
 
-#define CW_ACROSS_NAME		carriageInstance->current_command->availability_types
-#define CW_ACROSS_TYPE		1
 
 #define CW_CHAR				1
 #define CW_SHORT			2
@@ -85,7 +84,8 @@ typedef enum				byte_blocks_e
 
 
 /*
-**	-------------------------
+** Error's Defines
+** -------------------------------------------
 */
 
 #define CW_NOT_ALLOCATED	1
@@ -110,7 +110,12 @@ typedef enum				byte_blocks_e
 #define CW_EXEC_ERROR		"In Exec error"
 
 /*
-** ---------------------------
+** ------------------------------------------
+*/
+
+/*
+** Common defines;
+** -----------------------------
 */
 
 #define CW_BEGIN_FROM_ZERO	0x00
@@ -131,6 +136,17 @@ typedef enum				byte_blocks_e
 #define CW_IND_CODE			0x03
 #define CW_IND_SIZE			0x02
 
+#define CW_CHECK_SEAL		'*'
+
+/*
+** -----------------------------
+*/
+
+/*
+** Command's defines
+** -----------------------------
+*/
+
 #define CW_LIVE				0x01
 #define CW_LD				0x02
 #define CW_ST				0x03
@@ -147,6 +163,10 @@ typedef enum				byte_blocks_e
 #define CW_LLDI				0x0e
 #define CW_LFORK			0x0f
 #define CW_AFF				0x10
+
+/*
+**------------------------------
+*/
 
 void						live_exec				(corewar_t *game);
 void						ld_exec					(corewar_t *game);
