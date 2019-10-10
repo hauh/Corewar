@@ -6,13 +6,21 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/06 18:16:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:20:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cwPrintField(arena_t *arenaInstance)
+static int	cwCheckConditions(arena_t *pArenaInstance)
+{
+	if (pArenaInstance->cycleToDie <= 0 || pArenaInstance->cycleAmount % pArenaInstance->cycleToDie == 0)
+		return (CW_TRUE);
+	else
+		return (CW_FALSE);
+}
+
+static void	cwPrintField(arena_t *pArenaInstance)
 {
 	int	border;
 	int	i;
@@ -22,15 +30,15 @@ void	cwPrintField(arena_t *arenaInstance)
 	printf("%4d: ", 0);
 	while (i < MEM_SIZE)
 	{
-		printf("%.2x ", arenaInstance->field[i]);
+		printf("%.2x ", pArenaInstance->pField[i]);
 		if ((i + 1) % border == 0)
-			printf("\n%4d: ", i + 1);
+			printf("\n%4x: ", i + 1);
 		++i;
 	}
 	printf("\n");
 }
 
-void	cwBuffersInit(arena_t *arenaInstance)
+static void	cwBuffersInit(arena_t *pArenaInstance)
 {
 	buffer_t	*bufferObj;
 	int			bufIter;
@@ -39,35 +47,37 @@ void	cwBuffersInit(arena_t *arenaInstance)
 	while (bufIter < CW_BUFFER_AMOUNT)
 	{
 		cwCreateInstanceBuffer(&bufferObj);
-		bufferObj->cwConstructorBuffer;
-		arenaInstance->bufferSet[bufIter] = bufferObj;
+		pArenaInstance->paBufferSet[bufIter] = bufferObj;
 		++bufIter;
 	}
 }
 
-void	cwConstructorArena(arena_t *arenaInstance)
+static void	cwConstructorArena(arena_t **ppArenaInstance)
 {
-	if (!(arenaInstance->field = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
+	if (!((*ppArenaInstance)->pField = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	ft_memset(arenaInstance->field, 0, MEM_SIZE);
-	arenaInstance->cycle_amount 	= 0;
-	arenaInstance->live_amount		= 0;
-	arenaInstance->check_amount		= 0;
-	arenaInstance->cycle_to_die		= CYCLE_TO_DIE;
-	arenaInstance->cwPrintField		= &cwPrintField;
-	arenaInstance->cwBufferInit		= &cwBuffersInit;
+	ft_memset((*ppArenaInstance)->pField, 0, MEM_SIZE);
+	(*ppArenaInstance)->cycleAmount = 0;
+	(*ppArenaInstance)->checkAmount	= 0;
+	(*ppArenaInstance)->liveAmount	= 0;
+	(*ppArenaInstance)->cycleToDie	= CYCLE_TO_DIE;
 }
 
-void	cwDestructorArena(arena_t *arenaInstance)
+static void	cwDestructorArena(arena_t **ppArenaInstance)
 {
-	free(arenaInstance->field);
-	free(arenaInstance);
+	free((*ppArenaInstance)->pField);
+	free(*ppArenaInstance);
+	*ppArenaInstance = NULL;
 }
 
-void	cwCreateInstanceArena(arena_t **arenaObj)
+void	cwCreateInstanceArena(arena_t **ppArenaObj)
 {
-	if (!(*arenaObj = (arena_t *)malloc(sizeof(arena_t))))
+	if (!(*ppArenaObj = (arena_t *)malloc(sizeof(arena_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	(*arenaObj)->cwConstructorArena	= &cwConstructorArena;
-	(*arenaObj)->cwDestructorArena	= &cwDestructorArena;
+	(*ppArenaObj)->cwConstructorArena	= (const void *)&cwConstructorArena;
+	(*ppArenaObj)->cwDestructorArena	= (const void *)&cwDestructorArena;
+	(*ppArenaObj)->cwCheckConditions	= (const void *)&cwCheckConditions;
+	(*ppArenaObj)->cwBufferInit			= (const void *)&cwBuffersInit;
+	(*ppArenaObj)->cwPrintField			= (const void *)&cwPrintField;
+	(*ppArenaObj)->cwConstructorArena	(ppArenaObj);
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/09 21:07:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:19:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ typedef enum				byte_blocks_e
 #define SHORT_DIR_SIZE		2
 #define OVERSTEP_NAME		1
 #define CW_REGISTER_SIZE	1
-#define CW_IND_SIZE			2
 #define TO_FIRST_ARG		1
 
 
@@ -126,6 +125,7 @@ typedef enum				byte_blocks_e
 #define CW_REG				0x40
 #define CW_REG_CODE			0x01
 #define CW_REG_SIZE			0x01
+#define CW_REG_AMOUNT		0x04
 
 #define CW_DIR				0x20
 #define CW_DIR_CODE			0x02
@@ -168,23 +168,30 @@ typedef enum				byte_blocks_e
 **------------------------------
 */
 
-void						live_exec				(corewar_t *game);
-void						ld_exec					(corewar_t *game);
-void						st_exec					(corewar_t *game);
-void						add_exec				(corewar_t *game);
-void						sub_exec				(corewar_t *game);
-void						and_exec				(corewar_t *game);
-void						or_exec					(corewar_t *game);
-void						xor_exec				(corewar_t *game);
-void						zjmp_exec				(corewar_t *game);
-void						ldi_exec				(corewar_t *game);
-void						sti_exec				(corewar_t *game);
-void						fork_exec				(corewar_t *game);
-void						lld_exec				(corewar_t *game);
-void						lldi_exec				(corewar_t *game);
-void						lfork_exec				(corewar_t *game);
-void						aff_exec				(corewar_t *game);
+void						liveExec	(corewar_t *game);
+void						ldExec		(corewar_t *game);
+void						stExec		(corewar_t *game);
+void						addExec		(corewar_t *game);
+void						subExec		(corewar_t *game);
+void						andExec		(corewar_t *game);
+void						orExec		(corewar_t *game);
+void						xorExec		(corewar_t *game);
+void						zjmpExec	(corewar_t *game);
+void						ldiExec		(corewar_t *game);
+void						stiExec		(corewar_t *game);
+void						forkExec	(corewar_t *game);
+void						lldExec		(corewar_t *game);
+void						lldiExec	(corewar_t *game);
+void						lforkExec	(corewar_t *game);
+void						affExec		(corewar_t *game);
 
-void						cwStartGame				(corewar_t *game);
+void						cwCreateInstanceGame		(corewar_t **ppGameObj);
+void						cwCreateInstanceKey			(key_t **pKeyObj);
+void						cwCreateInstancePlayer		(player_t **ppPlayerObj);
+void						cwCreateInstanceCommand		(command_t **ppCommandObj);
+void						cwCreateInstanceCarriage	(carriage_t **ppCarriageObj);
+void						cwCreateInstanceBuffer		(buffer_t **ppBufferObj);
+void						cwCreateInstanceArena		(arena_t **ppArenaObj);
+void						cwErrorCatcher				(int error_code, const char *section);
 
 #endif

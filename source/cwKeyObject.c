@@ -6,17 +6,19 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/09 21:21:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:30:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void	cwValidateArgs(key_t *pKeyInstance, char **argv, int argc)
+static void	cwValidateArgs(key_t *pKeyInstance, int argc, char **argv)
 {
 	/*
 	**	Stub
 	*/
+	if (argc < 2)
+		cwErrorCatcher(CW_NOT_VALID_KEY, CW_KEYS);
 	return ;
 }
 
@@ -77,10 +79,10 @@ void		cwCreateInstanceKey(key_t **ppKeyObj)
 {
 	if (!(*ppKeyObj = (key_t *)malloc(sizeof(key_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_KEYS);
-	(*ppKeyObj)->cwConstructorKey	= &cwConstructorKey;
-	(*ppKeyObj)->cwDestructorKey	= &CW_DESTRUCTOR;
-	(*ppKeyObj)->cwReadKeys			= &cwReadKeys;
-	(*ppKeyObj)->cwValidateArgs		= &cwValidateArgs;
+	(*ppKeyObj)->cwConstructorKey	= (const void *)&cwConstructorKey;
+	(*ppKeyObj)->cwDestructorKey	= (const void *)&cwDestructorKey;
+	(*ppKeyObj)->cwReadKeys			= (const void *)&cwReadKeys;
+	(*ppKeyObj)->cwValidateArgs		= (const void *)&cwValidateArgs;
 	(*ppKeyObj)->cwConstructorKey	(ppKeyObj);
 }
 

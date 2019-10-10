@@ -6,31 +6,33 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 17:41:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/05 17:50:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:20:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cwConstructorBuffer(buffer_t *bufferInstance)
+void	cwConstructorBuffer(buffer_t **ppBufferInstance)
 {
-	if (!(bufferInstance->data = (unsigned char *)malloc(sizeof(unsigned char) * REG_SIZE)))
+	if (!((*ppBufferInstance)->pData = (unsigned char *)malloc(sizeof(unsigned char) * CW_REG_AMOUNT)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	bufferInstance->intValue = 0;
-	bufferInstance->charValue = 0;
-	bufferInstance->shortValue = 0;
+	(*ppBufferInstance)->intValue	= 0;
+	(*ppBufferInstance)->charValue	= 0;
+	(*ppBufferInstance)->shortValue	= 0;
 }
 
-void	cwDestructorBuffer(buffer_t *bufferInstance)
+void	cwDestructorBuffer(buffer_t **ppBufferInstance)
 {
-	free(bufferInstance->data);
-	free(bufferInstance);
+	free((*ppBufferInstance)->pData);
+	free(*ppBufferInstance);
+	*ppBufferInstance = NULL;
 }
 
-void	cwCreateInstanceBuffer(buffer_t **bufferObj)
+void	cwCreateInstanceBuffer(buffer_t **ppBufferObj)
 {
-	if (!(*bufferObj = (buffer_t *)malloc(sizeof(buffer_t))))
+	if (!(*ppBufferObj = (buffer_t *)malloc(sizeof(buffer_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	(*bufferObj)->cwConstructorBuffer	= &cwConstructorBuffer;
-	(*bufferObj)->cwDestructorBuffer	= &cwDestructorBuffer;
+	(*ppBufferObj)->cwConstructorBuffer	= (const void *)&cwConstructorBuffer;
+	(*ppBufferObj)->cwDestructorBuffer	= (const void *)&cwDestructorBuffer;
+	(*ppBufferObj)->cwConstructorBuffer	(ppBufferObj);
 }

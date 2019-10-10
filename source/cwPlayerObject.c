@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/09 21:24:02 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:26:18 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ static void	cwDestructorPlayer(player_t **ppPlayerInstance)
 	*ppPlayerInstance = NULL;
 }
 
-void	cwCreateInstancePlayer(player_t **ppPlayerObj)
+void		cwCreateInstancePlayer(player_t **ppPlayerObj)
 {
 	if (!(*ppPlayerObj = (player_t *)malloc(sizeof(player_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	(*ppPlayerObj)->cwConstructorPlayer	= &cwConstructorPlayer;
-	(*ppPlayerObj)->cwDestructorPlayer	= &cwDestructorPlayer;
-	(*ppPlayerObj)->cwBuildPlayer		= &cwBuildPlayer;
-	(*ppPlayerObj)->cwValidatePlayer	= &cwValidatePlayer;
-	(*ppPlayerObj)->cwReadFile			= &cwReadFile;
+	(*ppPlayerObj)->cwConstructorPlayer	= (const void *)&cwConstructorPlayer;
+	(*ppPlayerObj)->cwDestructorPlayer	= (const void *)&cwDestructorPlayer;
+	(*ppPlayerObj)->cwBuildPlayer		= (const void *)&cwBuildPlayer;
+	(*ppPlayerObj)->cwValidatePlayer	= (const void *)&cwValidatePlayer;
+	(*ppPlayerObj)->cwReadFile			= (const void *)&cwReadFile;
 	(*ppPlayerObj)->cwConstructorPlayer	(ppPlayerObj);
 }
 

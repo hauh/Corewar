@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:21:54 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/09 21:17:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 19:30:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 # include "cwTypedefObjects.h"
 
-typedef struct				key_s
+typedef struct	key_s
 {
-	unsigned int			loadDump;
-	unsigned int			customId;
-	unsigned int			graphics;
+	int			loadDump;
+	int			customId;
+	int			graphics;
 
-	const void				(*cwConstructorKey)		(key_t **);
-	const void				(*cwValidateArgs)		(key_t *, int, char **);
-	const void				(*cwReadKeys)			(key_t *, int, char **);
-	const void				(*cwDestructorKey)		(key_t **);
-}							key_t;
+	const void	(*cwConstructorKey)	(key_t **);
+	const void	(*cwValidateArgs)	(key_t *, int, char **);
+	const void	(*cwReadKeys)		(key_t *, int, char **);
+	const void	(*cwDestructorKey)	(key_t **);
+}				key_t;
 
 #endif
