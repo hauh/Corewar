@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:24:55 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/11 13:42:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 
 void	liveExec(corewar_t *pGameObject)
 {
-	pGameObject->pCarriageObject->cwSavePos		(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwComputeJump	(pGameObject->pCarriageObject);
+	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
+	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
+	pGameObject->pCarriageObject->cwValidateTypes	(pGameObject->pCarriageObject);
+	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
+	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject);
+	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
 }
 
 void	ldExec(corewar_t *pGameObject)

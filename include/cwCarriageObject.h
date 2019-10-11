@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:11:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/11 20:00:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ typedef struct			carriage_s
 	int					id;
 	int					jump;
 	int					carry;
+	int					offset;
 	int					savePoint;
 	int					waitingTime;
 	int					lastSpeakCycle;
 	int					currentLocation;
-	int					currentRegister;
 	int					errorOcurred;
+	char				currentRegister;
 
 	unsigned char		*pRegisters;
 
@@ -47,7 +48,9 @@ typedef struct			carriage_s
 	const void			(*cwComputeJump)		(carriage_t *);
 	const void			(*cwParseTypes)			(carriage_t *);
 	const void			(*cwMoveTo)				(carriage_t *, int);
+	const void			(*cwReadFromRegToBuf)	(carriage_t *, );
+	const void			(*cwWriteFromBufToReg)	(carriage_t *);
 	const void			(*cwDestructorCarriage) (carriage_t **);
-}							carriage_t;
+}						carriage_t;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:32:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/10 21:21:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ static void	cwCarriageObjectInit(corewar_t *pGameInstance)
 	{
 		cwCreateInstanceCarriage(&pCarriageObj);
 		pCarriageObj->id = pGameInstance->pPlayerObject->id;
+		pCarriageObj->pOwnerCarriage = pGameInstance->pPlayerObject;
 		pGameInstance->cwAddCarriageToList(pGameInstance, pCarriageObj);
 		pGameInstance->pPlayerObject = pGameInstance->pPlayerObject->pNext;
 		++iter;
@@ -218,7 +219,7 @@ static void	cwPlayerObjectInit(corewar_t *pGameInstance, int argc, char **argv)
 		}
 		++iter;
 	}
-	if (pGameInstance->playersAmount < 1)
+	if (pGameInstance->playersAmount < 1 || pGameInstance->playersAmount > 4)
 		cwErrorCatcher(CW_INVALID_PLAYERS, CW_PLAYER);
 }
 
