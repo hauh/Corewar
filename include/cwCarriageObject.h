@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/11 20:00:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:10:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct			carriage_s
 	const void			(*cwComputeJump)		(carriage_t *);
 	const void			(*cwParseTypes)			(carriage_t *);
 	const void			(*cwMoveTo)				(carriage_t *, int);
-	const void			(*cwReadFromRegToBuf)	(carriage_t *, );
+	const void			(*cwReadFromRegToBuf)	(carriage_t *);
 	const void			(*cwWriteFromBufToReg)	(carriage_t *);
 	const void			(*cwDestructorCarriage) (carriage_t **);
 }						carriage_t;

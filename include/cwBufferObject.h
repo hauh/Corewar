@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:23:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:21:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:39:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 
 # include "cwTypedefObjects.h"
 
-typedef struct 		buffer_s
+typedef union		types_u
 {
 	int				intValue;
-	char			charValue;
 	short			shortValue;
+	char			charValue;
+}					types_t;
+
+typedef struct 		buffer_s
+{
+	types_t			sTypes;
 
 	unsigned char	*pData;
 

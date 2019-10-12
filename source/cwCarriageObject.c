@@ -6,172 +6,142 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/11 20:00:37 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:39:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cwConversionIntToBytes(unsigned char *buffer, int *from, int bias)
+void	cwConversionIntToBytes(carriage_t *pCarraigeInstance, buffer_t *pBufferObj, int type)
 {
-	ft_memset(buffer, 0, CW_REG_SIZE);
-	//while (bias < REG_SIZE)
-	//{
-	//	buffer[bias] = (*from << (bias * 8)) >> 24;
-	//	++bias;
-	//}
-}
-
-void	cwConversionBytesToInt(unsigned char *buffer, void *dest, int bias, int type)
-{
-	char 	*char_value;
-	short 	*short_value;
-	int		*int_value;
-
-	if (type == CW_CHAR)
+	ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
+	while (type < CW_REG_SIZE)
 	{
-		char_value = (char *)dest;
-		*char_value = 0;
-		while (bias < CW_REG_SIZE)
-		{
-			*char_value |= buffer[bias] << ((3 - bias) * 8);
-			++bias;
-		}
-	}
-	else if (type == CW_SHORT)
-	{
-		short_value = (short *)dest;
-		*short_value = 0;
-		while (bias < CW_REG_SIZE)
-		{
-			*short_value |= buffer[bias] << ((3 - bias) * 8);
-			++bias;
-		}
-	}
-	else if (type == CW_INT)
-	{
-		int_value = (int *)dest;
-		*int_value = 0;
-		while (bias < CW_REG_SIZE)
-		{
-			*int_value |= buffer[bias] << ((3 - bias) * 8);
-			++bias;
-		}
+		pBufferObj->pData[type] = (pBufferObj->sTypes.intValue << (type * 8)) >> 24;
+		++type;
 	}
 }
 
-void	cwReadFromRegToBuf(carriage_t *pCarriageInstance, unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
+void	cwConversionBytesToInt(carriage_t *pCarraigeInstance, buffer_t *pBufferObj, int type)
 {
-	ft_memset(buffer, 0, CW_REG_SIZE);
-	while (bias < CW_REG_SIZE)
+	pBufferObj->sTypes.intValue = 0;
+	while (type < CW_REG_SIZE)
 	{
-		buffer[bias] = registers[bias + ((reg_num - 1) * CW_REG_SIZE)];
-		++bias;
+		pBufferObj->sTypes.intValue |= pBufferObj->pData[type] << ((3 - type) * 8);
+		++type;
 	}
 }
 
-void	cwReadFromArenaToBuf(unsigned char *buffer, unsigned char *field, int data_location, int bias)
+void	cwReadFromRegToBuf(carriage_t *pCarriageInstance, buffer_t *pBufferObj, int type)
 {
-	//ft_memset(buffer, 0, REG_SIZE);
-	//while (bias < REG_SIZE)
-	//	buffer[bias++] = field[data_location++];
-	;
-}
-
-void	cwWriteFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
-{
-	//while (bias < REG_SIZE)
-	//{
-	//	registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias];
-	//	++bias;
-	//}
-	;
-}
-
-void	cwWriteFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)
-{
-	//while (bias < REG_SIZE)
-	//	field[data_location++] = buffer[bias++];
-	;
-}
-
-void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
-{
-	int		save_point;
-
-	if (input_arg == CW_REG_CODE)
+	ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
+	while (type < CW_REG_SIZE)
 	{
-		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
-			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
-		else
-			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
-		cwWriteFromBufToReg(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
-		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
-	}
-	else if (input_arg == CW_DIR_CODE)
-	{
-		cwWriteFromBufToReg(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
-		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
-	}
-	else if (input_arg == CW_IND_CODE)
-	{
-		save_point = CW_CARRIAGE_LOCATION;
-		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
-		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
-		if (idx_mod == TRUE)
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
-		else
-			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
-		if (CW_CARRIAGE_LOCATION < 0)
-			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
-		cwWriteFromBufToArena(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
-		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
+		pBufferObj->pData[type] = pCarriageInstance->pRegisters[type + ((pCarriageInstance->currentRegister - 1) * CW_REG_SIZE)];
+		++type;
 	}
 }
 
-void		cwReadOperation(carriage_t *pCarraigeInstance, arena_t *pArenaObject, buffer_t *pBufferObject, int whereTo, int inputArg)
-{
-	if (whereTo == CW_ON_FIELD)
-	{
-		if (inputArg == CW_REG_CODE)
-		{
-			if (pArenaObject->pField[pCarraigeInstance->currentLocation] > 0 && pArenaObject->pField[pCarraigeInstance->currentLocation] < 17)
-				pCarraigeInstance->currentRegister = pArenaObject->pField[pCarraigeInstance->currentLocation];
-			else
-				pCarraigeInstance->errorOcurred = CW_TRUE;
-			pCarraigeInstance->cwReadFromRegToBuf()
-			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
-			CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
-		}
-		else if (inputArg == CW_DIR_CODE)
-		{
-			cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
-			if (CW_CURRENT_COMMAND->dir_size == SHORT_DIR_SIZE)
-				cwConversionBytesToInt(buffer->data, &buffer->short_value, CW_SHORT_BIAS, CW_SHORT);
-			else
-				cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
-			CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
-		}
-		else if (inputArg == CW_IND_CODE)
-		{
-			cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
-			cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
-			if (idx_mod == CW_TRUE)
-				CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
-			else
-				CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
-			if (CW_CARRIAGE_LOCATION < 0)
-				CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
-			cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
-			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_SHORT_BIAS, CW_SHORT);
-			CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
-		}
-	}
-	else if (whereTo == CW_ON_REGISTER)
-	{
+// void	cwReadFromArenaToBuf(carriage_t pCarraigeInstance, buffer_t *pBufferObj, arena_t *pArenaObj, int data_location, int type)
+// {
+// 	ft_memset(buffer, 0, REG_SIZE);
+// 	while (bias < REG_SIZE)
+// 		buffer[bias++] = field[data_location++];
+// }
 
-	}
-}
+// void	cwWriteFromBufToReg(unsigned char *buffer, unsigned char *registers, int reg_num, int bias)
+// {
+// 	while (bias < REG_SIZE)
+// 	{
+// 		registers[bias + ((reg_num - 1) * REG_SIZE)] = buffer[bias];
+// 		++bias;
+// 	}
+// }
+
+// void	cwWriteFromBufToArena(unsigned char *buffer, unsigned char *field, int data_location, int bias)
+// {
+// 	while (bias < REG_SIZE)
+// 		field[data_location++] = buffer[bias++];
+// }
+
+// void		cwWriteOperation(corewar_t *game, buffer_t *buffer, int idx_mod, int input_arg)
+// {
+// 	int		save_point;
+
+// 	if (input_arg == CW_REG_CODE)
+// 	{
+// 		if (CW_GAME_ARENA[CW_CARRIAGE_LOCATION] > 0 && CW_GAME_ARENA[CW_CARRIAGE_LOCATION] < 17)
+// 			CW_REQUESTING_REGISTER = CW_GAME_ARENA[CW_CARRIAGE_LOCATION];
+// 		else
+// 			cwErrorCatcher(CW_CHEAT_DETECT, CW_EXEC_ERROR);
+// 		cwWriteFromBufToReg(buffer->data, CW_CARRIAGE_REGISTERS, CW_REQUESTING_REGISTER, CW_INT_BIAS);
+// 		CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
+// 	}
+// 	else if (input_arg == CW_DIR_CODE)
+// 	{
+// 		cwWriteFromBufToReg(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
+// 		CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
+// 	}
+// 	else if (input_arg == CW_IND_CODE)
+// 	{
+// 		save_point = CW_CARRIAGE_LOCATION;
+// 		cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
+// 		cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
+// 		if (idx_mod == TRUE)
+// 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
+// 		else
+// 			CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+// 		if (CW_CARRIAGE_LOCATION < 0)
+// 			CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+// 		cwWriteFromBufToArena(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
+// 		CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
+// 	}
+// }
+
+// void		cwReadOperation(carriage_t *pCarraigeInstance, arena_t *pArenaObject, buffer_t *pBufferObject, int whereTo, int inputArg)
+// {
+// 	if (whereTo == CW_ON_FIELD)
+// 	{
+// 		if (inputArg == CW_REG_CODE)
+// 		{
+// 			if (pArenaObject->pField[pCarraigeInstance->currentLocation] > 0 && pArenaObject->pField[pCarraigeInstance->currentLocation] < 17)
+// 				pCarraigeInstance->currentRegister = pArenaObject->pField[pCarraigeInstance->currentLocation];
+// 			else
+// 				pCarraigeInstance->errorOcurred = CW_TRUE;
+// 			pCarraigeInstance->cwReadFromRegToBuf()
+// 			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
+// 			CW_CARRIAGE_LOCATION += CW_REGISTER_SIZE;
+// 		}
+// 		else if (inputArg == CW_DIR_CODE)
+// 		{
+// 			cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_DYNAMIC_SIZE_DIR);
+// 			if (CW_CURRENT_COMMAND->dir_size == SHORT_DIR_SIZE)
+// 				cwConversionBytesToInt(buffer->data, &buffer->short_value, CW_SHORT_BIAS, CW_SHORT);
+// 			else
+// 				cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_INT_BIAS, CW_INT);
+// 			CW_CARRIAGE_LOCATION += CW_CURRENT_COMMAND->dir_size;
+// 		}
+// 		else if (inputArg == CW_IND_CODE)
+// 		{
+// 			cwReadFromArenaToBuf(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, CW_SHORT_BIAS);
+// 			cwConversionBytesToInt(CW_BUFFER_SET[CW_SYSTEM_BUF]->data, &CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value, CW_SHORT_BIAS, CW_SHORT);
+// 			if (idx_mod == CW_TRUE)
+// 				CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + (CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value % IDX_MOD)) % MEM_SIZE;
+// 			else
+// 				CW_CARRIAGE_LOCATION = (CW_CARRIAGE_SAVE_POINT + CW_BUFFER_SET[CW_SYSTEM_BUF]->short_value) % MEM_SIZE;
+// 			if (CW_CARRIAGE_LOCATION < 0)
+// 				CW_CARRIAGE_LOCATION = MEM_SIZE + CW_CARRIAGE_LOCATION;
+// 			cwReadFromArenaToBuf(buffer->data, CW_GAME_ARENA, CW_CARRIAGE_LOCATION, 0);
+// 			cwConversionBytesToInt(buffer->data, &buffer->int_value, CW_SHORT_BIAS, CW_SHORT);
+// 			CW_CARRIAGE_LOCATION = save_point + CW_IND_SIZE;
+// 		}
+// 	}
+// 	else if (whereTo == CW_ON_REGISTER)
+// 	{
+
+// 	}
+// }
+
 
 void	cwCopyReg(unsigned char *from, unsigned char *to, int size)
 {
@@ -262,22 +232,6 @@ static void	cwSavePos(carriage_t *carriageInstance)
 {
 	carriageInstance->savePoint = carriageInstance->currentLocation;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

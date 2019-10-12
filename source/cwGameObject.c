@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 21:21:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:50:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,17 +159,17 @@ static void	cwAddPlayerToList(corewar_t *pGameInstance, player_t *pPlayerAdding)
 	}
 }
 
-static void	cwCommandObjectInit(corewar_t *gameInstance)
+static void	cwCommandObjectInit(corewar_t *pGameInstance)
 {
-	command_t	*commandObj;
-	int		iter;
+	command_t	*pCommandObj;
+	int			iter;
 
 	iter = CW_BEGIN_FROM_ONE;
 	while (iter < CW_COMMAND_AMOUNT)
 	{
-		cwCreateInstanceCommand(&commandObj);
-		commandObj->cwRecognizeCommand(commandObj, iter);
-		gameInstance->paCommands[iter] = commandObj;
+		cwCreateInstanceCommand(&pCommandObj);
+		pCommandObj->cwRecognizeCommand(pCommandObj, iter);
+		pGameInstance->paCommands[iter] = pCommandObj;
 		++iter;
 	}
 }

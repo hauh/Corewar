@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/11 14:09:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/12 21:00:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ typedef enum				byte_blocks_e
 
 #define CW_DIR				0x20
 #define CW_DIR_CODE			0x02
-#define CW_DIR_CODE_SIZE	0x04
+#define CW_DIR_CODE_SIZE	4
 #define CW_SHDIR_CODE_SIZE	0x02
 
 #define CW_IND				0x0c
