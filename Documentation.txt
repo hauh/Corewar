@@ -17,8 +17,8 @@ If you want to add you object in VM, please follow next steps:
 		Destructor function and Constructor function rest on you;
 	2) Create .c file where you will implement all functions you need to ensure functionality of your object.
 		In this file necessarily must be implement of Destructor and Constructor functions, it need for create and kill obj;
-	3) After above steps in your code you should call at first your Constructor then you do what you need with the object and then
-		you must kill acroos call Destructor it ensure to avoid memory leaks;
+	3) After above steps in your code you should call at first your Constructor then you do what you need with the object
+		and then you must kill acroos call Destructor it ensure to avoid memory leaks;
 
 For example:
 .h file:
@@ -60,7 +60,7 @@ For example:
 		*ppObjectPointer = (yourObject_t *)malloc(sizeof(yourObject_t));
 		(*ppObjectPointer)->cwConstructor = &cwConstructor;
 		(*ppObjectPointer)->cwDestructor = &cwDestructor;
-		(*ppObjectPointer)->cwConstructor	(ppObjectPointer);				<--- Constructor always call if instance of object creating
+		(*ppObjectPointer)->cwConstructor	(ppObjectPointer);<--- Constructor always call if instance of object creating
 	}"
 
 
