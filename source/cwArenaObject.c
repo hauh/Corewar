@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:20:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:46:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ static void	cwBuffersInit(arena_t *pArenaInstance)
 	}
 }
 
+/*
+** Low level function for initialization object;
+**--------------------------------------------------------------------------------------
+*/
+
 static void	cwConstructorArena(arena_t **ppArenaInstance)
 {
 	if (!((*ppArenaInstance)->pField = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
@@ -81,3 +86,7 @@ void	cwCreateInstanceArena(arena_t **ppArenaObj)
 	(*ppArenaObj)->cwPrintField			= (const void *)&cwPrintField;
 	(*ppArenaObj)->cwConstructorArena	(ppArenaObj);
 }
+
+/*
+**--------------------------------------------------------------------------------------
+*/

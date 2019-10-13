@@ -6,59 +6,59 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 20:13:19 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 21:00:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:47:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cwPutParam(command_t *commandInstance, int id, int firstArg, int secondArg, int thirdArg, int dirSize, int changeCarry, int waitingTime, int typeByte, const void (*f)(corewar_t *))
+void	cwPutParam(command_t *pCommandInstance, int id, int firstArg, int secondArg, int thirdArg, int dirSize, int changeCarry, int waitingTime, int typeByte, const void (*f)(corewar_t *))
 {
-	commandInstance->id				= id;
-	commandInstance->firstArg		= firstArg;
-	commandInstance->secondArg		= secondArg;
-	commandInstance->thirdArg		= thirdArg;
-	commandInstance->dirSize		= dirSize;
-	commandInstance->changeCarry	= changeCarry;
-	commandInstance->waitingTime	= waitingTime;
-	commandInstance->typeByte		= typeByte;
-	commandInstance->cwCallback		= f;
+	pCommandInstance->id			= id;
+	pCommandInstance->firstArg		= firstArg;
+	pCommandInstance->secondArg		= secondArg;
+	pCommandInstance->thirdArg		= thirdArg;
+	pCommandInstance->dirSize		= dirSize;
+	pCommandInstance->changeCarry	= changeCarry;
+	pCommandInstance->waitingTime	= waitingTime;
+	pCommandInstance->typeByte		= typeByte;
+	pCommandInstance->cwCallback	= f;
 }
 
-void	cwRecognizeCommand(command_t *commandInstance, int command)
+void	cwRecognizeCommand(command_t *pCommandInstance, int command)
 {
 	if (command == CW_LIVE)
-		commandInstance->cwPutParam(commandInstance, CW_LIVE,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 10, CW_FALSE, &liveExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LIVE,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 10, CW_FALSE, &liveExec);
 	else if (command == CW_LD)
-		commandInstance->cwPutParam(commandInstance, CW_LD,		CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 5, CW_TRUE, &ldExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LD,	CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 5, CW_TRUE, &ldExec);
 	else if (command == CW_ST)
-		commandInstance->cwPutParam(commandInstance, CW_ST,		CW_REG,						CW_REG | CW_IND,			CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 5, CW_TRUE, &stExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_ST,	CW_REG,						CW_REG | CW_IND,			CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 5, CW_TRUE, &stExec);
 	else if (command == CW_ADD)
-		commandInstance->cwPutParam(commandInstance, CW_ADD,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &addExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_ADD,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &addExec);
 	else if (command == CW_SUB)
-		commandInstance->cwPutParam(commandInstance, CW_SUB,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &subExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_SUB,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &subExec);
 	else if (command == CW_AND)
-		commandInstance->cwPutParam(commandInstance, CW_AND,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &andExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_AND,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &andExec);
 	else if (command == CW_OR)
-		commandInstance->cwPutParam(commandInstance, CW_OR,		CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &orExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_OR,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &orExec);
 	else if (command == CW_XOR)
-		commandInstance->cwPutParam(commandInstance, CW_XOR,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &xorExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_XOR,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &xorExec);
 	else if (command == CW_ZJMP)
-		commandInstance->cwPutParam(commandInstance, CW_ZJMP,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 20, CW_FALSE, &zjmpExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_ZJMP,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 20, CW_FALSE, &zjmpExec);
 	else if (command == CW_LDI)
-		commandInstance->cwPutParam(commandInstance, CW_LDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &ldiExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &ldiExec);
 	else if (command == CW_STI)
-		commandInstance->cwPutParam(commandInstance, CW_STI,	CW_REG,						CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,	CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &stiExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_STI,	CW_REG,						CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,	CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &stiExec);
 	else if (command == CW_FORK)
-		commandInstance->cwPutParam(commandInstance, CW_FORK,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 800, CW_FALSE, &forkExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_FORK,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 800, CW_FALSE, &forkExec);
 	else if (command == CW_LLD)
-		commandInstance->cwPutParam(commandInstance, CW_LLD,	CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &lldExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LLD,	CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &lldExec);
 	else if (command == CW_LLDI)
-		commandInstance->cwPutParam(commandInstance, CW_LLDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_TRUE, 50, CW_TRUE, &lldiExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LLDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_TRUE, 50, CW_TRUE, &lldiExec);
 	else if (command == CW_LFORK)
-		commandInstance->cwPutParam(commandInstance, CW_LFORK,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 1000, CW_FALSE, &lforkExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_LFORK, CW_DIR,					CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 1000, CW_FALSE, &lforkExec);
 	else if (command == CW_AFF)
-		commandInstance->cwPutParam(commandInstance, CW_AFF,	CW_REG,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 20, CW_TRUE, &affExec);
+		pCommandInstance->cwPutParam(pCommandInstance, CW_AFF,	CW_REG,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 20, CW_TRUE, &affExec);
 }
 
 /*
@@ -87,7 +87,7 @@ static void	cwDestructorCommand(command_t **ppCommandInstance)
 
 void	cwCreateInstanceCommand(command_t **ppCommandObj)
 {
-	if (!(*ppCommandObj = (command_t *)malloc(sizeof(ppCommandObj))))
+	if (!(*ppCommandObj = (command_t *)malloc(sizeof(command_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_COMMAND);
 	(*ppCommandObj)->cwConstructorCommand	= (const void *)&cwConstructorCommand;
 	(*ppCommandObj)->cwDestructorCommand	= (const void *)&cwDestructorCommand;

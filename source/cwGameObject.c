@@ -6,24 +6,19 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 20:50:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:56:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void	cwDeleteCarriage(corewar_t *pGameInstance)
+static void	cwDeleteCarriage(corewar_t *pGameInstance, int *pDeletedCount)
 {
 	carriage_t *temporaryCarriage;
 
-	--pGameInstance->carriagesAmount;
 	temporaryCarriage = pGameInstance->pCarriageObject;
 	if (pGameInstance->pCarriageObject->pNext == pGameInstance->pCarriageObject)
-	{
 		pGameInstance->pCarriageObject->cwDestructorCarriage(&pGameInstance->pCarriageObject);
-		pGameInstance->pCarriageObject				= NULL;
-		pGameInstance->pArenaObject->pLastCarriage	= NULL;
-	}
 	else
 	{
 		if (pGameInstance->pCarriageObject == pGameInstance->pArenaObject->pLastCarriage)
@@ -33,22 +28,26 @@ static void	cwDeleteCarriage(corewar_t *pGameInstance)
 		pGameInstance->pCarriageObject					= pGameInstance->pCarriageObject->pNext;
 		temporaryCarriage->cwDestructorCarriage			(&temporaryCarriage);
 	}
+	*pDeletedCount += 1;
 }
 
 static void	cwMainChecking(corewar_t *pGameInstance)
 {
+	int		deletedCount;
 	int		iter;
 
-	iter = CW_BEGIN_FROM_ZERO;
+	deletedCount	= 0;
+	iter			= CW_BEGIN_FROM_ZERO;
 	++pGameInstance->pArenaObject->checkAmount;
 	while (iter < pGameInstance->carriagesAmount)
 	{
 		if (pGameInstance->pArenaObject->cycleAmount - pGameInstance->pCarriageObject->lastSpeakCycle >= pGameInstance->pArenaObject->cycleToDie || pGameInstance->pArenaObject->cycleToDie <= 0)
-			pGameInstance->cwDeleteCarraige(pGameInstance);
+			pGameInstance->cwDeleteCarriage(pGameInstance, &deletedCount);
 		if (pGameInstance->pCarriageObject)
 			pGameInstance->pCarriageObject = pGameInstance->pCarriageObject->pNext;
 		++iter;
 	}
+	pGameInstance->carriagesAmount					-= deletedCount;
 	if (pGameInstance->pArenaObject->liveAmount		>= NBR_LIVE)
 	{
 		pGameInstance->pArenaObject->cycleToDie		-= CYCLE_DELTA;
@@ -72,16 +71,17 @@ static void	cwStartGame(corewar_t *pGameInstance)
 		while (iter < pGameInstance->carriagesAmount)
 		{
 			if (pGameInstance->pCarriageObject->pCurrentCommand	== NULL)
-				pGameInstance->pCarriageObject->cwSetCommandTime	(pGameInstance->pCarriageObject, pGameInstance->pArenaObject);
+				;//pGameInstance->pCarriageObject->cwSetCommandTime	(pGameInstance->pCarriageObject, pGameInstance->pArenaObject);
 			if (pGameInstance->pCarriageObject->waitingTime > 0)
-				pGameInstance->pCarriageObject->cwReduceWaitingTime	(pGameInstance->pCarriageObject);
+				;//pGameInstance->pCarriageObject->cwReduceWaitingTime	(pGameInstance->pCarriageObject);
 			if (pGameInstance->pCarriageObject->pCurrentCommand != NULL)
-				pGameInstance->pCarriageObject->cwExecCommand		(pGameInstance->pCarriageObject);
+				;//pGameInstance->pCarriageObject->cwExecCommand		(pGameInstance->pCarriageObject);
 			pGameInstance->pCarriageObject = pGameInstance->pCarriageObject->pNext;
 			++iter;
 		}
 		if (pGameInstance->pArenaObject->cwCheckConditions(pGameInstance->pArenaObject) == CW_TRUE)
 			pGameInstance->cwMainChecking(pGameInstance);
+		++pGameInstance->pArenaObject->cycleAmount;
 	}
 }
 
@@ -107,6 +107,12 @@ static void		cwArrangeUnitsOnField(corewar_t *gameInstance)
 	}
 }
 
+static void cwCongratulations(corewar_t *pGameInstance)
+{
+	ft_printf("\t\t\tCongratulations winner!!!\n");
+	ft_printf("\t\t\t>>>%s(id: %d)<<<\n", pGameInstance->pArenaObject->pLastSurvivor->pName, pGameInstance->pArenaObject->pLastSurvivor->id);
+}
+
 static void	cwIntroducePlayers(corewar_t *gameInstance)
 {
 	int		iter;
@@ -123,6 +129,21 @@ static void	cwIntroducePlayers(corewar_t *gameInstance)
 		gameInstance->pPlayerObject = gameInstance->pPlayerObject->pNext;
 		++iter;
 	}
+}
+
+static void cwFreeAllCommand(corewar_t *pGameInstance)
+{
+	;
+}
+
+static void cwFreeAllCarriage(corewar_t *pGameInstance)
+{
+	;
+}
+
+static void	cwFreeAllPlayer(corewar_t *pGameInstance)
+{
+	;
 }
 
 static void	cwAddCarriageToList(corewar_t *pGameInstance, carriage_t *pCarriageAdding)
@@ -180,7 +201,9 @@ static void	cwArenaObjectInit	(corewar_t *gameInstance)
 
 	cwCreateInstanceArena		(&arenaObj);
 	arenaObj->cwBufferInit		(arenaObj);
-	gameInstance->pArenaObject = arenaObj;
+	arenaObj->pLastSurvivor		= gameInstance->pPlayerObject->pPrev;
+	arenaObj->pLastCarriage		= gameInstance->pCarriageObject->pPrev;
+	gameInstance->pArenaObject	= arenaObj;
 }
 
 static void	cwCarriageObjectInit(corewar_t *pGameInstance)
@@ -192,7 +215,7 @@ static void	cwCarriageObjectInit(corewar_t *pGameInstance)
 	while (iter < pGameInstance->playersAmount)
 	{
 		cwCreateInstanceCarriage(&pCarriageObj);
-		pCarriageObj->id = pGameInstance->pPlayerObject->id;
+		pCarriageObj->id = ++pGameInstance->carriagesAmount;
 		pCarriageObj->pOwnerCarriage = pGameInstance->pPlayerObject;
 		pGameInstance->cwAddCarriageToList(pGameInstance, pCarriageObj);
 		pGameInstance->pPlayerObject = pGameInstance->pPlayerObject->pNext;
@@ -251,8 +274,9 @@ static void	cwConstructorGame(corewar_t **ppGameInstance)
 
 static void	cwDestructorGame(corewar_t **ppGameInstance)
 {
-	//(*ppGameInstance)->cwFreeAllCarriages				(ppGameInstance);
-	//(*ppGameInstance)->cwFreeAllPlayers				(ppGameInstance);
+	(*ppGameInstance)->cwFreeAllCarriages				(*ppGameInstance);
+	(*ppGameInstance)->cwFreeAllPlayers					(*ppGameInstance);
+	(*ppGameInstance)->cwFreeAllCommand					(*ppGameInstance);
 	(*ppGameInstance)->pArenaObject->cwDestructorArena	(&(*ppGameInstance)->pArenaObject);
 	(*ppGameInstance)->pKeyObject->cwDestructorKey		(&(*ppGameInstance)->pKeyObject);
 	free(*ppGameInstance);
@@ -271,10 +295,14 @@ void		cwCreateInstanceGame(corewar_t **ppGameObj)
 	(*ppGameObj)->cwArenaObjectInit		= (const void *)&cwArenaObjectInit;
 	(*ppGameObj)->cwKeyObjectInit		= (const void *)&cwKeyObjectInit;
 	(*ppGameObj)->cwAddCarriageToList	= (const void *)&cwAddCarriageToList;
+	(*ppGameObj)->cwFreeAllCarriages	= (const void *)&cwFreeAllCarriage;
 	(*ppGameObj)->cwAddPlayerToList		= (const void *)&cwAddPlayerToList;
+	(*ppGameObj)->cwFreeAllPlayers		= (const void *)&cwFreeAllPlayer;
+	(*ppGameObj)->cwFreeAllCommand		= (const void *)&cwFreeAllCommand;
 	(*ppGameObj)->cwArrangeUnitsOnField	= (const void *)&cwArrangeUnitsOnField;
 	(*ppGameObj)->cwIntroducePlayers	= (const void *)&cwIntroducePlayers;
-	(*ppGameObj)->cwDeleteCarraige		= (const void *)&cwDeleteCarriage;
+	(*ppGameObj)->cwCongratulations		= (const void *)&cwCongratulations;
+	(*ppGameObj)->cwDeleteCarriage		= (const void *)&cwDeleteCarriage;
 	(*ppGameObj)->cwMainChecking		= (const void *)&cwMainChecking;
 	(*ppGameObj)->cwStartGame			= (const void *)&cwStartGame;
 	(*ppGameObj)->cwConstructorGame		(ppGameObj);

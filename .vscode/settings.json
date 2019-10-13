@@ -4,6 +4,7 @@
 		"array": "c",
 		"string_view": "c",
 		"string": "c",
-		"vector": "c"
+		"vector": "c",
+		"locale": "c"
 	}
 }

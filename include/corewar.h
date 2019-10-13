@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 21:00:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 16:18:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ typedef enum				byte_blocks_e
 }							byte_blocks_t;
 
 
-#define CW_CHAR				1
+#define CW_CHAR				3
 #define CW_SHORT			2
-#define CW_INT				4
+#define CW_INT				0
 #define CW_CHAR_BIAS		3
 #define CW_SHORT_BIAS		2
 #define CW_INT_BIAS			0

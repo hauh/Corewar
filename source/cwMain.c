@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 21:02:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:05:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,6 @@ int				main(int argc, char **argv)
 	pGameObj->cwCarraigeObjectInit	(pGameObj);
 	pGameObj->cwArenaObjectInit		(pGameObj);
 	pGameObj->cwCommandObjectInit	(pGameObj);
-	for (int i = 1; i < 17 ; ++i)
-	{
-		ft_printf("%d\n", pGameObj->paCommands[i]->id);
-		ft_printf("%08b\n", pGameObj->paCommands[i]->firstArg);
-		ft_printf("%08b\n", pGameObj->paCommands[i]->secondArg);
-		ft_printf("%08b\n", pGameObj->paCommands[i]->thirdArg);
-		ft_printf("Time: %d\n", pGameObj->paCommands[i]->waitingTime);
-		ft_printf("DirSize: %d\n", pGameObj->paCommands[i]->dirSize);
-		ft_printf("Type: %d\n", pGameObj->paCommands[i]->typeByte);
-	}
-	exit(1);
 	pGameObj->cwIntroducePlayers	(pGameObj);
 	pGameObj->cwArrangeUnitsOnField	(pGameObj);
 	pGameObj->cwStartGame			(pGameObj);

@@ -6,17 +6,17 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:26:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:46:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void	cwReadFile(player_t *pPlayerInstance, const char *file)
+static void	cwReadFile(player_t *pPlayerInstance, const char *pFile)
 {
 	int fd;
 
-	if ((fd = open(file, O_RDONLY)) < 0)
+	if ((fd = open(pFile, O_RDONLY)) < 0)
 		cwErrorCatcher(CW_OPEN_FILE_ERROR, CW_PLAYER);
 	if (read(fd, pPlayerInstance->pSource, CODE) < 0)
 		cwErrorCatcher(CW_READ_FILE_ERROR, CW_PLAYER);

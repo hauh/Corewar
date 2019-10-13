@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:30:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:47:01 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 static void	cwValidateArgs(key_t *pKeyInstance, int argc, char **argv)
 {
-	/*
-	**	Stub
-	*/
 	if (argc < 2)
 		cwErrorCatcher(CW_NOT_VALID_KEY, CW_KEYS);
 	return ;
@@ -62,17 +59,17 @@ static void	cwReadKeys(key_t *pKeyInstance, int argc, char **argv)
 **--------------------------------------------------------------------------------------
 */
 
-static void	cwDestructorKey(key_t **ppKeyInstance)
-{
-	free(*ppKeyInstance);
-	*ppKeyInstance = NULL;
-}
-
 static void	cwConstructorKey(key_t **ppKeyInstance)
 {
 	(*ppKeyInstance)->loadDump = CW_FALSE;
 	(*ppKeyInstance)->customId = CW_FALSE;
 	(*ppKeyInstance)->graphics = CW_FALSE;
+}
+
+static void	cwDestructorKey(key_t **ppKeyInstance)
+{
+	free(*ppKeyInstance);
+	*ppKeyInstance = NULL;
 }
 
 void		cwCreateInstanceKey(key_t **ppKeyObj)
