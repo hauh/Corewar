@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 18:19:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 20:01:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,12 +178,13 @@ void			cwReduceWaitingTime(carriage_t *carraigeInstance)
 		carraigeInstance->errorOcurred = CW_TRUE;
 }
 
-void			cwExecCommand(carriage_t *carriageInstance, corewar_t *gameInstance)
+void			cwExecCommand(carriage_t *pCarriageInstance, corewar_t *pGameInstance)
 {
-	if (carriageInstance->pCurrentCommand)
-		carriageInstance->pCurrentCommand->cwCallback(gameInstance);
+	if (pCarriageInstance->pCurrentCommand)
+		pCarriageInstance->pCurrentCommand->cwCallback(pGameInstance);
 	else
-		carriageInstance->errorOcurred = CW_TRUE;
+		pCarriageInstance->errorOcurred	= CW_TRUE;
+	pCarriageInstance->pCurrentCommand	= NULL;
 }
 
 void			cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInstance)
@@ -192,7 +193,6 @@ void			cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInstance)
 	{
 		pCarriageInstance->pCurrentCommand	= pCarriageInstance->ppCommandContainer[pArenaInstance->pField[pCarriageInstance->currentLocation]];
 		pCarriageInstance->waitingTime		= pCarriageInstance->pCurrentCommand->waitingTime;
-		pCarriageInstance->offset			= pCarriageInstance->pCurrentCommand->typeByte;
 	}
 	else
 		pCarriageInstance->errorOcurred		= CW_TRUE;
@@ -215,9 +215,10 @@ static void	cwComputeJump(carriage_t *pCarriageInstance)
 	pCarriageInstance->jump = pCarriageInstance->currentLocation - pCarriageInstance->savePoint;
 }
 
-static void	cwSavePos(carriage_t *carriageInstance)
+static void	cwSavePos(carriage_t *pCarriageInstance)
 {
-	carriageInstance->savePoint = carriageInstance->currentLocation;
+	exit(1);
+	pCarriageInstance->savePoint = pCarriageInstance->currentLocation;
 }
 
 /*

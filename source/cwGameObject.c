@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 15:56:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 20:01:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ static void	cwStartGame(corewar_t *pGameInstance)
 		while (iter < pGameInstance->carriagesAmount)
 		{
 			if (pGameInstance->pCarriageObject->pCurrentCommand	== NULL)
-				;//pGameInstance->pCarriageObject->cwSetCommandTime	(pGameInstance->pCarriageObject, pGameInstance->pArenaObject);
+				pGameInstance->pCarriageObject->cwSetCommandTime	(pGameInstance->pCarriageObject, pGameInstance->pArenaObject);
 			if (pGameInstance->pCarriageObject->waitingTime > 0)
-				;//pGameInstance->pCarriageObject->cwReduceWaitingTime	(pGameInstance->pCarriageObject);
+				pGameInstance->pCarriageObject->cwReduceWaitingTime	(pGameInstance->pCarriageObject);
 			if (pGameInstance->pCarriageObject->pCurrentCommand != NULL)
-				;//pGameInstance->pCarriageObject->cwExecCommand		(pGameInstance->pCarriageObject);
+				pGameInstance->pCarriageObject->cwExecCommand		(pGameInstance->pCarriageObject, pGameInstance);
 			pGameInstance->pCarriageObject = pGameInstance->pCarriageObject->pNext;
 			++iter;
 		}
@@ -217,6 +217,7 @@ static void	cwCarriageObjectInit(corewar_t *pGameInstance)
 		cwCreateInstanceCarriage(&pCarriageObj);
 		pCarriageObj->id = ++pGameInstance->carriagesAmount;
 		pCarriageObj->pOwnerCarriage = pGameInstance->pPlayerObject;
+		pCarriageObj->ppCommandContainer = pGameInstance->paCommands;
 		pGameInstance->cwAddCarriageToList(pGameInstance, pCarriageObj);
 		pGameInstance->pPlayerObject = pGameInstance->pPlayerObject->pNext;
 		++iter;

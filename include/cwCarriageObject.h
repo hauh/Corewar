@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 18:15:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/13 20:01:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct			carriage_s
 
 	const void			(*cwConstructorCarriage)(carriage_t **);
 	const void			(*cwSavePos)			(carriage_t *);
-	const void			(*cwExecCommand)		(carriage_t *);
+	const void			(*cwExecCommand)		(carriage_t *, corewar_t *);
 	const void			(*cwSetCommandTime)		(carriage_t *, arena_t *);
 	const void			(*cwReduceWaitingTime)	(carriage_t *);
 	const void			(*cwValidateTypes)		(carriage_t *);
