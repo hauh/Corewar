@@ -6,11 +6,22 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 15:46:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:14:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+static void cwSetId(player_t *pSelfPlayer, int id)
+{
+	if (id > 0)
+		pSelfPlayer->id = id;
+	else
+	{
+		ft_printf("Not suitable id, will be set as abs(yourId)\n");
+		pSelfPlayer->id = -id;
+	}
+}
 
 static void	cwReadFile(player_t *pPlayerInstance, const char *pFile)
 {
@@ -23,7 +34,7 @@ static void	cwReadFile(player_t *pPlayerInstance, const char *pFile)
 	close(fd);
 }
 
-static void	cwValidatePlayer(player_t *pPlayerInstance)
+static void	cwSelfValidate(player_t *pPlayerInstance)
 {
 	int		checkSize;
 
@@ -38,7 +49,7 @@ static void	cwValidatePlayer(player_t *pPlayerInstance)
 		cwErrorCatcher(CW_CHEAT_DETECT, CW_PLAYER);
 }
 
-static void	cwBuildPlayer(player_t *pPlayerInstane)
+static void	cwSelfBuild(player_t *pPlayerInstane)
 {
 	int		globalIter;
 	int		localIter;
@@ -72,7 +83,7 @@ static void	cwBuildPlayer(player_t *pPlayerInstane)
 **--------------------------------------------------------------------------------------
 */
 
-static void	cwConstructorPlayer(player_t **ppPlayerInstance)
+static void	cwConstructor(player_t **ppPlayerInstance)
 {
 	if (!((*ppPlayerInstance)->pSource	= (unsigned char *)malloc(sizeof(unsigned char) * CODE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
@@ -93,7 +104,7 @@ static void	cwConstructorPlayer(player_t **ppPlayerInstance)
 	(*ppPlayerInstance)->pPrev			= NULL;
 }
 
-static void	cwDestructorPlayer(player_t **ppPlayerInstance)
+static void	cwDestructor(player_t **ppPlayerInstance)
 {
 	free((*ppPlayerInstance)->pSource);
 	free((*ppPlayerInstance)->pCode);
@@ -107,12 +118,13 @@ void		cwCreateInstancePlayer(player_t **ppPlayerObj)
 {
 	if (!(*ppPlayerObj = (player_t *)malloc(sizeof(player_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	(*ppPlayerObj)->cwConstructorPlayer	= (const void *)&cwConstructorPlayer;
-	(*ppPlayerObj)->cwDestructorPlayer	= (const void *)&cwDestructorPlayer;
-	(*ppPlayerObj)->cwBuildPlayer		= (const void *)&cwBuildPlayer;
-	(*ppPlayerObj)->cwValidatePlayer	= (const void *)&cwValidatePlayer;
-	(*ppPlayerObj)->cwReadFile			= (const void *)&cwReadFile;
-	(*ppPlayerObj)->cwConstructorPlayer	(ppPlayerObj);
+	(*ppPlayerObj)->cwConstructor	= (const void *)&cwConstructor;
+	(*ppPlayerObj)->cwDestructor	= (const void *)&cwDestructor;
+	(*ppPlayerObj)->cwSetId			= (const void *)&cwSetId;
+	(*ppPlayerObj)->cwReadFile		= (const void *)&cwReadFile;
+	(*ppPlayerObj)->cwSelfBuild		= (const void *)&cwSelfBuild;
+	(*ppPlayerObj)->cwSelfValidate	= (const void *)&cwSelfValidate;
+	(*ppPlayerObj)->cwConstructor	(ppPlayerObj);
 }
 
 /*

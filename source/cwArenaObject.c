@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 15:46:35 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 18:55:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	cwPrintField(arena_t *pArenaInstance)
 	{
 		printf("%.2x ", pArenaInstance->pField[i]);
 		if ((i + 1) % border == 0)
-			printf("\n%4x: ", i + 1);
+			printf("\n%4d: ", i + 1);
 		++i;
 	}
 	printf("\n");
@@ -57,7 +57,7 @@ static void	cwBuffersInit(arena_t *pArenaInstance)
 **--------------------------------------------------------------------------------------
 */
 
-static void	cwConstructorArena(arena_t **ppArenaInstance)
+static void	cwConstructor(arena_t **ppArenaInstance)
 {
 	if (!((*ppArenaInstance)->pField = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
@@ -68,7 +68,7 @@ static void	cwConstructorArena(arena_t **ppArenaInstance)
 	(*ppArenaInstance)->cycleToDie	= CYCLE_TO_DIE;
 }
 
-static void	cwDestructorArena(arena_t **ppArenaInstance)
+static void	cwDestructor(arena_t **ppArenaInstance)
 {
 	free((*ppArenaInstance)->pField);
 	free(*ppArenaInstance);
@@ -79,12 +79,12 @@ void	cwCreateInstanceArena(arena_t **ppArenaObj)
 {
 	if (!(*ppArenaObj = (arena_t *)malloc(sizeof(arena_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	(*ppArenaObj)->cwConstructorArena	= (const void *)&cwConstructorArena;
-	(*ppArenaObj)->cwDestructorArena	= (const void *)&cwDestructorArena;
+	(*ppArenaObj)->cwConstructor		= (const void *)&cwConstructor;
+	(*ppArenaObj)->cwDestructor			= (const void *)&cwDestructor;
 	(*ppArenaObj)->cwCheckConditions	= (const void *)&cwCheckConditions;
 	(*ppArenaObj)->cwBufferInit			= (const void *)&cwBuffersInit;
 	(*ppArenaObj)->cwPrintField			= (const void *)&cwPrintField;
-	(*ppArenaObj)->cwConstructorArena	(ppArenaObj);
+	(*ppArenaObj)->cwConstructor		(ppArenaObj);
 }
 
 /*

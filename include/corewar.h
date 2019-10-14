@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 14:19:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:42:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ typedef enum				byte_blocks_e
 
 #define CW_IND				0x0c
 #define CW_IND_CODE			0x03
-#define CW_IND_COD_SIZE		0x02
+#define CW_IND_CODE_SIZE	0x02
 #define CW_IND_SIZE			0x04
 
 #define CW_CHECK_SEAL		'*'

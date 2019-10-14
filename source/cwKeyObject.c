@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 17:37:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 15:47:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:04:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ static void	cwReadKeys(key_t *pKeyInstance, int argc, char **argv)
 **--------------------------------------------------------------------------------------
 */
 
-static void	cwConstructorKey(key_t **ppKeyInstance)
+static void	cwConstructor(key_t **ppKeyInstance)
 {
 	(*ppKeyInstance)->loadDump = CW_FALSE;
 	(*ppKeyInstance)->customId = CW_FALSE;
 	(*ppKeyInstance)->graphics = CW_FALSE;
 }
 
-static void	cwDestructorKey(key_t **ppKeyInstance)
+static void	cwDestructor(key_t **ppKeyInstance)
 {
 	free(*ppKeyInstance);
 	*ppKeyInstance = NULL;
@@ -76,11 +76,11 @@ void		cwCreateInstanceKey(key_t **ppKeyObj)
 {
 	if (!(*ppKeyObj = (key_t *)malloc(sizeof(key_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_KEYS);
-	(*ppKeyObj)->cwConstructorKey	= (const void *)&cwConstructorKey;
-	(*ppKeyObj)->cwDestructorKey	= (const void *)&cwDestructorKey;
-	(*ppKeyObj)->cwReadKeys			= (const void *)&cwReadKeys;
-	(*ppKeyObj)->cwValidateArgs		= (const void *)&cwValidateArgs;
-	(*ppKeyObj)->cwConstructorKey	(ppKeyObj);
+	(*ppKeyObj)->cwConstructor	= (const void *)&cwConstructor;
+	(*ppKeyObj)->cwDestructor	= (const void *)&cwDestructor;
+	(*ppKeyObj)->cwReadKeys		= (const void *)&cwReadKeys;
+	(*ppKeyObj)->cwValidateArgs	= (const void *)&cwValidateArgs;
+	(*ppKeyObj)->cwConstructor	(ppKeyObj);
 }
 
 /*

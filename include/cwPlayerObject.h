@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:19:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/10 19:11:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 17:40:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ typedef struct		player_s
 	struct player_s	*pNext;
 	struct player_s	*pPrev;
 
-	const void		(*cwConstructorPlayer)	(player_t **);
-	const void		(*cwBuildPlayer)		(player_t *);
-	const void		(*cwReadFile)			(player_t *, const char *);
-	const void		(*cwValidatePlayer)		(player_t *);
-	const void		(*cwDestructorPlayer)	(player_t **);
+	const void		(*cwConstructor)	(player_t **);
+	const void		(*cwSetId)			(player_t *, int);
+	const void		(*cwReadFile)		(player_t *, const char *);
+	const void		(*cwSelfBuild)		(player_t *);
+	const void		(*cwSelfValidate)	(player_t *);
+	const void		(*cwDestructor)		(player_t **);
 }					player_t;
 
 #endif
