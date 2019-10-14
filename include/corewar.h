@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 16:18:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:19:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ typedef enum				byte_blocks_e
 ** Common defines;
 ** -----------------------------
 */
+
+#define CW_SUCCESS			0
 
 #define CW_BEGIN_FROM_ZERO	0x00
 #define CW_BEGIN_FROM_ONE	0x01

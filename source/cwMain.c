@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 20:02:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:19:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ int				main(int argc, char **argv)
 	pGameObj->cwStartGame			(pGameObj);
 	pGameObj->cwCongratulations		(pGameObj);
 	pGameObj->cwDestructorGame		(&pGameObj);
-	return (0);
+	return (CW_SUCCESS);
 }

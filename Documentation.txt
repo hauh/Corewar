@@ -58,8 +58,8 @@ For example:
 	cwCreateInstanceYourObject(yourObject_t **ppObjectPointer)
 	{
 		*ppObjectPointer = (yourObject_t *)malloc(sizeof(yourObject_t));
-		(*ppObjectPointer)->cwConstructor = &cwConstructor;
-		(*ppObjectPointer)->cwDestructor = &cwDestructor;
+		(*ppObjectPointer)->cwConstructor	= &cwConstructor;
+		(*ppObjectPointer)->cwDestructor	= &cwDestructor;
 		(*ppObjectPointer)->cwConstructor	(ppObjectPointer);<--- Constructor always call if instance of object creating
 	}"
 
