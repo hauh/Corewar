@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 14:23:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:24:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int					main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	corewar_t	*pGameObj;
 
