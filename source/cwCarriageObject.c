@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 19:07:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 19:19:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 	}
 	else if (inputArg == CW_DIR_CODE)
 	{
-
 		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
 		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
 		{
@@ -131,6 +130,7 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 	else if (inputArg == CW_IND_CODE)
 	{
 		ft_memset(pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData, 0, CW_REG_SIZE);
+		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
 		for (int i = CW_SHORT; i < CW_REG_SIZE; ++i)
 		{
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
