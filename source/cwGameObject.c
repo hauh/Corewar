@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 18:57:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 20:07:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,8 @@ static void		cwCarriageObjectInit(corewar_t *pGameInstance)
 		pCarriageObj->ppCommandContainer	= pGameInstance->paCommands;
 		pCarriageObj->cwSetOwner			(pCarriageObj, pGameInstance->pPlayerObj, pGameInstance->playersAmount);
 		pCarriageObj->cwWriteOwnerIdToReg	(pCarriageObj);
+		pCarriageObj->Test					= pGameInstance->pArenaObj->cwPrintField;
+		pCarriageObj->test					= pGameInstance->pArenaObj;
 		pGameInstance->cwAddCarriageToList	(pGameInstance, pCarriageObj);
 		++iter;
 	}

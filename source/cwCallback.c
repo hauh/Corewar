@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 19:27:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 19:55:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,30 +183,98 @@ void	ldiExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
+	pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = (pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue
+																			+ pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue) % IDX_MOD;
+	pGameObj->pCarriageObj->cwSavePos(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue - pGameObj->pCarriageObj->odometer);
+	for (int i = CW_INT; i < CW_REG_SIZE; ++i)
+	{
+		pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->pData[i] = pGameObj->pArenaObj->pField[pGameObj->pCarriageObj->currentLocation];
+		pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, 1);
+	}
+	pGameObj->pCarriageObj->cwCarriageReturn(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
 }
 
 void	stiExec(corewar_t *pGameObj)
 {
 	ft_printf("Sti executing.../ | \\\n");
-
+	pGameObj->pCarriageObj->cwParseTypes (pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pArenaObj->paBufferSet[CW_SPARE_BUF]->sTypes.intValue = (pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue
+																			+ pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue) % IDX_MOD;
+	pGameObj->pCarriageObj->cwSavePos(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, pGameObj->pArenaObj->paBufferSet[CW_SPARE_BUF]->sTypes.intValue - pGameObj->pCarriageObj->odometer);
+	for (int i = CW_INT; i < CW_REG_SIZE; ++i)
+	{
+		pGameObj->pArenaObj->pField[pGameObj->pCarriageObj->currentLocation] = pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->pData[i];
+		pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, 1);
+	}
+	pGameObj->pCarriageObj->cwCarriageReturn(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
 }
 
 void	forkExec(corewar_t *pGameObj)
 {
 	ft_printf("Fork executing.../ | \\\n");
+	carriage_t *pCarriageObj;
 
+	cwCreateInstanceCarriage(&pCarriageObj);
 }
 
 void	lldExec(corewar_t *pGameObj)
 {
 	ft_printf("Lld executing.../ | \\\n");
-
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
 void	lldiExec(corewar_t *pGameObj)
 {
 	ft_printf("Lldi executing.../ | \\\n");
-
+	pGameObj->pCarriageObj->cwParseTypes (pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = (pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue
+																			+ pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue);
+	pGameObj->pCarriageObj->cwSavePos(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue - pGameObj->pCarriageObj->odometer);
+	for (int i = CW_INT; i < CW_REG_SIZE; ++i)
+	{
+		pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3]->pData[i] = pGameObj->pArenaObj->pField[pGameObj->pCarriageObj->currentLocation];
+		pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, 1);
+	}
+	pGameObj->pCarriageObj->cwCarriageReturn(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
 }
 
 void	lforkExec(corewar_t *pGameObj)
@@ -218,5 +286,11 @@ void	lforkExec(corewar_t *pGameObj)
 void	affExec(corewar_t *pGameObj)
 {
 	ft_printf("Aff executing.../ | \\\n");
-
+	pGameObj->pCarriageObj->cwParseTypes(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	ft_printf("%c", pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.charValue);
 }

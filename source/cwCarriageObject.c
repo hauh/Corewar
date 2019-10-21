@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 19:19:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 20:14:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,13 @@ static void cwCarriageReturn(carriage_t *pCarriageInstance, int whereExactly)
 
 static void	cwMoveTo(carriage_t *pCarraigeInstance, int distance)
 {
+	int i = 0;
+	char test = '1';
+
+	while (test != 'e')
+		scanf("%c", &test);
+	pCarraigeInstance->Test(pCarraigeInstance->test);
+	ft_printf("----------------------------------------------------------\n");
 	pCarraigeInstance->currentLocation		= (pCarraigeInstance->currentLocation + distance) % MEM_SIZE;
 	if (pCarraigeInstance->currentLocation < 0)
 		pCarraigeInstance->currentLocation	= MEM_SIZE + pCarraigeInstance->currentLocation;
@@ -249,6 +256,7 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 			cwErrorCatcher(CW_NOT_ALLOCATED, "Error occured while trying to set command\n");
 		pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
 	}
+	pArenaInstance->test = &pCarriageInstance->currentLocation;
 	pCarriageInstance->pCurrentCommand	= pCarriageInstance->ppCommandContainer[pArenaInstance->pField[pCarriageInstance->currentLocation]];
 	pCarriageInstance->waitingTime		= pCarriageInstance->pCurrentCommand->waitingTime;
 	pCarriageInstance->odometer			= 0;
@@ -275,9 +283,15 @@ static void	cwReturnProtocolActivate(carriage_t *pCarriageInstance, arena_t *pAr
 	int		lengthOfBrokenCode;
 	int		iter;
 
+	if (pCarriageInstance->pCurrentCommand->id == CW_STI)
+		exit(1);
 	lengthOfBrokenCode	= 0;
 	iter				= 0;
 	pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_MAIN_SAVE);
+	ft_printf("Broken Code occured, let's see why and which exactly reasons promote to this error\n");
+	char i;
+	while (i != 'e')
+		scanf("%c", &i);
 	if (pCarriageInstance->pCurrentCommand->typeByte)
 	{
 		pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
@@ -289,6 +303,7 @@ static void	cwReturnProtocolActivate(carriage_t *pCarriageInstance, arena_t *pAr
 				lengthOfBrokenCode += CW_DIR_CODE;
 			else if (((pArenaObj->pField[pCarriageInstance->currentLocation] << (iter * 2) & 0xc0) >> 6) == CW_IND_CODE)
 				lengthOfBrokenCode += CW_IND_CODE;
+			++iter;
 		}
 		pCarriageInstance->cwMoveTo(pCarriageInstance, lengthOfBrokenCode + 1);
 	}
