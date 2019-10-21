@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/12 20:12:19 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/21 14:07:49 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ SOURCE			:=		cwArenaObject.c \
 							cwCommandObject.c \
 							cwErrorObject.c\
 							cwGameObject.c\
-							cwKeyObject.c\
 							cwMain.c\
 							cwPlayerObject.c\
 							cwBufferObject.c\

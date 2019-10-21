@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 16:42:36 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 18:15:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include "cwCommandObject.h"
 # include "cwErrorObject.h"
 # include "cwGameObject.h"
-# include "cwKeyObject.h"
 # include "cwPlayerObject.h"
 
 /*
@@ -35,7 +34,10 @@
 */
 
 #define MAX_ARGS_NUMBER			4
-#define MAX_PLAYERS				4
+#define CW_MAX_PLAYERS			4
+#define CW_MIN_PLAYERS			1
+#define CW_MIN_DUMP_CYCLE		1
+#define CW_ALL_FREE				0x4030201
 #define SIZE_BINARY_LABEL		4
 #define NULL_SEPARATOR			4
 #define SIZE_VARIABLE			4
@@ -43,7 +45,6 @@
 #define IDX_MOD					(MEM_SIZE / 8)
 #define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
 
-#define REG_NUMBER				16
 
 #define CYCLE_TO_DIE			1536
 #define CYCLE_DELTA				50
@@ -71,16 +72,7 @@ typedef enum				byte_blocks_e
 #define CW_CHAR				3
 #define CW_SHORT			2
 #define CW_INT				0
-#define CW_CHAR_BIAS		3
-#define CW_SHORT_BIAS		2
-#define CW_INT_BIAS			0
-
-#define DIRECTION_SIZE		4
-#define SHORT_DIR_SIZE		2
-#define OVERSTEP_NAME		1
-#define CW_REGISTER_SIZE	1
-#define TO_FIRST_ARG		1
-
+#define CW_REG_NUMBER		16
 
 /*
 ** Error's Defines
@@ -139,14 +131,20 @@ typedef enum				byte_blocks_e
 #define CW_IND_CODE_SIZE	0x02
 #define CW_IND_SIZE			0x04
 
-#define CW_CHECK_SEAL		'*'
+#define CW_KEY				'-'
 
-#define CW_ON_FIELD			1
-#define CW_ON_REGISTER		2
+#define CW_NAME_PASS		1
+
+#define CW_MAIN_SAVE		1
+#define CW_ADDIT_SAVE		2
 
 /*
 ** -----------------------------
 */
+
+#define CW_REG_SUPPORT(x, y)	(x >> 6) > 0
+#define CW_DIR_SUPPORT(x, y)	((x << 2) >> 6) > 0
+#define CW_IND_SUPPORT(x, y)	((x << 4) >> 6) > 0
 
 /*
 ** Command's defines
@@ -192,7 +190,6 @@ void						lforkExec	(corewar_t *game);
 void						affExec		(corewar_t *game);
 
 void						cwCreateInstanceGame		(corewar_t **ppGameObj);
-void						cwCreateInstanceKey			(key_t **pKeyObj);
 void						cwCreateInstancePlayer		(player_t **ppPlayerObj);
 void						cwCreateInstanceCommand		(command_t **ppCommandObj);
 void						cwCreateInstanceCarriage	(carriage_t **ppCarriageObj);

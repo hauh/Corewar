@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 15:34:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 13:43:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ typedef struct		arena_s
 	player_t		*pLastSurvivor;
 	buffer_t		*paBufferSet[CW_BUFFER_AMOUNT];
 
-	const void		(*cwConstructor)		(arena_t **);
-	const int		(*cwCheckConditions)	(arena_t *);
-	const void		(*cwBufferInit)			(arena_t *);
-	const void		(*cwPrintField)			(arena_t *);
-	const void		(*cwDestructor)			(arena_t **);
+	void			(*cwConstructor)		(arena_t **);
+	void			(*cwSetLastSurvivor)	(arena_t *, player_t *);
+	void			(*cwSetLastCarriage)	(arena_t *, carriage_t *);
+	int				(*cwTimeToCheck)		(arena_t *);
+	void			(*cwBufferInit)			(arena_t *);
+	void			(*cwPrintField)			(arena_t *);
+	void			(*cwDestructor)			(arena_t **);
 }					arena_t;
 
 #endif

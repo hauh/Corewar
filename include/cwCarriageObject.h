@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 18:45:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 18:50:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,19 @@
 typedef struct			carriage_s
 {
 	int					id;
-	int					jump;
 	int					carry;
-	int					offset;
 	int					odometer;
 	int					savePoint;
-	int					accumOffset;
 	int					waitingTime;
+	int					additOdometer;
 	int					lastSpeakCycle;
+	int					additSavePoint;
 	int					currentLocation;
+	char				currentRegister;
 	int					errorOcurred;
 	int					firstArg;
 	int					secondArg;
 	int					thirdArg;
-	char				currentRegister;
 
 	unsigned char		*pRegisters;
 
@@ -42,26 +41,23 @@ typedef struct			carriage_s
 	command_t			*pCurrentCommand;
 	player_t			*pOwnerCarriage;
 
-	const void			(*cwConstructor)			(carriage_t **);
-	const void			(*cwSavePos)				(carriage_t *);
-	const void			(*cwExecCommand)			(carriage_t *, corewar_t *);
-	const void			(*cwSetCommandTime)			(carriage_t *, arena_t *);
-	const void			(*cwReduceTime)				(carriage_t *);
-	const void			(*cwComputeJump)			(carriage_t *);
-	const void			(*cwParseTypes)				(carriage_t *, arena_t *);
-	const void			(*cwMoveTo)					(carriage_t *, int);
-	const void 			(*cwCarriageReturn)			(carriage_t *);
-	const void			(*cwConversionValueToBytes)	(carriage_t *, buffer_t *, int);
-	const void			(*cwConversionBytesToValue)	(carriage_t *, buffer_t *, int);
-	const void			(*cwReadFromRegToBuf)		(carriage_t *, buffer_t *, int);
-	const void 			(*cwReadFromArenaToBuf)		(carriage_t *, buffer_t *, arena_t *, int);
-	const void			(*cwWriteFromBufToReg)		(carriage_t *, buffer_t *, int);
-	const void			(*cwWriteFromBufToArena)	(carriage_t *, buffer_t *, arena_t *, int);
-	const void			(*cwWriteOperation)			(carriage_t *, arena_t *, buffer_t *, int);
-	const void			(*cwReadOperation)			(carriage_t *, arena_t *, buffer_t *, int);
-	const void			(*cwCheckCarry)				(carriage_t *);
-	const void 			(*cwWriteOwnerIdToReg)		(carriage_t *);
-	const void			(*cwDestructor)				(carriage_t **);
+	void				(*cwConstructor)			(carriage_t **);
+	void				(*cwSavePos)				(carriage_t *, flag_t);
+	void				(*cwExecCommand)			(carriage_t *, corewar_t *);
+	void				(*cwSetCommandTime)			(carriage_t *, arena_t *);
+	void				(*cwReduceTime)				(carriage_t *);
+	void				(*cwParseTypes)				(carriage_t *, arena_t *);
+	void				(*cwMoveTo)					(carriage_t *, int);
+	void 				(*cwCarriageReturn)			(carriage_t *, int);
+	void				(*cwReturnProtocolActivate)	(carriage_t *, arena_t *);
+	void				(*cwSetOwner)				(carriage_t *, player_t *, int);
+	void				(*cwConversionValueToBytes)	(carriage_t *, buffer_t *, int);
+	void				(*cwConversionBytesToValue)	(carriage_t *, buffer_t *, int);
+	void				(*cwWriteOperation)			(carriage_t *, arena_t *, buffer_t *, int);
+	void				(*cwReadOperation)			(carriage_t *, arena_t *, buffer_t *, int);
+	void				(*cwCheckCarry)				(carriage_t *);
+	void 				(*cwWriteOwnerIdToReg)		(carriage_t *);
+	void				(*cwDestructor)				(carriage_t **);
 }						carriage_t;
 
 #endif

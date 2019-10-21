@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 15:08:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 15:46:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,38 @@
 
 #define	CW_COMMAND_AMOUNT	16 + 1
 
-typedef struct				corewar_s
+typedef struct			corewar_s
 {
-	int						playersAmount;
-	int						commandsAmount;
-	int						carriagesAmount;
+	flag_t				loadDump;
+	flag_t				visualizator;
 
-	carriage_t				*pCarriageObject;
-	command_t				*paCommands[CW_COMMAND_AMOUNT];
-	player_t				*pPlayerObject;
-	arena_t					*pArenaObject;
-	key_t					*pKeyObject;
+	int					playersAmount;
+	int					commandsAmount;
+	int					carriagesAmount;
 
-	const void				(*cwConstructor)		(corewar_t **);
-	const void				(*cwCarraigeObjectInit)	(corewar_t *);
-	const void				(*cwCommandObjectInit)	(corewar_t *);
-	const void				(*cwPlayerObjectInit)	(corewar_t *, int, char **);
-	const void				(*cwArenaObjectInit)	(corewar_t *);
-	const void				(*cwKeyObjectInit)		(corewar_t *, int, char **);
-	const void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *);
-	const void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
-	const void				(*cwFreeAllCarriages)	(corewar_t *);
-	const void				(*cwFreeAllPlayers)		(corewar_t *);
-	const void 				(*cwFreeAllCommand)		(corewar_t *);
-	const void				(*cwArrangeUnitsOnField)(corewar_t *);
-	const void				(*cwIntroducePlayers)	(corewar_t *);
-	const void				(*cwCongratulations)	(corewar_t *);
-	const void				(*cwDeleteCarriage)		(corewar_t *, int *);
-	const void				(*cwMainChecking)		(corewar_t *);
-	const void				(*cwStartGame)			(corewar_t *);
-	const void				(*cwDestructor)			(corewar_t **);
-}							corewar_t;
+	carriage_t			*pCarriageObj;
+	command_t			*paCommands[CW_COMMAND_AMOUNT];
+	player_t			*pPlayerObj;
+	arena_t				*pArenaObj;
+
+	void				(*cwConstructor)		(corewar_t **);
+	void				(*cwCarriageObjInit)	(corewar_t *);
+	void				(*cwCommandObjInit)		(corewar_t *);
+	void				(*cwPlayerObjInit)		(corewar_t *, int, char **);
+	void				(*cwArenaObjInit)		(corewar_t *);
+	void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *);
+	void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
+	void				(*cwFreeAllCarriages)	(corewar_t *);
+	void				(*cwFreeAllPlayers)		(corewar_t *);
+	void 				(*cwFreeAllCommand)		(corewar_t *);
+	void				(*cwArrangeUnitsOnField)(corewar_t *);
+	void				(*cwIntroducePlayers)	(corewar_t *);
+	void				(*cwCongratulations)	(corewar_t *);
+	void				(*cwDeleteCarriage)		(corewar_t *, int *);
+	void				(*cwMainChecking)		(corewar_t *);
+	void				(*cwStartGame)			(corewar_t *);
+	void 				(*cwPauseTheGame)		(corewar_t *, const char *);
+	void				(*cwDestructor)			(corewar_t **);
+}						corewar_t;
 
 #endif

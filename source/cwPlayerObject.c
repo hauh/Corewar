@@ -6,26 +6,44 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 16:14:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:05:06 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void cwSetId(player_t *pSelfPlayer, int id)
+static void	cwSetId(player_t *pPlayerInstance, int *pBusyByte, int id, int customId)
 {
-	if (id > 0)
-		pSelfPlayer->id = id;
+	if (customId)
+	{
+		if ((*pBusyByte & (id << ((id - 1) * 8))) == id << ((id - 1) * 8))
+		{
+			pPlayerInstance->id = id;
+			*pBusyByte ^= (id << ((id - 1) * 8));
+		}
+		else
+			cwErrorCatcher(CW_NOT_VALID_KEY, "Not valid number near -n");
+	}
 	else
 	{
-		ft_printf("Not suitable id, will be set as abs(yourId)\n");
-		pSelfPlayer->id = -id;
+		while (id <= CW_MAX_PLAYERS)
+		{
+			if ((*pBusyByte & (id << ((id - 1) * 8))) == id << ((id - 1) * 8))
+			{
+				pPlayerInstance->id = id;
+				*pBusyByte ^= (id << ((id - 1) * 8));
+				return ;
+			}
+			else
+				++id;
+		}
+		cwErrorCatcher(CW_NOT_VALID_KEY, "Not valid number near -n");
 	}
 }
 
 static void	cwReadFile(player_t *pPlayerInstance, const char *pFile)
 {
-	int fd;
+	int		fd;
 
 	if ((fd = open(pFile, O_RDONLY)) < 0)
 		cwErrorCatcher(CW_OPEN_FILE_ERROR, CW_PLAYER);
@@ -114,16 +132,16 @@ static void	cwDestructor(player_t **ppPlayerInstance)
 	*ppPlayerInstance = NULL;
 }
 
-void		cwCreateInstancePlayer(player_t **ppPlayerObj)
+extern void	cwCreateInstancePlayer(player_t **ppPlayerObj)
 {
 	if (!(*ppPlayerObj = (player_t *)malloc(sizeof(player_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);
-	(*ppPlayerObj)->cwConstructor	= (const void *)&cwConstructor;
-	(*ppPlayerObj)->cwDestructor	= (const void *)&cwDestructor;
-	(*ppPlayerObj)->cwSetId			= (const void *)&cwSetId;
-	(*ppPlayerObj)->cwReadFile		= (const void *)&cwReadFile;
-	(*ppPlayerObj)->cwSelfBuild		= (const void *)&cwSelfBuild;
-	(*ppPlayerObj)->cwSelfValidate	= (const void *)&cwSelfValidate;
+	(*ppPlayerObj)->cwConstructor	= cwConstructor;
+	(*ppPlayerObj)->cwDestructor	= cwDestructor;
+	(*ppPlayerObj)->cwSetId			= cwSetId;
+	(*ppPlayerObj)->cwReadFile		= cwReadFile;
+	(*ppPlayerObj)->cwSelfBuild		= cwSelfBuild;
+	(*ppPlayerObj)->cwSelfValidate	= cwSelfValidate;
 	(*ppPlayerObj)->cwConstructor	(ppPlayerObj);
 }
 

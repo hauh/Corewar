@@ -6,18 +6,16 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 20:13:19 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/13 15:47:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/20 18:15:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cwPutParam(command_t *pCommandInstance, int id, int firstArg, int secondArg, int thirdArg, int dirSize, int changeCarry, int waitingTime, int typeByte, const void (*f)(corewar_t *))
+static void	cwPutParam(command_t *pCommandInstance, int id, int firstArg, int secondArg, int thirdArg, int dirSize, int changeCarry, int waitingTime, int typeByte, void (*f)(corewar_t *))
 {
 	pCommandInstance->id			= id;
-	pCommandInstance->firstArg		= firstArg;
-	pCommandInstance->secondArg		= secondArg;
-	pCommandInstance->thirdArg		= thirdArg;
+	pCommandInstance->args			= (firstArg << 24) | (secondArg << 16) | (thirdArg << 8);
 	pCommandInstance->dirSize		= dirSize;
 	pCommandInstance->changeCarry	= changeCarry;
 	pCommandInstance->waitingTime	= waitingTime;
@@ -25,7 +23,7 @@ void	cwPutParam(command_t *pCommandInstance, int id, int firstArg, int secondArg
 	pCommandInstance->cwCallback	= f;
 }
 
-void	cwRecognizeCommand(command_t *pCommandInstance, int command)
+static void	cwRecognizeCommand(command_t *pCommandInstance, int command)
 {
 	if (command == CW_LIVE)
 		pCommandInstance->cwPutParam(pCommandInstance, CW_LIVE,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 10, CW_FALSE, &liveExec);
@@ -69,9 +67,7 @@ void	cwRecognizeCommand(command_t *pCommandInstance, int command)
 static void	cwConstructorCommand(command_t **ppCommandInstance)
 {
 	(*ppCommandInstance)->id			= 0;
-	(*ppCommandInstance)->firstArg		= 0;
-	(*ppCommandInstance)->secondArg		= 0;
-	(*ppCommandInstance)->thirdArg		= 0;
+	(*ppCommandInstance)->args			= 0;
 	(*ppCommandInstance)->dirSize		= 0;
 	(*ppCommandInstance)->changeCarry	= 0;
 	(*ppCommandInstance)->waitingTime	= 0;
@@ -85,14 +81,14 @@ static void	cwDestructorCommand(command_t **ppCommandInstance)
 	*ppCommandInstance = NULL;
 }
 
-void	cwCreateInstanceCommand(command_t **ppCommandObj)
+extern void	cwCreateInstanceCommand(command_t **ppCommandObj)
 {
 	if (!(*ppCommandObj = (command_t *)malloc(sizeof(command_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_COMMAND);
-	(*ppCommandObj)->cwConstructorCommand	= (const void *)&cwConstructorCommand;
-	(*ppCommandObj)->cwDestructorCommand	= (const void *)&cwDestructorCommand;
-	(*ppCommandObj)->cwRecognizeCommand		= (const void *)&cwRecognizeCommand;
-	(*ppCommandObj)->cwPutParam				= (const void *)&cwPutParam;
+	(*ppCommandObj)->cwConstructorCommand	= cwConstructorCommand;
+	(*ppCommandObj)->cwDestructorCommand	= cwDestructorCommand;
+	(*ppCommandObj)->cwRecognizeCommand		= cwRecognizeCommand;
+	(*ppCommandObj)->cwPutParam				= cwPutParam;
 	(*ppCommandObj)->cwConstructorCommand	(ppCommandObj);
 }
 

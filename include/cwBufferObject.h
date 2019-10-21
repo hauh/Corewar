@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:23:49 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 20:39:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/20 17:30:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ typedef struct 		buffer_s
 
 	unsigned char	*pData;
 
-	const void		(*cwConstructorBuffer)	(buffer_t **);
-	const void		(*cwDestructorBuffer)	(buffer_t **);
+	void			(*cwConstructor)	(buffer_t **);
+	void			(*cwDestructor)		(buffer_t **);
 }					buffer_t;
 
 #endif

@@ -6,39 +6,39 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 18:55:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 14:15:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static int	cwCheckConditions(arena_t *pArenaInstance)
+static int		cwTimeToCheck(arena_t *pArenaInstance)
 {
-	if (pArenaInstance->cycleToDie <= 0 || pArenaInstance->cycleAmount % pArenaInstance->cycleToDie == 0)
+	if (pArenaInstance->cycleToDie <= 0 || !(pArenaInstance->cycleAmount % pArenaInstance->cycleToDie))
 		return (CW_TRUE);
 	else
 		return (CW_FALSE);
 }
 
-static void	cwPrintField(arena_t *pArenaInstance)
+static void		cwPrintField(arena_t *pArenaInstance)
 {
-	int	border;
-	int	i;
+	int			border;
+	int			iter;
 
 	border	= sqrt(MEM_SIZE);
-	i		= CW_BEGIN_FROM_ZERO;
-	printf("%4d: ", 0);
-	while (i < MEM_SIZE)
+	iter	= CW_BEGIN_FROM_ZERO;
+	ft_printf("0x0000 : ");
+	while (iter < MEM_SIZE)
 	{
-		printf("%.2x ", pArenaInstance->pField[i]);
-		if ((i + 1) % border == 0)
-			printf("\n%4d: ", i + 1);
-		++i;
+		ft_printf("%.2x ", pArenaInstance->pField[iter]);
+		if ((iter + 1) % border == 0 && iter != MEM_SIZE - 1)
+			ft_printf("\n%#06x : ", iter + 1);
+		++iter;
 	}
-	printf("\n");
+	ft_printf("\n");
 }
 
-static void	cwBuffersInit(arena_t *pArenaInstance)
+static void		cwBuffersInit(arena_t *pArenaInstance)
 {
 	buffer_t	*bufferObj;
 	int			bufIter;
@@ -52,38 +52,57 @@ static void	cwBuffersInit(arena_t *pArenaInstance)
 	}
 }
 
+static void		cwSetLastSurvivor(arena_t *pArenaInstance, player_t *pLastSurvivor)
+{
+	pArenaInstance->pLastSurvivor = pLastSurvivor;
+}
+
+static void		cwSetLastCarriage(arena_t *pArenaInstnace, carriage_t *pLastCarriage)
+{
+	pArenaInstnace->pLastCarriage = pLastCarriage;
+}
+
 /*
 ** Low level function for initialization object;
-**--------------------------------------------------------------------------------------
+**-----------------------------------------------------------------------------
 */
 
-static void	cwConstructor(arena_t **ppArenaInstance)
+static void		cwConstructor(arena_t **ppArenaInstance)
 {
 	if (!((*ppArenaInstance)->pField = (unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
 	ft_memset((*ppArenaInstance)->pField, 0, MEM_SIZE);
-	(*ppArenaInstance)->cycleAmount = 0;
-	(*ppArenaInstance)->checkAmount	= 0;
-	(*ppArenaInstance)->liveAmount	= 0;
-	(*ppArenaInstance)->cycleToDie	= CYCLE_TO_DIE;
+	(*ppArenaInstance)->cycleAmount		= 0;
+	(*ppArenaInstance)->checkAmount		= 0;
+	(*ppArenaInstance)->liveAmount		= 0;
+	(*ppArenaInstance)->cycleToDie		= CYCLE_TO_DIE;
+	(*ppArenaInstance)->pLastSurvivor	= NULL;
+	(*ppArenaInstance)->pLastCarriage	= NULL;
 }
 
-static void	cwDestructor(arena_t **ppArenaInstance)
+static void		cwDestructor(arena_t **ppArenaInstance)
 {
+	int			iter;
+
+	iter = 0;
+	while (iter < CW_BUFFER_AMOUNT)
+		(*ppArenaInstance)->paBufferSet[iter]->cwDestructor(&(*ppArenaInstance)->paBufferSet[iter]);
 	free((*ppArenaInstance)->pField);
 	free(*ppArenaInstance);
 	*ppArenaInstance = NULL;
 }
 
-void	cwCreateInstanceArena(arena_t **ppArenaObj)
+extern void		cwCreateInstanceArena(arena_t **ppArenaObj)
 {
 	if (!(*ppArenaObj = (arena_t *)malloc(sizeof(arena_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
-	(*ppArenaObj)->cwConstructor		= (const void *)&cwConstructor;
-	(*ppArenaObj)->cwDestructor			= (const void *)&cwDestructor;
-	(*ppArenaObj)->cwCheckConditions	= (const void *)&cwCheckConditions;
-	(*ppArenaObj)->cwBufferInit			= (const void *)&cwBuffersInit;
-	(*ppArenaObj)->cwPrintField			= (const void *)&cwPrintField;
+	(*ppArenaObj)->cwConstructor		= cwConstructor;
+	(*ppArenaObj)->cwDestructor			= cwDestructor;
+	(*ppArenaObj)->cwSetLastSurvivor	= cwSetLastSurvivor;
+	(*ppArenaObj)->cwSetLastCarriage	= cwSetLastCarriage;
+	(*ppArenaObj)->cwTimeToCheck		= cwTimeToCheck;
+	(*ppArenaObj)->cwBufferInit			= cwBuffersInit;
+	(*ppArenaObj)->cwPrintField			= cwPrintField;
 	(*ppArenaObj)->cwConstructor		(ppArenaObj);
 }
 

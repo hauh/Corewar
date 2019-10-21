@@ -6,249 +6,195 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/14 18:47:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/21 19:09:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	liveExec(corewar_t *pGameObject)
+void	liveExec(corewar_t *pGameObj)
 {
 	ft_printf("Live executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	if (pGameObject->pCarriageObject->id == pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue)
-		pGameObject->pCarriageObject->lastSpeakCycle = pGameObject->pArenaObject->cycleAmount;
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->id == pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue)
+		pGameObj->pCarriageObj->lastSpeakCycle = pGameObj->pArenaObj->cycleAmount;
 }
 
-void	ldExec(corewar_t *pGameObject)
+void	ldExec(corewar_t *pGameObj)
 {
 	ft_printf("Ld executing now.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwCarriageReturn	(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	stExec(corewar_t *pGameObject)
+void	stExec(corewar_t *pGameObj)
 {
 	ft_printf("St executing now.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwCarriageReturn	(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
 }
 
-void	addExec(corewar_t *pGameObject)
+void	addExec(corewar_t *pGameObj)
 {
 	ft_printf("Add executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue + pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue;
-	pGameObject->pCarriageObject->cwConversionValueToBytes(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], CW_INT);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], pGameObject->pCarriageObject->thirdArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	subExec(corewar_t *pGameObject)
+void	subExec(corewar_t *pGameObj)
 {
 	ft_printf("Sub executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue - pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue;
-	pGameObject->pCarriageObject->cwConversionValueToBytes(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], CW_INT);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], pGameObject->pCarriageObject->thirdArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	andExec(corewar_t *pGameObject)
+void	andExec(corewar_t *pGameObj)
 {
 	ft_printf("And executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue & pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue;
-	pGameObject->pCarriageObject->cwConversionValueToBytes(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], CW_INT);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], pGameObject->pCarriageObject->thirdArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	orExec(corewar_t *pGameObject)
+void	orExec(corewar_t *pGameObj)
 {
 	ft_printf("Or executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue | pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue;
-	pGameObject->pCarriageObject->cwConversionValueToBytes(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], CW_INT);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], pGameObject->pCarriageObject->thirdArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	xorExec(corewar_t *pGameObject)
+void	xorExec(corewar_t *pGameObj)
 {
 	ft_printf("Xor executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2], pGameObject->pCarriageObject->secondArg);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3]->sTypes.intValue = pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue ^ pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_2]->sTypes.intValue;
-	pGameObject->pCarriageObject->cwConversionValueToBytes(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], CW_INT);
-	pGameObject->pCarriageObject->cwWriteOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_3], pGameObject->pCarriageObject->thirdArg);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes	(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation	(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_2], pGameObj->pCarriageObj->secondArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
 }
 
-void	zjmpExec(corewar_t *pGameObject)
+void	zjmpExec(corewar_t *pGameObj)
 {
 	ft_printf("Zjmp executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwReadOperation	(pGameObject->pCarriageObject, pGameObject->pArenaObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1], pGameObject->pCarriageObject->firstArg);
-	if (pGameObject->pCarriageObject->carry)
-		pGameObject->pCarriageObject->cwMoveTo		(pGameObject->pCarriageObject, pGameObject->pArenaObject->paBufferSet[CW_VALUE_BUF_1]->sTypes.shortValue);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes(pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
+	if (pGameObj->pCarriageObj->carry)
+		pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.shortValue);
 }
 
-void	ldiExec(corewar_t *pGameObject)
+void	ldiExec(corewar_t *pGameObj)
 {
 	ft_printf("Ldi executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+	pGameObj->pCarriageObj->cwParseTypes (pGameObj->pCarriageObj, pGameObj->pArenaObj);
+	if (pGameObj->pCarriageObj->errorOcurred)
+		return ;
 }
 
-void	stiExec(corewar_t *pGameObject)
+void	stiExec(corewar_t *pGameObj)
 {
 	ft_printf("Sti executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }
 
-void	forkExec(corewar_t *pGameObject)
+void	forkExec(corewar_t *pGameObj)
 {
 	ft_printf("Fork executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }
 
-void	lldExec(corewar_t *pGameObject)
+void	lldExec(corewar_t *pGameObj)
 {
 	ft_printf("Lld executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }
 
-void	lldiExec(corewar_t *pGameObject)
+void	lldiExec(corewar_t *pGameObj)
 {
 	ft_printf("Lldi executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }
 
-void	lforkExec(corewar_t *pGameObject)
+void	lforkExec(corewar_t *pGameObj)
 {
 	ft_printf("Lfork executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }
 
-void	affExec(corewar_t *pGameObject)
+void	affExec(corewar_t *pGameObj)
 {
 	ft_printf("Aff executing.../ | \\\n");
-	pGameObject->pCarriageObject->cwSavePos			(pGameObject->pCarriageObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwParseTypes		(pGameObject->pCarriageObject, pGameObject->pArenaObject);
-	pGameObject->pCarriageObject->cwMoveTo			(pGameObject->pCarriageObject, pGameObject->pCarriageObject->offset);
-	pGameObject->pCarriageObject->cwComputeJump		(pGameObject->pCarriageObject);
-	if (pGameObject->pCarriageObject->pCurrentCommand->changeCarry)
-		pGameObject->pCarriageObject->cwCheckCarry(pGameObject->pCarriageObject);
+
 }

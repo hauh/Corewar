@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:22:50 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/12 20:55:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/20 18:56:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,17 @@
 typedef struct		command_s
 {
 	int				id;
-	int				firstArg;
-	int				secondArg;
-	int				thirdArg;
+	int				args;
 	int				dirSize;
 	int				changeCarry;
 	int				waitingTime;
 	int				typeByte;
 
-	const void		(*cwConstructorCommand)	(command_t **);
-	const void		(*cwRecognizeCommand)	(command_t *, int);
-	const void		(*cwPutParam)			(command_t *, int, int, int, int, int, int, int, int, const void *);
-	const void		(*cwCallback)			(corewar_t *);
-	const void		(*cwDestructorCommand)	(command_t **);
+	void			(*cwConstructorCommand)	(command_t **);
+	void			(*cwRecognizeCommand)	(command_t *, int);
+	void			(*cwPutParam)			(command_t *, int, int, int, int, int, int, int, int, void (*f)(corewar_t *));
+	void			(*cwCallback)			(corewar_t *);
+	void			(*cwDestructorCommand)	(command_t **);
 }					command_t;
 
 #endif
