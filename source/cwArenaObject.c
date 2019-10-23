@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 20:07:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 18:41:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ static void		cwSetLastSurvivor(arena_t *pArenaInstance, player_t *pLastSurvivor)
 	pArenaInstance->pLastSurvivor = pLastSurvivor;
 }
 
-static void		cwSetLastCarriage(arena_t *pArenaInstnace, carriage_t *pLastCarriage)
-{
-	pArenaInstnace->pLastCarriage = pLastCarriage;
-}
-
 /*
 ** Low level function for initialization object;
 **-----------------------------------------------------------------------------
@@ -80,7 +75,6 @@ static void		cwConstructor(arena_t **ppArenaInstance)
 	(*ppArenaInstance)->liveAmount		= 0;
 	(*ppArenaInstance)->cycleToDie		= CYCLE_TO_DIE;
 	(*ppArenaInstance)->pLastSurvivor	= NULL;
-	(*ppArenaInstance)->pLastCarriage	= NULL;
 }
 
 static void		cwDestructor(arena_t **ppArenaInstance)
@@ -102,7 +96,6 @@ extern void		cwCreateInstanceArena(arena_t **ppArenaObj)
 	(*ppArenaObj)->cwConstructor		= cwConstructor;
 	(*ppArenaObj)->cwDestructor			= cwDestructor;
 	(*ppArenaObj)->cwSetLastSurvivor	= cwSetLastSurvivor;
-	(*ppArenaObj)->cwSetLastCarriage	= cwSetLastCarriage;
 	(*ppArenaObj)->cwTimeToCheck		= cwTimeToCheck;
 	(*ppArenaObj)->cwBufferInit			= cwBuffersInit;
 	(*ppArenaObj)->cwPrintField			= cwPrintField;

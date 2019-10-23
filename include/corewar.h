@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 18:15:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 17:30:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,9 @@ typedef enum				byte_blocks_e
 ** -----------------------------
 */
 
-#define CW_REG_SUPPORT(x, y)	(x >> 6) > 0
-#define CW_DIR_SUPPORT(x, y)	((x << 2) >> 6) > 0
-#define CW_IND_SUPPORT(x, y)	((x << 4) >> 6) > 0
+#define CW_REG_SUPPORT(x, y) (x >> 6) > 0
+#define CW_DIR_SUPPORT(x, y) ((x << 2) >> 6) > 0
+#define CW_IND_SUPPORT(x, y) ((x << 4) >> 6) > 0
 
 /*
 ** Command's defines

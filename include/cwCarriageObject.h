@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 20:07:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 18:50:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct			carriage_s
 	void				(*cwReadOperation)			(carriage_t *, arena_t *, buffer_t *, int);
 	void				(*cwCheckCarry)				(carriage_t *);
 	void 				(*cwWriteOwnerIdToReg)		(carriage_t *);
+	void				(*cwCopyReg)				(carriage_t *, carriage_t *);
 	void				(*cwDestructor)				(carriage_t **);
 }						carriage_t;
 
