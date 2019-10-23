@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 18:41:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 20:29:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ static void		cwPrintField(arena_t *pArenaInstance)
 
 	border	= sqrt(MEM_SIZE);
 	iter	= CW_BEGIN_FROM_ZERO;
-	ft_printf("0x0000 : ");
+	ft_printf("0x0000 :");
 	while (iter < MEM_SIZE)
 	{
 		if (iter == *pArenaInstance->test)
-			ft_printf("@{red}%.2x @{eoc}", pArenaInstance->pField[iter]);
+			ft_printf("@{red} %.2x@{eoc}", pArenaInstance->pField[iter]);
 		else
-			ft_printf("%.2x ", pArenaInstance->pField[iter]);
+			ft_printf(" %.2x", pArenaInstance->pField[iter]);
 		if ((iter + 1) % border == 0 && iter != MEM_SIZE - 1)
-			ft_printf("\n%#06x : ", iter + 1);
+			ft_printf("\n%#06x :", iter + 1);
 		++iter;
 	}
 	ft_printf("\n");
@@ -49,7 +49,7 @@ static void		cwBuffersInit(arena_t *pArenaInstance)
 	bufIter = CW_BEGIN_FROM_ZERO;
 	while (bufIter < CW_BUFFER_AMOUNT)
 	{
-		cwCreateInstanceBuffer(&bufferObj);
+		cw_create_instance_buffer(&bufferObj);
 		pArenaInstance->paBufferSet[bufIter] = bufferObj;
 		++bufIter;
 	}
@@ -89,7 +89,7 @@ static void		cwDestructor(arena_t **ppArenaInstance)
 	*ppArenaInstance = NULL;
 }
 
-extern void		cwCreateInstanceArena(arena_t **ppArenaObj)
+extern void		cw_create_instance_arena(arena_t **ppArenaObj)
 {
 	if (!(*ppArenaObj = (arena_t *)malloc(sizeof(arena_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);

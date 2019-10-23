@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 19:24:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 20:27:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,8 +398,8 @@ static void	cwReturnProtocolActivate(carriage_t *pCarriageInstance, arena_t *pAr
 
 	ft_printf("Attention! Return Protocol Activate!\n");
 	char test = '1';
-	while (test != 'a')
-		scanf("%c", &test);
+	//while (test != 'a')
+	//	scanf("%c", &test);
 	lengthOfBrokenCode	= 0;
 	iter				= 0;
 	pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_MAIN_SAVE);
@@ -420,9 +420,6 @@ static void	cwReturnProtocolActivate(carriage_t *pCarriageInstance, arena_t *pAr
 	}
 	else
 		pCarriageInstance->cwMoveTo(pCarriageInstance, pCarriageInstance->pCurrentCommand->dirSize + 1);
-	test = '1';
-	while (test != 'a')
-		scanf("%c", &test);
 }
 
 /*
@@ -459,7 +456,7 @@ static void	cwDestructor(carriage_t **ppCarriageInstance)
 	*ppCarriageInstance = NULL;
 }
 
-extern void	cwCreateInstanceCarriage(carriage_t **ppCarriageObj)
+extern void	cw_create_instance_carriage(carriage_t **ppCarriageObj)
 {
 	if (!(*ppCarriageObj = (carriage_t *)malloc(sizeof(carriage_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_CARRIAGE);

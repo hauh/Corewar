@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/21 14:07:49 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/23 20:24:13 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SOURCE			:=		cwArenaObject.c \
 							cwCommandObject.c \
 							cwErrorObject.c\
 							cwGameObject.c\
-							cwMain.c\
+							cw_main.c\
 							cwPlayerObject.c\
 							cwBufferObject.c\
 
@@ -75,4 +75,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re
-#.SILENT: all $(NAME) $(OBJ) $(VIS_OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
+.SILENT: all $(NAME) $(OBJ) $(VIS_OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re

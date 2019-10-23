@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 19:00:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 20:28:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	liveExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->pOwnerCarriage->id == pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.intValue)
 		pGameObj->pArenaObj->pLastSurvivor = pGameObj->pCarriageObj->pOwnerCarriage;
 	pGameObj->pCarriageObj->lastSpeakCycle = pGameObj->pArenaObj->cycleAmount;
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	ldExec(corewar_t *pGameObj)
@@ -40,7 +40,7 @@ void	ldExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	stExec(corewar_t *pGameObj)
@@ -56,7 +56,7 @@ void	stExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->secondArg);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	addExec(corewar_t *pGameObj)
@@ -82,7 +82,7 @@ void	addExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	subExec(corewar_t *pGameObj)
@@ -108,7 +108,7 @@ void	subExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	andExec(corewar_t *pGameObj)
@@ -134,7 +134,7 @@ void	andExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	orExec(corewar_t *pGameObj)
@@ -160,7 +160,7 @@ void	orExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	xorExec(corewar_t *pGameObj)
@@ -186,7 +186,7 @@ void	xorExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	zjmpExec(corewar_t *pGameObj)
@@ -201,7 +201,7 @@ void	zjmpExec(corewar_t *pGameObj)
 		return ;
 	if (pGameObj->pCarriageObj->carry)
 		pGameObj->pCarriageObj->cwMoveTo(pGameObj->pCarriageObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.shortValue - pGameObj->pCarriageObj->odometer);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	ldiExec(corewar_t *pGameObj)
@@ -234,7 +234,7 @@ void	ldiExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	stiExec(corewar_t *pGameObj)
@@ -269,8 +269,8 @@ void	stiExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwCarriageReturn(pGameObj->pCarriageObj, CW_ADDIT_SAVE);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	forkExec(corewar_t *pGameObj)
@@ -286,7 +286,7 @@ void	forkExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	ft_printf("%d\n", pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.shortValue);
-	cwCreateInstanceCarriage(&pCarriageObj);
+	cw_create_instance_carriage(&pCarriageObj);
 	pGameObj->pCarriageObj->cwCopyReg(pGameObj->pCarriageObj, pCarriageObj);
 	pCarriageObj->carry					= pGameObj->pCarriageObj->carry;
 	pCarriageObj->lastSpeakCycle		= pGameObj->pCarriageObj->lastSpeakCycle;
@@ -294,7 +294,7 @@ void	forkExec(corewar_t *pGameObj)
 	pCarriageObj->ppCommandContainer	= pGameObj->pCarriageObj->ppCommandContainer;
 	pCarriageObj->pOwnerCarriage		= pGameObj->pCarriageObj->pOwnerCarriage;
 	pGameObj->cwPushToQueue(pGameObj, pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	lldExec(corewar_t *pGameObj)
@@ -311,7 +311,7 @@ void	lldExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	pGameObj->pCarriageObj->cwCheckCarry	(pGameObj->pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	lldiExec(corewar_t *pGameObj)
@@ -344,7 +344,7 @@ void	lldiExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwWriteOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_3], pGameObj->pCarriageObj->thirdArg);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	lforkExec(corewar_t *pGameObj)
@@ -358,7 +358,7 @@ void	lforkExec(corewar_t *pGameObj)
 	pGameObj->pCarriageObj->cwReadOperation(pGameObj->pCarriageObj, pGameObj->pArenaObj, pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1], pGameObj->pCarriageObj->firstArg);
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
-	cwCreateInstanceCarriage(&pCarriageObj);
+	cw_create_instance_carriage(&pCarriageObj);
 	pGameObj->pCarriageObj->cwCopyReg(pGameObj->pCarriageObj, pCarriageObj);
 	pCarriageObj->carry					= pGameObj->pCarriageObj->carry;
 	pCarriageObj->lastSpeakCycle		= pGameObj->pCarriageObj->lastSpeakCycle;
@@ -366,7 +366,7 @@ void	lforkExec(corewar_t *pGameObj)
 	pCarriageObj->ppCommandContainer	= pGameObj->pCarriageObj->ppCommandContainer;
 	pCarriageObj->pOwnerCarriage		= pGameObj->pCarriageObj->pOwnerCarriage;
 	pGameObj->cwPushToQueue(pGameObj, pCarriageObj);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }
 
 void	affExec(corewar_t *pGameObj)
@@ -380,5 +380,5 @@ void	affExec(corewar_t *pGameObj)
 	if (pGameObj->pCarriageObj->errorOcurred)
 		return ;
 	ft_printf("%c", pGameObj->pArenaObj->paBufferSet[CW_VALUE_BUF_1]->sTypes.charValue);
-	pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
+	// pGameObj->pArenaObj->cwPrintField(pGameObj->pArenaObj);
 }

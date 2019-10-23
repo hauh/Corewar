@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 19:24:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 20:23:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ static void	cwCommandObjectInit(corewar_t *pGameInstance)
 	iter = CW_BEGIN_FROM_ONE;
 	while (iter < CW_COMMAND_AMOUNT)
 	{
-		cwCreateInstanceCommand			(&pCommandObj);
+		cw_create_instance_command			(&pCommandObj);
 		pCommandObj->cwRecognizeCommand	(pCommandObj, iter);
 		pGameInstance->paCommands[iter]	= pCommandObj;
 		++iter;
@@ -266,7 +266,7 @@ static void		cwCarriageObjectInit(corewar_t *pGameInstance)
 	iter = CW_BEGIN_FROM_ZERO;
 	while (iter < pGameInstance->playersAmount)
 	{
-		cwCreateInstanceCarriage(&pCarriageObj);
+		cw_create_instance_carriage(&pCarriageObj);
 		pCarriageObj->id					= -++pGameInstance->carriagesAmount;
 		pCarriageObj->ppCommandContainer	= pGameInstance->paCommands;
 		pCarriageObj->cwSetOwner			(pCarriageObj, pGameInstance->pPlayerObj, pGameInstance->playersAmount);
@@ -313,7 +313,7 @@ static void		cwPlayerObjectInit(corewar_t *pGameInstance, int argc, char **argv)
 		}
 		else if (++pGameInstance->playersAmount)
 		{
-			cwCreateInstancePlayer		(&pPlayerObj);
+			cw_create_instance_player		(&pPlayerObj);
 			pPlayerObj->cwReadFile		(pPlayerObj, argv[iter]);
 			pPlayerObj->cwSelfBuild		(pPlayerObj);
 			pPlayerObj->cwSelfValidate	(pPlayerObj);
@@ -341,7 +341,7 @@ static void		cwArenaObjectInit(corewar_t *gameInstance)
 {
 	arena_t		*pArenaObj;
 
-	cwCreateInstanceArena(&pArenaObj);
+	cw_create_instance_arena(&pArenaObj);
 	pArenaObj->cwBufferInit(pArenaObj);
 	gameInstance->pArenaObj = pArenaObj;
 }
@@ -374,7 +374,7 @@ static void	cwDestructor(corewar_t **ppGameInstance)
 	*ppGameInstance = NULL;
 }
 
-extern void	cwCreateInstanceGame(corewar_t **ppGameObj)
+extern void	cw_create_instance_game(corewar_t **ppGameObj)
 {
 	if (!(*ppGameObj = (corewar_t *)malloc(sizeof(corewar_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_GAME);

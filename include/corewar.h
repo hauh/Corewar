@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 17:30:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/23 20:18:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,12 +189,12 @@ void						lldiExec	(corewar_t *game);
 void						lforkExec	(corewar_t *game);
 void						affExec		(corewar_t *game);
 
-void						cwCreateInstanceGame		(corewar_t **ppGameObj);
-void						cwCreateInstancePlayer		(player_t **ppPlayerObj);
-void						cwCreateInstanceCommand		(command_t **ppCommandObj);
-void						cwCreateInstanceCarriage	(carriage_t **ppCarriageObj);
-void						cwCreateInstanceBuffer		(buffer_t **ppBufferObj);
-void						cwCreateInstanceArena		(arena_t **ppArenaObj);
-void						cwErrorCatcher				(int error_code, const char *section);
+void						cw_create_instance_game(corewar_t **ppGameObj);
+void						cw_create_instance_player(player_t **ppPlayerObj);
+void						cw_create_instance_command(command_t **ppCommandObj);
+void						cw_create_instance_carriage(carriage_t **ppCarriageObj);
+void						cw_create_instance_buffer(buffer_t **ppBufferObj);
+void						cw_create_instance_arena(arena_t **ppArenaObj);
+void						cwErrorCatcher(int error_code, const char *section);
 
 #endif
