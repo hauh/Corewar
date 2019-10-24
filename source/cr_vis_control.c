@@ -6,16 +6,18 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/09/24 16:31:23 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/24 16:19:49 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		cr_vis_timer(t_vis	*vis)
+int		cr_vis_timer(corewar_t *cr)
 {
-	long int check;
+	long int	check;
+	t_vis		*vis;
 
+	vis = cr->vis;
 	// if (!vis->time)
 	// 	vis->time = clock();
 	if (time < 0)
@@ -29,10 +31,12 @@ int		cr_vis_timer(t_vis	*vis)
 	return (0);
 }
 
-int		cr_vis_keys(t_vis *vis)
+int		cr_vis_keys(corewar_t *cr)
 {
 	int key;
+	t_vis		*vis;
 
+	vis = cr->vis;
 	key = getch();
 	if (key == KEY_F(1))
 		vis->exit = 1;

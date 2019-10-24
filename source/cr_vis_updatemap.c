@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_updatemap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/09/24 18:24:55 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 17:08:29 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		cr_vis_getxcolour(int i)
 	if (c == COLOR_PAIR(1))
 		return (1);
 	else if (c == COLOR_PAIR(2))
-		return (2);
+		return (2);	
 	else if (c == COLOR_PAIR(3))
 		return (3);
 	else if (c == COLOR_PAIR(4))
@@ -65,15 +65,13 @@ int		cr_vis_printcar(corewar_t *cr)
 	int			colour;
 	int			i;
 
-	car = cr->carriages;
+	car = cr->pCarriageObj;
 	i = -1;
-	while (++i < cr->carriages_amount)
+	while (++i < cr->carriagesAmount)
 	{
-		colour = cr_vis_getxcolour(car->current_location);;
-		if (!car->carry || !cr_vis_checkzero(car->current_location))
-			colour = car->owner->id;
-		cr_vis_putx(cr->arena->field[car->current_location], car->current_location, colour, 1);
-		car = car->next;
+		colour = cr_vis_getxcolour(car->currentLocation);
+		cr_vis_putx(cr->pArenaObj->pField[car->currentLocation], car->currentLocation, colour, 1, cr);
+		car = car->pNext;
 	}
 	return (0);
 }
@@ -86,12 +84,12 @@ int		cr_vis_printdiff(corewar_t *cr)
 
 	i = -1;
 	f_vis = cr->vis->field;
-	f_cr = cr->arena->field;
+	f_cr = cr->pArenaObj->pField;
 	while (++i < MEM_SIZE)
 	{
 		if (f_vis[i] != f_cr[i] || cr_vis_getxrev(i))
 		{
-			cr_vis_putx(f_cr[i], i, cr_vis_getxcolour(i), 0);
+			cr_vis_putx(f_cr[i], i, cr_vis_getxcolour(i), 0, cr);
 			f_vis[i] = f_cr[i];
 		}
 	}

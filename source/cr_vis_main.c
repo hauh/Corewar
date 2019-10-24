@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/09/24 16:44:29 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/24 17:03:31 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,17 @@
 
 int		cr_vis_cleanup(corewar_t *cr)
 {
-	free(cr->vis->field);
-	free(cr->vis);
-	cr->vis = NULL;
 	endwin();
+	if (cr)
+	{
+		if (cr->vis)
+		{
+			if (cr->vis->field)
+				free(cr->vis->field);
+			free(cr->vis);
+		}
+		cr->vis = NULL;
+	}
 	return (0);
 }
 
@@ -27,19 +34,18 @@ int		cr_vis_main(corewar_t *cr, int action)
 		cr_vis_initvis(cr);
 	else if (action == V_CONTROL)
 	{
-		cr_vis_timer(cr->vis);
-		cr_vis_keys(cr->vis);
+		cr_vis_timer(cr);
+		cr_vis_keys(cr);
 	}
 	else if (action == V_UPDATE)
 	{
+		cr_vis_printinfo(cr);
 		cr_vis_updatemap(cr);
+		refresh();
 		cr->vis->step = 0;
 		cr->vis->tick = 0;
 	}
-	else if (action == V_INFO)
-		cr_vis_printinfo(cr);
 	else if (action == V_CLEANUP)
 		cr_vis_cleanup(cr);
-	refresh();
 	return (0);
 }

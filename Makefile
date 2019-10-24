@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
+#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/23 20:24:13 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/24 16:04:55 by dbrady           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,17 +18,32 @@ DIR_SOURCE		:=		source/
 DIR_INCLUDE		:=		include/
 DIR_BIN			:=		bin/
 
-SOURCE			:=		cwArenaObject.c \
-							cwCallback.c \
-							cwCarriageObject.c \
-							cwCommandObject.c \
-							cwErrorObject.c\
-							cwGameObject.c\
-							cw_main.c\
-							cwPlayerObject.c\
-							cwBufferObject.c\
+SOURCE			:=		cr_vis_buildmap.c \
+						cr_vis_control.c \
+						cr_vis_init.c \
+						cr_vis_main.c \
+						cr_vis_printinfo.c \
+						cr_vis_updatemap.c \
+						cwArenaObject.c \
+						cwBufferObject.c \
+						cwCallback.c \
+						cwCarriageObject.c \
+						cwCommandObject.c \
+						cwErrorObject.c \
+						cwGameObject.c \
+						cwPlayerObject.c \
+						cw_main.c \
 
-HEADERS			:=		corewar.h cwArenaObject.h cwCarriageObject.h
+HEADERS			:=		corewar.h \
+						cr_vis.h \
+						cwArenaObject.h \
+						cwBufferObject.h \
+						cwCarriageObject.h \
+						cwCommandObject.h \
+						cwErrorObject.h \
+						cwGameObject.h \
+						cwPlayerObject.h \
+						cwTypedefObjects.h \
 
 OBJ				:=		$(SOURCE:.c=.o)
 OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cwCarriageObject.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 20:27:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 16:18:17 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	cwCheckCarry(carriage_t *pCarriageInstance)
 	int iter;
 
 	char test = '1';
-	ft_printf("Checking carry...\n");
+//	ft_printf("Checking carry...\n");
 	//while (test != 'e')
 	//	scanf("%c", &test);
 	iter = (pCarriageInstance->currentRegister) * CW_REG_SIZE;
@@ -50,13 +50,13 @@ static void	cwCheckCarry(carriage_t *pCarriageInstance)
 		if (pCarriageInstance->pRegisters[iter] != 0)
 		{
 			pCarriageInstance->carry = 0;
-			ft_printf("Res: %d\n", pCarriageInstance->carry);
+//			ft_printf("Res: %d\n", pCarriageInstance->carry);
 			return ;
 		}
 		++iter;
 	}
 	pCarriageInstance->carry = 1;
-	ft_printf("Res: %d\n", pCarriageInstance->carry);
+//	ft_printf("Res: %d\n", pCarriageInstance->carry);
 }
 
 static void	cwConversionValueToBytes(carriage_t *pCarraigeInstance, buffer_t *pBufferObj, int type)
@@ -81,13 +81,13 @@ static void	cwConversionBytesToValue(carriage_t *pCarraigeInstance, buffer_t *pB
 
 void		cwWriteOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer_t *pBufferObj, int inputArg)
 {
-	ft_printf("Writing Operation\n");
-	if (inputArg == CW_REG_CODE)
-		ft_printf("Registr\n");
-	else if (inputArg == CW_DIR_CODE)
-		ft_printf("Direction\n");
-	else if (inputArg == CW_IND_CODE)
-		ft_printf("Indirection\n");
+//	ft_printf("Writing Operation\n");
+// 	if (inputArg == CW_REG_CODE)
+// 		ft_printf("Registr\n");
+// 	else if (inputArg == CW_DIR_CODE)
+// 		ft_printf("Direction\n");
+// 	else if (inputArg == CW_IND_CODE)
+// 		ft_printf("Indirection\n");
 	char test = '1';
 	//while (test != 'e')
 	//	scanf("%c", &test);
@@ -97,23 +97,23 @@ void		cwWriteOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer
 			pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
 		else if ((pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
-		ft_printf("Choosen reg: %d\n", pCarriageInstance->currentRegister);
+//		ft_printf("Choosen reg: %d\n", pCarriageInstance->currentRegister);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
 			pCarriageInstance->pRegisters[i + (pCarriageInstance->currentRegister * CW_REG_SIZE)] = pBufferObj->pData[i];
-		ft_printf("Next data was writen:\n");
-		for (int i = 0; i < CW_REG_SIZE; ++i)
-			ft_printf("%08b ", pBufferObj->pData[i]);
-		ft_printf("\n");
+//		ft_printf("Next data was writen:\n");
+// 		for (int i = 0; i < CW_REG_SIZE; ++i)
+// 			ft_printf("%08b ", pBufferObj->pData[i]);
+//		ft_printf("\n");
 		pCarriageInstance->cwMoveTo(pCarriageInstance, CW_REG_CODE_SIZE);
 	}
 	else if (inputArg == CW_DIR_CODE)
 	{
-		ft_printf("Next data was writen\n");
-		ft_printf("DirSize: %d\n", 4 - pCarriageInstance->pCurrentCommand->dirSize);
+		// ft_printf("Next data was writen\n");
+		// ft_printf("DirSize: %d\n", 4 - pCarriageInstance->pCurrentCommand->dirSize);
 		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
 		{
 			pArenaObj->pField[pCarriageInstance->currentLocation] = pBufferObj->pData[i];
-			ft_printf("%08b ", pBufferObj->pData[i]);
+			// ft_printf("%08b ", pBufferObj->pData[i]);
 			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
 		}
 	}
@@ -128,7 +128,7 @@ void		cwWriteOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer
 		pCarriageInstance->cwConversionBytesToValue	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF], CW_SHORT);
 		if (pCarriageInstance->pCurrentCommand->id != CW_LLD)
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue %= IDX_MOD;
-		ft_printf("Ind readed: %d\n", pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue);
+		// ft_printf("Ind readed: %d\n", pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue);
 		pCarriageInstance->cwSavePos(pCarriageInstance, CW_ADDIT_SAVE);
 		pCarriageInstance->cwMoveTo					(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
@@ -136,23 +136,23 @@ void		cwWriteOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer
 			pArenaObj->pField[pCarriageInstance->currentLocation] = pBufferObj->pData[i];
 			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
 		}
-		ft_printf("Next data was writen:\n");
-		for (int i = pCarriageInstance->currentLocation - 1; i > pCarriageInstance->currentLocation - 5; --i)
-			ft_printf("%08b ", pArenaObj->pField[i]);
-		ft_printf("\n");
+		// ft_printf("Next data was writen:\n");
+		// for (int i = pCarriageInstance->currentLocation - 1; i > pCarriageInstance->currentLocation - 5; --i)
+		// 	ft_printf("%08b ", pArenaObj->pField[i]);
+		// ft_printf("\n");
 		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
 	}
 }
 
 static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer_t *pBufferObj, int inputArg)
 {
-	ft_printf("Reading operation\n");
-	if (inputArg == CW_REG_CODE)
-		ft_printf("Registr\n");
-	else if (inputArg == CW_DIR_CODE)
-		ft_printf("Direction\n");
-	else if (inputArg == CW_IND_CODE)
-		ft_printf("Indirection\n");
+	// ft_printf("Reading operation\n");
+	// if (inputArg == CW_REG_CODE)
+	// 	ft_printf("Registr\n");
+	// else if (inputArg == CW_DIR_CODE)
+	// 	ft_printf("Direction\n");
+	// else if (inputArg == CW_IND_CODE)
+		// ft_printf("Indirection\n");
 	char test = '1';
 //	while (test != 'e')
 //		scanf("%c", &test);
@@ -162,30 +162,30 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 			pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
 		else if ((pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
-		ft_printf("Choosen reg: %d\n", pCarriageInstance->currentRegister);
-		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
+		// ft_printf("Choosen reg: %d\n", pCarriageInstance->currentRegister);
+		// ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
 			pBufferObj->pData[i] = pCarriageInstance->pRegisters[i + (pCarriageInstance->currentRegister * CW_REG_SIZE)];
-		ft_printf("Next data was reading:\n");
-		for (int i = 0; i < CW_REG_SIZE; ++i)
-			ft_printf("%08b ", pBufferObj->pData[i]);
-		ft_printf("\n");
+		// ft_printf("Next data was reading:\n");
+		// for (int i = 0; i < CW_REG_SIZE; ++i)
+		// 	ft_printf("%08b ", pBufferObj->pData[i]);
+		// ft_printf("\n");
 		pCarriageInstance->cwConversionBytesToValue	(pCarriageInstance, pBufferObj, CW_INT);
 		pCarriageInstance->cwMoveTo					(pCarriageInstance, CW_REG_CODE_SIZE);
 	}
 	else if (inputArg == CW_DIR_CODE)
 	{
 		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
-		ft_printf("Next Data was readed\n");
-		ft_printf("DirSize: %d\n", 4 - pCarriageInstance->pCurrentCommand->dirSize);
+		// ft_printf("Next Data was readed\n");
+		// ft_printf("DirSize: %d\n", 4 - pCarriageInstance->pCurrentCommand->dirSize);
 		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
 		{
 			pBufferObj->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
 			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
 		}
-		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
-			ft_printf("%08b ", pBufferObj->pData[i]);
-		ft_printf("\n");
+		// for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
+		// 	ft_printf("%08b ", pBufferObj->pData[i]);
+		// ft_printf("\n");
 		pCarriageInstance->cwConversionBytesToValue(pCarriageInstance, pBufferObj, 4 - pCarriageInstance->pCurrentCommand->dirSize);
 	}
 	else if (inputArg == CW_IND_CODE)
@@ -200,7 +200,7 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 		pCarriageInstance->cwConversionBytesToValue	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF], CW_SHORT);
 		if (pCarriageInstance->pCurrentCommand->id != CW_LLD)
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue %= IDX_MOD;
-		ft_printf("Ind readed: %d\n", pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue);
+		// ft_printf("Ind readed: %d\n", pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue);
 		pCarriageInstance->cwSavePos(pCarriageInstance, CW_ADDIT_SAVE);
 		pCarriageInstance->cwMoveTo					(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
@@ -208,10 +208,10 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 			pBufferObj->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
 			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
 		}
-		ft_printf("Next data was readed:\n");
-		for (int i = pCarriageInstance->currentLocation - 1; i > pCarriageInstance->currentLocation - 5; --i)
-			ft_printf("%08b ", pArenaObj->pField[i]);
-		ft_printf("\n");
+		// ft_printf("Next data was readed:\n");
+		// for (int i = pCarriageInstance->currentLocation - 1; i > pCarriageInstance->currentLocation - 5; --i)
+		// 	ft_printf("%08b ", pArenaObj->pField[i]);
+		// ft_printf("\n");
 		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
 	}
 }
@@ -225,36 +225,36 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 	iter = -1;
 //	while (test != 'e')
 //		scanf("%c", &test);
-	ft_printf("Parsing bytes...\n");
-	ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args);
-	ft_printf("%08b\n", pArenaObj->pField[pCarriageInstance->currentLocation]);
-	ft_printf("First arg: ------\n");
+	// ft_printf("Parsing bytes...\n");
+	// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args);
+	// ft_printf("%08b\n", pArenaObj->pField[pCarriageInstance->currentLocation]);
+	// ft_printf("First arg: ------\n");
 	target = pArenaObj->pField[pCarriageInstance->currentLocation];
-	ft_printf("%d\n", pCarriageInstance->currentLocation);
+	// ft_printf("%d\n", pCarriageInstance->currentLocation);
 	if (pCarriageInstance->pCurrentCommand->typeByte)
 	{
 		if ((pCarriageInstance->pCurrentCommand->args >> 24) & 0xff)
 		{
-			ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 24);
-			ft_printf("%08b\n", (pArenaObj->pField[pCarriageInstance->currentLocation] >> 6) & 0x03);
+			// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 24);
+			// ft_printf("%08b\n", (pArenaObj->pField[pCarriageInstance->currentLocation] >> 6) & 0x03);
 			while (++iter < 3)
 			{
-				ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (26 + (iter * 2)));
+				// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (26 + (iter * 2)));
 				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 6) & 0x03) & (pCarriageInstance->pCurrentCommand->args >> (26 + (iter * 2))))
 					break;
 			}
 		}
 		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
-		ft_printf("Second arg: ---------\n");
+		// ft_printf("Second arg: ---------\n");
 		iter = -1;
 		if ((pCarriageInstance->pCurrentCommand->args >> 16) & 0xff)
 		{
-			ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 16);
-			ft_printf("%08b\n", (target >> 4) & 0x03);
+			// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 16);
+			// ft_printf("%08b\n", (target >> 4) & 0x03);
 			while (++iter < 3)
 			{
-				ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (18 + (iter * 2)));
+				// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (18 + (iter * 2)));
 				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 4) & 0x03) & ((pCarriageInstance->pCurrentCommand->args >> (18 + (iter * 2))) & 0xff))
 					break;
 			}
@@ -262,20 +262,20 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
 		iter = -1;
-		ft_printf("Third arg: ---------\n");
+		// ft_printf("Third arg: ---------\n");
 		if ((pCarriageInstance->pCurrentCommand->args >> 8) & 0xff)
 		{
-			ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 8);
-			ft_printf("%08b\n", (target >> 2) & 0x03);
+			// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> 8);
+			// ft_printf("%08b\n", (target >> 2) & 0x03);
 			while (++iter < 3)
 			{
-				ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (10 + (iter * 2)));
+				// ft_printf("%032b\n", pCarriageInstance->pCurrentCommand->args >> (10 + (iter * 2)));
 				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 2) & 0x03) & (pCarriageInstance->pCurrentCommand->args >> (10 + (iter * 2))))
 					break;
 			}
 		}
 	}
-	ft_printf("Done...\n");
+	// ft_printf("Done...\n");
 	if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 		return ;
 	if (pCarriageInstance->pCurrentCommand->typeByte)
@@ -314,14 +314,14 @@ static void	cwMoveTo(carriage_t *pCarraigeInstance, int distance)
 //	while (test != 'e')
 //		scanf("%c", &test);
 	test = '1';
-	ft_printf("Moving\n");
-	ft_printf("Distance: %d\n", distance);
-	ft_printf("Before: %d\n", pCarraigeInstance->currentLocation);
+	// ft_printf("Moving\n");
+	// ft_printf("Distance: %d\n", distance);
+	// ft_printf("Before: %d\n", pCarraigeInstance->currentLocation);
 	pCarraigeInstance->currentLocation		= (pCarraigeInstance->currentLocation + distance) % MEM_SIZE;
 	if (pCarraigeInstance->currentLocation < 0)
 		pCarraigeInstance->currentLocation	= MEM_SIZE + pCarraigeInstance->currentLocation;
 	pCarraigeInstance->odometer += (distance % MEM_SIZE);
-	ft_printf("After: %d\n", pCarraigeInstance->currentLocation);
+	// ft_printf("After: %d\n", pCarraigeInstance->currentLocation);
 }
 
 static void	cwSavePos(carriage_t *pCarriageInstance, int whichExactly)
@@ -356,7 +356,7 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 	char test = '1';
 
 	errorCount = 0;
-	ft_printf("Setting command\n");
+	// ft_printf("Setting command\n");
 	//while (test != 'e')
 //		scanf("%c", &test);
 	test = '1';
@@ -371,8 +371,8 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 	pCarriageInstance->pCurrentCommand	= pCarriageInstance->ppCommandContainer[pArenaInstance->pField[pCarriageInstance->currentLocation]];
 	pCarriageInstance->waitingTime		= pCarriageInstance->pCurrentCommand->waitingTime;
 	pCarriageInstance->odometer			= 0;
-	ft_printf("Location: %d\n", pCarriageInstance->currentLocation);
-	ft_printf("Command: %d\n", pCarriageInstance->pCurrentCommand->id);
+	// ft_printf("Location: %d\n", pCarriageInstance->currentLocation);
+	// ft_printf("Command: %d\n", pCarriageInstance->pCurrentCommand->id);
 	pCarriageInstance->cwMoveTo	(pCarriageInstance, CW_NAME_PASS);
 	pCarriageInstance->cwSavePos(pCarriageInstance, CW_MAIN_SAVE);
 }
@@ -396,7 +396,7 @@ static void	cwReturnProtocolActivate(carriage_t *pCarriageInstance, arena_t *pAr
 	int		lengthOfBrokenCode;
 	int		iter;
 
-	ft_printf("Attention! Return Protocol Activate!\n");
+	// ft_printf("Attention! Return Protocol Activate!\n");
 	char test = '1';
 	//while (test != 'a')
 	//	scanf("%c", &test);
