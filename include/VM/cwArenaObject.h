@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 17:52:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 20:03:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct		arena_s
 	int				checkAmount;
 	int				cycleToDie;
 	unsigned long	cycleAmount;
-	int				*test;
 
 	unsigned char	*pField;
 

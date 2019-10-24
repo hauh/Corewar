@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 19:35:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 20:09:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,10 +363,10 @@ static void	cwConstructor(corewar_t **ppGameInstance)
 
 static void	cwDestructor(corewar_t **ppGameInstance)
 {
-	(*ppGameInstance)->cwFreeAllCarriages		(*ppGameInstance);
-	(*ppGameInstance)->cwFreeAllPlayers			(*ppGameInstance);
-	(*ppGameInstance)->cwFreeAllCommand			(*ppGameInstance);
-	(*ppGameInstance)->pArenaObj->cwDestructor	(&(*ppGameInstance)->pArenaObj);
+	//(*ppGameInstance)->cwFreeAllCarriages		(*ppGameInstance);
+	//(*ppGameInstance)->cwFreeAllPlayers			(*ppGameInstance);
+	//(*ppGameInstance)->cwFreeAllCommand			(*ppGameInstance);
+	//(*ppGameInstance)->pArenaObj->cwDestructor	(&(*ppGameInstance)->pArenaObj);
 	free(*ppGameInstance);
 	*ppGameInstance = NULL;
 }

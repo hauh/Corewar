@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 19:34:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 20:33:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef enum				byte_blocks_e
 
 #define CW_BEGIN_FROM_ZERO	0x00
 #define CW_BEGIN_FROM_ONE	0x01
+#define CW_ITERATOR			-1
 #define CW_TRUE				0x01
 #define CW_FALSE			0x00
 

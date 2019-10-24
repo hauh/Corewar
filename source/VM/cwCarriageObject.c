@@ -6,39 +6,54 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 19:33:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 20:33:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void cwCopyReg(carriage_t *pCarriageInstance, carriage_t *pCopyingCarriage)
+static void	cwComputeOffset(carriage_t *pCarriageInstance)
+{
+
+}
+
+static void	cwRegCheck(carriage_t *pCarriageInstance, arena_t *pArenaObj)
+{
+	if (pCarriageInstance->firstArg == CW_REG_CODE)
+		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
+			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
+			pCarriageInstance->errorOcurred = CW_TRUE;
+	if (pCarriageInstance->secondArg == CW_DIR_CODE)
+		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
+			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
+			pCarriageInstance->errorOcurred = CW_TRUE;
+	if (pCarriageInstance->thirdArg == CW_IND_CODE)
+		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
+			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
+			pCarriageInstance->errorOcurred = CW_TRUE;
+}
+
+static void	cwCopyReg(carriage_t *pCarriageInstance, carriage_t *pCopyingCarriage)
 {
 	int		iter;
 
-	iter = 0;
-	while (iter < CW_REG_SIZE * CW_REG_NUMBER)
-	{
+	iter = CW_ITERATOR;
+	while (++iter < CW_REG_SIZE * CW_REG_NUMBER)
 		pCopyingCarriage->pRegisters[iter] = pCarriageInstance->pRegisters[iter];
-		++iter;
-	}
 }
 
 static void	cwWriteOwnerIdToReg(carriage_t *pSelfCarriage)
 {
-	int iter;
+	int		iter;
 
-	iter = 0;
+	iter = CW_ITERATOR;
 	while (iter < CW_REG_SIZE)
-	{
 		pSelfCarriage->pRegisters[iter] = (-pSelfCarriage->pOwnerCarriage->id << (iter * 8)) >> 24;
-		++iter;
-	}
 }
 
 static void	cwCheckCarry(carriage_t *pCarriageInstance)
 {
-	int iter;
+	int		iter;
 
 	iter = (pCarriageInstance->currentRegister) * CW_REG_SIZE - 1;
 	while (++iter < (pCarriageInstance->currentRegister + 1) * CW_REG_SIZE)
@@ -71,40 +86,28 @@ void		cwWriteOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, buffer
 {
 	if (inputArg == CW_REG_CODE)
 	{
-		if (pArenaObj->pField[pCarriageInstance->currentLocation] > 0 && pArenaObj->pField[pCarriageInstance->currentLocation] < 17)
-			pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
-		else if ((pCarriageInstance->errorOcurred = CW_TRUE))
-			return ;
+		pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
 			pCarriageInstance->pRegisters[i + (pCarriageInstance->currentRegister * CW_REG_SIZE)] = pBufferObj->pData[i];
 		pCarriageInstance->cwMoveTo(pCarriageInstance, CW_REG_CODE_SIZE);
 	}
 	else if (inputArg == CW_DIR_CODE)
 	{
-		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
-		{
+		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pArenaObj->pField[pCarriageInstance->currentLocation] = pBufferObj->pData[i];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 	}
 	else if (inputArg == CW_IND_CODE)
 	{
 		ft_memset(pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData, 0, CW_REG_SIZE);
-		for (int i = CW_SHORT; i < CW_REG_SIZE; ++i)
-		{
+		for (int i = CW_SHORT; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 		pCarriageInstance->cwConversionBytesToValue	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF], CW_SHORT);
 		if (pCarriageInstance->pCurrentCommand->id != CW_LLD)
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue %= IDX_MOD;
 		pCarriageInstance->cwSavePos(pCarriageInstance, CW_ADDIT_SAVE);
-		pCarriageInstance->cwMoveTo					(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
-		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
-		{
+		pCarriageInstance->cwMoveTo	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
+		for (int i = CW_INT; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pArenaObj->pField[pCarriageInstance->currentLocation] = pBufferObj->pData[i];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
 	}
 }
@@ -113,10 +116,7 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 {
 	if (inputArg == CW_REG_CODE)
 	{
-		if (pArenaObj->pField[pCarriageInstance->currentLocation] > 0 && pArenaObj->pField[pCarriageInstance->currentLocation] < 17)
-			pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
-		else if ((pCarriageInstance->errorOcurred = CW_TRUE))
-			return ;
+		pCarriageInstance->currentRegister = pArenaObj->pField[pCarriageInstance->currentLocation] - 1;
 		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
 			pBufferObj->pData[i] = pCarriageInstance->pRegisters[i + (pCarriageInstance->currentRegister * CW_REG_SIZE)];
@@ -126,71 +126,58 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 	else if (inputArg == CW_DIR_CODE)
 	{
 		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
-		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i)
-		{
+		for (int i = 4 - pCarriageInstance->pCurrentCommand->dirSize; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pBufferObj->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 		pCarriageInstance->cwConversionBytesToValue(pCarriageInstance, pBufferObj, 4 - pCarriageInstance->pCurrentCommand->dirSize);
 	}
 	else if (inputArg == CW_IND_CODE)
 	{
 		ft_memset(pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData, 0, CW_REG_SIZE);
 		ft_memset(pBufferObj->pData, 0, CW_REG_SIZE);
-		for (int i = CW_SHORT; i < CW_REG_SIZE; ++i)
-		{
+		for (int i = CW_SHORT; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 		pCarriageInstance->cwConversionBytesToValue	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF], CW_SHORT);
 		if (pCarriageInstance->pCurrentCommand->id != CW_LLD)
 			pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue %= IDX_MOD;
 		pCarriageInstance->cwSavePos(pCarriageInstance, CW_ADDIT_SAVE);
-		pCarriageInstance->cwMoveTo					(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
-		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
-		{
+		pCarriageInstance->cwMoveTo	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
+		for (int i = CW_INT; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pBufferObj->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
-			pCarriageInstance->cwMoveTo(pCarriageInstance, 1);
-		}
 		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
+		pCarriageInstance->cwConversionBytesToValue(pCarriageInstance, pBufferObj, CW_INT);
 	}
 }
 
 static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 {
-	unsigned char	target;
-	int				iter;
+	int		iter;
 
-	iter = -1;
-	target = pArenaObj->pField[pCarriageInstance->currentLocation];
-	if (pCarriageInstance->pCurrentCommand->typeByte)
-	{
-		if ((pCarriageInstance->pCurrentCommand->args >> 24) & 0xff)
-			while (++iter < 3)
-				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 6) & 0x03) & (pCarriageInstance->pCurrentCommand->args >> (26 + (iter * 2))))
-					break;
-		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
-			return ;
-		iter = -1;
-		if ((pCarriageInstance->pCurrentCommand->args >> 16) & 0xff)
-			while (++iter < 3)
-				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 4) & 0x03) & ((pCarriageInstance->pCurrentCommand->args >> (18 + (iter * 2))) & 0xff))
-					break;
-		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
-			return ;
-		iter = -1;
-		if ((pCarriageInstance->pCurrentCommand->args >> 8) & 0xff)
-			while (++iter < 3)
-				if (((pArenaObj->pField[pCarriageInstance->currentLocation] >> 2) & 0x03) & (pCarriageInstance->pCurrentCommand->args >> (10 + (iter * 2))))
-					break;
-	}
-	if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
-		return ;
 	if (pCarriageInstance->pCurrentCommand->typeByte)
 	{
 		pCarriageInstance->firstArg		= (pArenaObj->pField[pCarriageInstance->currentLocation] & 0xc0) >> 6;
+		iter = -1;
+		if ((pCarriageInstance->pCurrentCommand->args >> 24) & 0xff)
+			while (++iter < 3)
+				if (pCarriageInstance->firstArg & (pCarriageInstance->pCurrentCommand->args >> (26 + (iter * 2))))
+					break;
+		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
+			return ;
 		pCarriageInstance->secondArg	= (pArenaObj->pField[pCarriageInstance->currentLocation] & 0x30) >> 4;
+		iter = -1;
+		if ((pCarriageInstance->pCurrentCommand->args >> 16) & 0xff)
+			while (++iter < 3)
+				if (pCarriageInstance->secondArg & ((pCarriageInstance->pCurrentCommand->args >> (18 + (iter * 2))) & 0xff))
+					break;
+		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
+			return ;
 		pCarriageInstance->thirdArg		= (pArenaObj->pField[pCarriageInstance->currentLocation] & 0x0c) >> 2;
+		iter = -1;
+		if ((pCarriageInstance->pCurrentCommand->args >> 8) & 0xff)
+			while (++iter < 3)
+				if (pCarriageInstance->thirdArg & (pCarriageInstance->pCurrentCommand->args >> (10 + (iter * 2))))
+					break;
+		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
+			return ;
 	}
 	else
 	{
@@ -201,7 +188,7 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 	pCarriageInstance->cwMoveTo(pCarriageInstance, pCarriageInstance->pCurrentCommand->typeByte);
 }
 
-static void cwCarriageReturn(carriage_t *pCarriageInstance, int whereExactly)
+static void	cwCarriageReturn(carriage_t *pCarriageInstance, int whereExactly)
 {
 	if (whereExactly == CW_MAIN_SAVE)
 	{
@@ -266,9 +253,8 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 	pCarriageInstance->errorOcurred 	= CW_FALSE;
 	pCarriageInstance->pCurrentCommand	= pCarriageInstance->ppCommandContainer[pArenaInstance->pField[pCarriageInstance->currentLocation]];
 	pCarriageInstance->waitingTime		= pCarriageInstance->pCurrentCommand->waitingTime;
-	pArenaInstance->test				= &pCarriageInstance->currentLocation;
-	pCarriageInstance->cwSavePos(pCarriageInstance, CW_MAIN_SAVE);
-	pCarriageInstance->cwMoveTo(pCarriageInstance, CW_NAME_PASS);
+	pCarriageInstance->cwSavePos	(pCarriageInstance, CW_MAIN_SAVE);
+	pCarriageInstance->cwMoveTo		(pCarriageInstance, CW_NAME_PASS);
 }
 
 static void	cwSetOwner(carriage_t *pCarriageInstance, player_t *pPlayerList, int playerAmount)
