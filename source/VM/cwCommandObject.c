@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 20:13:19 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 20:20:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 19:34:47 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	cwDestructorCommand(command_t **ppCommandInstance)
 	*ppCommandInstance = NULL;
 }
 
-extern void	cw_create_instance_command(command_t **ppCommandObj)
+extern void	cwCreateInstanceCommand(command_t **ppCommandObj)
 {
 	if (!(*ppCommandObj = (command_t *)malloc(sizeof(command_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_COMMAND);

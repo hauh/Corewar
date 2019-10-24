@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 20:21:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 19:34:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ static void	cwDestructor(player_t **ppPlayerInstance)
 	*ppPlayerInstance = NULL;
 }
 
-extern void	cw_create_instance_player(player_t **ppPlayerObj)
+extern void	cwCreateInstancePlayer(player_t **ppPlayerObj)
 {
 	if (!(*ppPlayerObj = (player_t *)malloc(sizeof(player_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_PLAYER);

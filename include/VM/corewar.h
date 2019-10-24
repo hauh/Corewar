@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 14:58:40 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/24 19:34:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,6 @@ typedef enum				byte_blocks_e
 ** -----------------------------
 */
 
-#define CW_REG_SUPPORT(x, y) (x >> 6) > 0
-#define CW_DIR_SUPPORT(x, y) ((x << 2) >> 6) > 0
-#define CW_IND_SUPPORT(x, y) ((x << 4) >> 6) > 0
-
 /*
 ** Command's defines
 ** -----------------------------
@@ -189,12 +185,12 @@ void						lldiExec	(corewar_t *game);
 void						lforkExec	(corewar_t *game);
 void						affExec		(corewar_t *game);
 
-void						cw_create_instance_game(corewar_t **ppGameObj);
-void						cw_create_instance_player(player_t **ppPlayerObj);
-void						cw_create_instance_command(command_t **ppCommandObj);
-void						cw_create_instance_carriage(carriage_t **ppCarriageObj);
-void						cw_create_instance_buffer(buffer_t **ppBufferObj);
-void						cw_create_instance_arena(arena_t **ppArenaObj);
+void						cwCreateInstanceGame(corewar_t **ppGameObj);
+void						cwCreateInstancePlayer(player_t **ppPlayerObj);
+void						cwCreateInstanceCommand(command_t **ppCommandObj);
+void						cwCreateInstanceCarriage(carriage_t **ppCarriageObj);
+void						cwCreateInstanceBuffer(buffer_t **ppBufferObj);
+void						cwCreateInstanceArena(arena_t **ppArenaObj);
 void						cwErrorCatcher(int error_code, const char *section);
 
 #endif

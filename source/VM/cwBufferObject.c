@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 17:41:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 20:22:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 19:34:31 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	cwDestructor(buffer_t **ppBufferInstance)
 	*ppBufferInstance = NULL;
 }
 
-extern void	cw_create_instance_buffer(buffer_t **ppBufferObj)
+extern void	cwCreateInstanceBuffer(buffer_t **ppBufferObj)
 {
 	if (!(*ppBufferObj = (buffer_t *)malloc(sizeof(buffer_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);

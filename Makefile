@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
+#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/24 16:04:55 by dbrady           ###   ########.fr        #
+#    Updated: 2019/10/24 19:27:41 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,45 +14,39 @@ NAME			:=		corewar
 
 DIR_PRINTF		:=		ft_printf/
 DIR_LIBFT		:=		libft/
-DIR_SOURCE		:=		source/
-DIR_INCLUDE		:=		include/
+VM_DIR_SOURCE	:=		source/VM
+VIS_DIR_SOURCE	:=		source/VIS
+VM_DIR_INCLUDE	:=		include/VM
+VIS_DIR_INCLUDE :=		include/VIS
 DIR_BIN			:=		bin/
 
-SOURCE			:=		cr_vis_buildmap.c \
-						cr_vis_control.c \
-						cr_vis_init.c \
-						cr_vis_main.c \
-						cr_vis_printinfo.c \
-						cr_vis_updatemap.c \
-						cwArenaObject.c \
-						cwBufferObject.c \
-						cwCallback.c \
-						cwCarriageObject.c \
-						cwCommandObject.c \
-						cwErrorObject.c \
-						cwGameObject.c \
-						cwPlayerObject.c \
-						cw_main.c \
+VM_SOURCE		:=		cwCarriageObject.c \
+							cwCommandObject.c \
+								cwBufferObject.c \
+									cwPlayerObject.c \
+										cwArenaObject.c \
+											cwErrorObject.c \
+												cwGameObject.c \
+													cwCallback.c  \
+														cwMain.c
 
-HEADERS			:=		corewar.h \
-						cr_vis.h \
-						cwArenaObject.h \
-						cwBufferObject.h \
-						cwCarriageObject.h \
-						cwCommandObject.h \
-						cwErrorObject.h \
-						cwGameObject.h \
-						cwPlayerObject.h \
-						cwTypedefObjects.h \
+VM_HEADERS		:=		cwCarriageObject.h \
+							cwCommandObject.h \
+								cwBufferObject.h \
+									cwPlayerObject.h \
+										cwArenaObject.h \
+												cwGameObject.h \
+													cwTypedefObjects.h \
+														corewar.h
 
-OBJ				:=		$(SOURCE:.c=.o)
-OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))
+OBJ				:=		$(VM_SOURCE:.c=.o)
+OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ))
 
 LIBFT			:=		libft.a
 LIBFTPRINTF		:=		libftprintf.a
 
-vpath %.c $(DIR_SOURCE)
-vpath %.h $(DIR_INCLUDE)
+vpath %.c $(VM_DIR_SOURCE)
+vpath %.h $(VM_DIR_INCLUDE)
 vpath %.o $(DIR_BIN)
 vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
 
@@ -61,11 +55,8 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
 	gcc $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 
-$(OBJ):%.o:%.c $(HEADERS) | $(DIR_BIN)
-	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
-
-$(VIS_OBJ):%.o:%.c $(HEADERS)
-	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
+$(OBJ):%.o:%.c $(VM_HEADERS) | $(DIR_BIN)
+	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
 
 $(DIR_BIN):
 	mkdir -p $@

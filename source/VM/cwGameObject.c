@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cwGameObject.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 17:10:12 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/24 19:35:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,24 @@ static void		cwDeleteCarriage(corewar_t *pGameInstance, int *pDeletedCount)
 	*pDeletedCount += 1;
 }
 
-static void	cwMainChecking(corewar_t *pGameInstance)
+static void		cwMainChecking(corewar_t *pGameInstance)
 {
-	int		deletedCount;
-	int		iter;
+	carriage_t 	*tmp;
+	int			deletedCount;
+	int			iter;
 
 	deletedCount = 0;
 	iter		 = CW_BEGIN_FROM_ZERO;
 	++pGameInstance->pArenaObj->checkAmount;
 	while (iter < pGameInstance->carriagesAmount)
 	{
-		if (pGameInstance->pArenaObj->cycleAmount - pGameInstance->pCarriageObj->lastSpeakCycle >= pGameInstance->pArenaObj->cycleToDie || pGameInstance->pArenaObj->cycleToDie <= 0)
+		if ((pGameInstance->pArenaObj->cycleAmount - pGameInstance->pCarriageObj->lastSpeakCycle) > pGameInstance->pArenaObj->cycleToDie || pGameInstance->pArenaObj->cycleToDie <= 0)
 			pGameInstance->cwDeleteCarriage(pGameInstance, &deletedCount);
 		pGameInstance->pCarriageObj ? pGameInstance->pCarriageObj = pGameInstance->pCarriageObj->pNext : CW_FALSE;
 		++iter;
 	}
 	pGameInstance->carriagesAmount -= deletedCount;
-	if (pGameInstance->pArenaObj->liveAmount >= NBR_LIVE || pGameInstance->pArenaObj->checkAmount >= MAX_CHECKS)
+	if (pGameInstance->pArenaObj->liveAmount >= NBR_LIVE || pGameInstance->pArenaObj->checkAmount > MAX_CHECKS)
 	{
 		pGameInstance->pArenaObj->cycleToDie -= CYCLE_DELTA;
 		pGameInstance->pArenaObj->checkAmount = 0;
@@ -93,36 +94,24 @@ static void	cwStartGame(corewar_t *pGameInstance)
 {
 	int				iter;
 
-	cr_vis_main(pGameInstance, V_INIT);
-	cr_vis_main(pGameInstance, V_UPDATE);
 	while (pGameInstance->pCarriageObj)
 	{
 		iter = CW_BEGIN_FROM_ZERO;
-		cr_vis_main(pGameInstance, V_CONTROL);
-		if (pGameInstance->vis->exit)
-			pGameInstance->cwDestructor(&pGameInstance);
-		else if ((pGameInstance->vis->step || pGameInstance->vis->flow) && pGameInstance->vis->tick)
+		while (iter < pGameInstance->carriagesAmount)
 		{
-			while (iter < pGameInstance->carriagesAmount)
-			{
-				if (!pGameInstance->pCarriageObj->waitingTime)
-					pGameInstance->pCarriageObj->cwSetCommandTime(pGameInstance->pCarriageObj, pGameInstance->pArenaObj);
-				if (pGameInstance->pCarriageObj->waitingTime > 0)
-					pGameInstance->pCarriageObj->cwReduceTime(pGameInstance->pCarriageObj);
-				if (!pGameInstance->pCarriageObj->waitingTime)
-					pGameInstance->pCarriageObj->cwExecCommand(pGameInstance->pCarriageObj, pGameInstance);
-				pGameInstance->pCarriageObj = pGameInstance->pCarriageObj->pNext;
-				++iter;
-			}
-			pGameInstance->cwMergeQueueToList(pGameInstance);
-			if (pGameInstance->pArenaObj->cwTimeToCheck(pGameInstance->pArenaObj))
-				pGameInstance->cwMainChecking(pGameInstance);
-			if (pGameInstance->loadDump == ++pGameInstance->pArenaObj->cycleAmount)
-			{
-				pGameInstance->pArenaObj->cwPrintField(pGameInstance->pArenaObj);
-				exit(1);
-			}
-			cr_vis_main(pGameInstance, V_UPDATE);
+			pGameInstance->pCarriageObj->cwSetCommandTime	(pGameInstance->pCarriageObj, pGameInstance->pArenaObj);
+			pGameInstance->pCarriageObj->cwReduceTime		(pGameInstance->pCarriageObj);
+			pGameInstance->pCarriageObj->cwExecCommand		(pGameInstance->pCarriageObj, pGameInstance);
+			pGameInstance->pCarriageObj = pGameInstance->pCarriageObj->pNext;
+			++iter;
+		}
+		pGameInstance->cwMergeQueueToList(pGameInstance);
+		if (pGameInstance->pArenaObj->cwTimeToCheck(pGameInstance->pArenaObj))
+			pGameInstance->cwMainChecking(pGameInstance);
+		if (pGameInstance->loadDump == ++pGameInstance->pArenaObj->cycleAmount)
+		{
+			pGameInstance->pArenaObj->cwPrintField(pGameInstance->pArenaObj);
+			exit(1);
 		}
 	}
 }
@@ -150,8 +139,9 @@ static void	cwArrangeUnitsOnField(corewar_t *gameInstance)
 
 static void	cwCongratulations(corewar_t *pGameInstance)
 {
-//	ft_printf("\t\t\tCongratulations winner!!!\n");
-//	ft_printf("\t\t\t>>>%s(id: %d)<<<\n", pGameInstance->pArenaObj->pLastSurvivor->pName, pGameInstance->pArenaObj->pLastSurvivor->id);
+	ft_printf("Contestant %d, \"%s\", has won !\n",
+	pGameInstance->pArenaObj->pLastSurvivor->id,
+	pGameInstance->pArenaObj->pLastSurvivor->pName);
 }
 
 static void	cwIntroducePlayers(corewar_t *gameInstance)
@@ -159,14 +149,14 @@ static void	cwIntroducePlayers(corewar_t *gameInstance)
 	int				iter;
 
 	iter = CW_BEGIN_FROM_ZERO;
-//	ft_printf("Introducing contestants...\n");
+	ft_printf("Introducing contestants...\n");
 	while (iter < gameInstance->carriagesAmount)
 	{
-//		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
-		// gameInstance->pCarriageObj->pOwnerCarriage->id,
-		// gameInstance->pCarriageObj->pOwnerCarriage->codeSize,
-		// gameInstance->pCarriageObj->pOwnerCarriage->pName,
-		// gameInstance->pCarriageObj->pOwnerCarriage->pComment);
+		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
+		gameInstance->pCarriageObj->pOwnerCarriage->id,
+		gameInstance->pCarriageObj->pOwnerCarriage->codeSize,
+		gameInstance->pCarriageObj->pOwnerCarriage->pName,
+		gameInstance->pCarriageObj->pOwnerCarriage->pComment);
 		gameInstance->pCarriageObj = gameInstance->pCarriageObj->pNext;
 		++iter;
 	}
@@ -260,7 +250,7 @@ static void	cwCommandObjectInit(corewar_t *pGameInstance)
 	iter = CW_BEGIN_FROM_ONE;
 	while (iter < CW_COMMAND_AMOUNT)
 	{
-		cw_create_instance_command			(&pCommandObj);
+		cwCreateInstanceCommand			(&pCommandObj);
 		pCommandObj->cwRecognizeCommand	(pCommandObj, iter);
 		pGameInstance->paCommands[iter]	= pCommandObj;
 		++iter;
@@ -275,13 +265,11 @@ static void		cwCarriageObjectInit(corewar_t *pGameInstance)
 	iter = CW_BEGIN_FROM_ZERO;
 	while (iter < pGameInstance->playersAmount)
 	{
-		cw_create_instance_carriage(&pCarriageObj);
+		cwCreateInstanceCarriage(&pCarriageObj);
 		pCarriageObj->id					= -++pGameInstance->carriagesAmount;
 		pCarriageObj->ppCommandContainer	= pGameInstance->paCommands;
 		pCarriageObj->cwSetOwner			(pCarriageObj, pGameInstance->pPlayerObj, pGameInstance->playersAmount);
 		pCarriageObj->cwWriteOwnerIdToReg	(pCarriageObj);
-		pCarriageObj->Test					= pGameInstance->pArenaObj->cwPrintField;
-		pCarriageObj->test					= pGameInstance->pArenaObj;
 		pGameInstance->cwAddCarriageToList	(pGameInstance, pCarriageObj);
 		++iter;
 	}
@@ -322,7 +310,7 @@ static void		cwPlayerObjectInit(corewar_t *pGameInstance, int argc, char **argv)
 		}
 		else if (++pGameInstance->playersAmount)
 		{
-			cw_create_instance_player		(&pPlayerObj);
+			cwCreateInstancePlayer		(&pPlayerObj);
 			pPlayerObj->cwReadFile		(pPlayerObj, argv[iter]);
 			pPlayerObj->cwSelfBuild		(pPlayerObj);
 			pPlayerObj->cwSelfValidate	(pPlayerObj);
@@ -350,7 +338,7 @@ static void		cwArenaObjectInit(corewar_t *gameInstance)
 {
 	arena_t		*pArenaObj;
 
-	cw_create_instance_arena(&pArenaObj);
+	cwCreateInstanceArena(&pArenaObj);
 	pArenaObj->cwBufferInit(pArenaObj);
 	gameInstance->pArenaObj = pArenaObj;
 }
@@ -375,7 +363,6 @@ static void	cwConstructor(corewar_t **ppGameInstance)
 
 static void	cwDestructor(corewar_t **ppGameInstance)
 {
-	cr_vis_main(*ppGameInstance, V_CLEANUP);
 	(*ppGameInstance)->cwFreeAllCarriages		(*ppGameInstance);
 	(*ppGameInstance)->cwFreeAllPlayers			(*ppGameInstance);
 	(*ppGameInstance)->cwFreeAllCommand			(*ppGameInstance);
@@ -384,7 +371,7 @@ static void	cwDestructor(corewar_t **ppGameInstance)
 	*ppGameInstance = NULL;
 }
 
-extern void	cw_create_instance_game(corewar_t **ppGameObj)
+extern void	cwCreateInstanceGame(corewar_t **ppGameObj)
 {
 	if (!(*ppGameObj = (corewar_t *)malloc(sizeof(corewar_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_GAME);

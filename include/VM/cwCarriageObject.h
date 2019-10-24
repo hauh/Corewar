@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 18:50:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 15:12:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ typedef struct			carriage_s
 	command_t			**ppCommandContainer;
 	command_t			*pCurrentCommand;
 	player_t			*pOwnerCarriage;
-
-	void				(*Test)						(arena_t *);
-	arena_t				*test;
 
 	void				(*cwConstructor)			(carriage_t **);
 	void				(*cwSavePos)				(carriage_t *, flag_t);

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/23 20:29:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/24 19:35:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void		cwBuffersInit(arena_t *pArenaInstance)
 	bufIter = CW_BEGIN_FROM_ZERO;
 	while (bufIter < CW_BUFFER_AMOUNT)
 	{
-		cw_create_instance_buffer(&bufferObj);
+		cwCreateInstanceBuffer(&bufferObj);
 		pArenaInstance->paBufferSet[bufIter] = bufferObj;
 		++bufIter;
 	}
@@ -89,7 +89,7 @@ static void		cwDestructor(arena_t **ppArenaInstance)
 	*ppArenaInstance = NULL;
 }
 
-extern void		cw_create_instance_arena(arena_t **ppArenaObj)
+extern void		cwCreateInstanceArena(arena_t **ppArenaObj)
 {
 	if (!(*ppArenaObj = (arena_t *)malloc(sizeof(arena_t))))
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);

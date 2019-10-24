@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cwGameObject.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 16:02:24 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/24 15:03:15 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,8 @@
 # define CW_GAME_OBJECT_H
 
 #include "cwTypedefObjects.h"
-#include "cr_vis.h"
 
 #define	CW_COMMAND_AMOUNT	16 + 1
-
-typedef struct			s_vis
-{
-	int					flow;
-	int					step;
-	int					exit;
-	int					tick;
-	int					fpsdiv;
-	unsigned char		*field;
-	long int			time;
-
-}						t_vis;
 
 typedef struct			corewar_s
 {
@@ -45,7 +32,6 @@ typedef struct			corewar_s
 	command_t			*paCommands[CW_COMMAND_AMOUNT];
 	player_t			*pPlayerObj;
 	arena_t				*pArenaObj;
-	t_vis				*vis;
 
 	void				(*cwConstructor)		(corewar_t **);
 	void				(*cwCarriageObjInit)	(corewar_t *);
