@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/25 18:43:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/25 19:34:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,8 @@ static void	cwStartGame(corewar_t *pGameInstance)
 		ft_printf("CheckAmount: %d\n", pGameInstance->pArenaObj->checkAmount);
 		ft_printf("LiveAmount: %d\n", pGameInstance->pArenaObj->liveAmount);
 		ft_printf("CycleToDie: %d\n", pGameInstance->pArenaObj->cycleToDie);
-		exit(1);
 		for (int i = 0; i < 100000; ++i)
 			;
-		//exit(1);
 		while (iter < pGameInstance->carriagesAmount)
 		{
 			pGameInstance->pCarriageObj->cwSetCommandTime	(pGameInstance->pCarriageObj, pGameInstance->pArenaObj);
