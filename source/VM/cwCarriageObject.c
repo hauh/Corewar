@@ -3,33 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   cwCarriageObject.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 20:33:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/25 18:07:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void	cwComputeOffset(carriage_t *pCarriageInstance)
+static void	cwRegCheck(carriage_t *pCarriageInstance, arena_t *pArenaObj, int type)
 {
-
-}
-
-static void	cwRegCheck(carriage_t *pCarriageInstance, arena_t *pArenaObj)
-{
-	if (pCarriageInstance->firstArg == CW_REG_CODE)
-		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
-			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
-			pCarriageInstance->errorOcurred = CW_TRUE;
-	if (pCarriageInstance->secondArg == CW_DIR_CODE)
-		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
-			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
-			pCarriageInstance->errorOcurred = CW_TRUE;
-	if (pCarriageInstance->thirdArg == CW_IND_CODE)
-		if (pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] < 1 ||
-			pArenaObj->pField[(pCarriageInstance->currentLocation + 1) % MEM_SIZE] > 16)
+	if (type == CW_REG_CODE)
+		pCarriageInstance->offset += 1;
+	else if (type == CW_DIR_CODE)
+		pCarriageInstance->offset += pCarriageInstance->pCurrentCommand->dirSize;
+	else if (type == CW_IND_CODE)
+		pCarriageInstance->offset += 2;
+	if (type == CW_REG_CODE)
+		if (pArenaObj->pField[(pCarriageInstance->currentLocation + pCarriageInstance->offset) % MEM_SIZE] < 1 ||
+			pArenaObj->pField[(pCarriageInstance->currentLocation + pCarriageInstance->offset) % MEM_SIZE] > 16)
 			pCarriageInstance->errorOcurred = CW_TRUE;
 }
 
@@ -48,7 +41,10 @@ static void	cwWriteOwnerIdToReg(carriage_t *pSelfCarriage)
 
 	iter = CW_ITERATOR;
 	while (iter < CW_REG_SIZE)
+	{
 		pSelfCarriage->pRegisters[iter] = (-pSelfCarriage->pOwnerCarriage->id << (iter * 8)) >> 24;
+		++iter;
+	}
 }
 
 static void	cwCheckCarry(carriage_t *pCarriageInstance)
@@ -143,8 +139,8 @@ static void	cwReadOperation(carriage_t *pCarriageInstance, arena_t *pArenaObj, b
 		pCarriageInstance->cwMoveTo	(pCarriageInstance, pArenaObj->paBufferSet[CW_SYSTEM_BUF]->sTypes.shortValue - pCarriageInstance->odometer);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i, pCarriageInstance->cwMoveTo(pCarriageInstance, 1))
 			pBufferObj->pData[i] = pArenaObj->pField[pCarriageInstance->currentLocation];
-		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
 		pCarriageInstance->cwConversionBytesToValue(pCarriageInstance, pBufferObj, CW_INT);
+		pCarriageInstance->cwCarriageReturn(pCarriageInstance, CW_ADDIT_SAVE);
 	}
 }
 
@@ -162,6 +158,7 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 					break;
 		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
+		pCarriageInstance->cwRegCheck(pCarriageInstance, pArenaObj, pCarriageInstance->firstArg);
 		pCarriageInstance->secondArg	= (pArenaObj->pField[pCarriageInstance->currentLocation] & 0x30) >> 4;
 		iter = -1;
 		if ((pCarriageInstance->pCurrentCommand->args >> 16) & 0xff)
@@ -170,6 +167,7 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 					break;
 		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
+		pCarriageInstance->cwRegCheck(pCarriageInstance, pArenaObj, pCarriageInstance->secondArg);
 		pCarriageInstance->thirdArg		= (pArenaObj->pField[pCarriageInstance->currentLocation] & 0x0c) >> 2;
 		iter = -1;
 		if ((pCarriageInstance->pCurrentCommand->args >> 8) & 0xff)
@@ -178,6 +176,7 @@ static void	cwParseTypes(carriage_t *pCarriageInstance, arena_t *pArenaObj)
 					break;
 		if (iter == 3 && (pCarriageInstance->errorOcurred = CW_TRUE))
 			return ;
+		pCarriageInstance->cwRegCheck(pCarriageInstance, pArenaObj, pCarriageInstance->thirdArg);
 	}
 	else
 	{
@@ -250,6 +249,7 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 		pCarriageInstance->errorOcurred = CW_TRUE;
 		return ;
 	}
+	pCarriageInstance->offset			= 0;
 	pCarriageInstance->errorOcurred 	= CW_FALSE;
 	pCarriageInstance->pCurrentCommand	= pCarriageInstance->ppCommandContainer[pArenaInstance->pField[pCarriageInstance->currentLocation]];
 	pCarriageInstance->waitingTime		= pCarriageInstance->pCurrentCommand->waitingTime;
@@ -257,15 +257,18 @@ static void	cwSetCommandTime(carriage_t *pCarriageInstance, arena_t *pArenaInsta
 	pCarriageInstance->cwMoveTo		(pCarriageInstance, CW_NAME_PASS);
 }
 
-static void	cwSetOwner(carriage_t *pCarriageInstance, player_t *pPlayerList, int playerAmount)
+static void	cwSetOwner(carriage_t *pCarriageInstance, player_t *pPlayerList, int playersAmount)
 {
 	int		iter;
 
 	iter = CW_BEGIN_FROM_ZERO;
-	while (iter < playerAmount)
+	while (iter < playersAmount)
 	{
-		if (pPlayerList->id == -pCarriageInstance->id)
+		if (pPlayerList->id == (playersAmount + 1) - pCarriageInstance->id)
+		{
 			pCarriageInstance->pOwnerCarriage = pPlayerList;
+			pCarriageInstance->id = -pPlayerList->id;
+		}
 		pPlayerList = pPlayerList->pNext;
 		++iter;
 	}
@@ -323,6 +326,7 @@ static void	cwConstructor(carriage_t **ppCarriageInstance)
 	(*ppCarriageInstance)->pOwnerCarriage	= NULL;
 	(*ppCarriageInstance)->pNext			= NULL;
 	(*ppCarriageInstance)->pPrev			= NULL;
+	(*ppCarriageInstance)->offset			= 0;
 }
 
 static void	cwDestructor(carriage_t **ppCarriageInstance)
@@ -354,6 +358,7 @@ extern void	cwCreateInstanceCarriage(carriage_t **ppCarriageObj)
 	(*ppCarriageObj)->cwReturnProtocolActivate	= cwReturnProtocolActivate;
 	(*ppCarriageObj)->cwSetOwner				= cwSetOwner;
 	(*ppCarriageObj)->cwCopyReg					= cwCopyReg;
+	(*ppCarriageObj)->cwRegCheck				= cwRegCheck;
 	(*ppCarriageObj)->cwConstructor				(ppCarriageObj);
 }
 

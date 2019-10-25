@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cwGameObject.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 15:03:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/25 19:17:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ typedef struct			corewar_s
 	player_t			*pPlayerObj;
 	arena_t				*pArenaObj;
 
+	queue_t				*pExecutionQueue;
+	stack_t				*pDistributionStack;
+	queue_t				*pWaitingQueue;
+
 	void				(*cwConstructor)		(corewar_t **);
 	void				(*cwCarriageObjInit)	(corewar_t *);
 	void				(*cwCommandObjInit)		(corewar_t *);
 	void				(*cwPlayerObjInit)		(corewar_t *, int, char **);
 	void				(*cwArenaObjInit)		(corewar_t *);
-	void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *);
+	void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *, int);
 	void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
 	void				(*cwFreeAllCarriages)	(corewar_t *);
 	void				(*cwFreeAllPlayers)		(corewar_t *);
