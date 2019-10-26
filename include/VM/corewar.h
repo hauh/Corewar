@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/25 14:55:30 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/26 18:22:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include "cwErrorObject.h"
 # include "cwGameObject.h"
 # include "cwPlayerObject.h"
+# include "cwQueueObject.h"
+# include "cwStackObject.h"
 
 /*
 ** Subject's defines
@@ -186,12 +188,13 @@ void						lldiExec	(corewar_t *game);
 void						lforkExec	(corewar_t *game);
 void						affExec		(corewar_t *game);
 
-void						cwCreateInstanceGame(corewar_t **ppGameObj);
-void						cwCreateInstancePlayer(player_t **ppPlayerObj);
-void						cwCreateInstanceCommand(command_t **ppCommandObj);
-void						cwCreateInstanceCarriage(carriage_t **ppCarriageObj);
-void						cwCreateInstanceBuffer(buffer_t **ppBufferObj);
-void						cwCreateInstanceArena(arena_t **ppArenaObj);
+void						cw_create_instance_game(corewar_t **pp_game_obj);
+void						cw_create_instance_player(player_t **pp_player_obj);
+void						cw_create_instance_command(command_t **pp_command_obj);
+void						cw_create_instance_carriage(carriage_t **pp_carriage_obj);
+void						cw_create_instance_buffer(buffer_t **pp_buffer_obj);
+void						cw_create_instance_arena(arena_t **pp_arena_obj);
+void						cw_create_instance_stack(stackk_t **pp_stack_obj);
 void						cwErrorCatcher(int error_code, const char *section);
 
 #endif

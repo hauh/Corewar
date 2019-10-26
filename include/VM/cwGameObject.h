@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cwGameObject.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/25 19:17:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/26 18:17:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,43 +19,44 @@
 
 typedef struct			corewar_s
 {
-	flag_t				loadDump;
+	flag_t				load_dump;
 	flag_t				visualizator;
 
-	int					playersAmount;
-	int					commandsAmount;
-	int					carriagesAmount;
-	int					queueSize;
+	int					players_amount;
+	int					commands_amount;
+	int					carriages_amount;
+	int					queue_size;
 
-	carriage_t			*pCarriageObj;
-	carriage_t			*pWaitingQueue;
-	command_t			*paCommands[CW_COMMAND_AMOUNT];
-	player_t			*pPlayerObj;
-	arena_t				*pArenaObj;
+	carriage_t			*p_carriage_obj;
+	command_t			*pa_commands[CW_COMMAND_AMOUNT];
+	player_t			*p_player_obj;
+	arena_t				*p_arena_obj;
 
-	queue_t				*pExecutionQueue;
-	stack_t				*pDistributionStack;
-	queue_t				*pWaitingQueue;
+	queue_t				*p_execution_queue;
+	stackk_t			*p_distribution_stack;
+	queue_t				*p_waiting_queue;
 
-	void				(*cwConstructor)		(corewar_t **);
-	void				(*cwCarriageObjInit)	(corewar_t *);
-	void				(*cwCommandObjInit)		(corewar_t *);
-	void				(*cwPlayerObjInit)		(corewar_t *, int, char **);
-	void				(*cwArenaObjInit)		(corewar_t *);
-	void				(*cwAddCarriageToList)	(corewar_t *, carriage_t *, int);
-	void				(*cwAddPlayerToList)	(corewar_t *, player_t *);
-	void				(*cwFreeAllCarriages)	(corewar_t *);
-	void				(*cwFreeAllPlayers)		(corewar_t *);
-	void 				(*cwFreeAllCommand)		(corewar_t *);
-	void				(*cwArrangeUnitsOnField)(corewar_t *);
-	void				(*cwIntroducePlayers)	(corewar_t *);
-	void				(*cwCongratulations)	(corewar_t *);
-	void				(*cwDeleteCarriage)		(corewar_t *, int *);
-	void				(*cwMainChecking)		(corewar_t *);
-	void				(*cwStartGame)			(corewar_t *);
-	void				(*cwPushToQueue)		(corewar_t *, carriage_t *);
-	void				(*cwMergeQueueToList)	(corewar_t *);
-	void				(*cwDestructor)			(corewar_t **);
+	void				(*cw_constructor)			(corewar_t **);
+	void				(*cw_carriage_obj_init)		(corewar_t *);
+	void				(*cw_command_obj_init)		(corewar_t *);
+	void				(*cw_player_obj_init)		(corewar_t *, int, char **);
+	void				(*cw_arena_obj_init)		(corewar_t *);
+	void				(*cw_add_carriage_to_list)	(corewar_t *, carriage_t *, int);
+	void				(*cw_add_player_to_list)	(corewar_t *, player_t *);
+	void				(*cw_free_all_carriages)	(corewar_t *);
+	void				(*cw_free_all_players)		(corewar_t *);
+	void 				(*cw_free_all_command)		(corewar_t *);
+	void				(*cw_arrange_units_on_field)(corewar_t *);
+	void				(*cw_introduce_players)		(corewar_t *);
+	void				(*cw_congratulations)		(corewar_t *);
+	void				(*cw_delete_carriage)		(corewar_t *, int *);
+	void				(*cw_main_checking)			(corewar_t *);
+	void				(*cw_start_game)			(corewar_t *);
+	void				(*cw_push_to_queue)			(corewar_t *, carriage_t *);
+	void				(*cw_merge_queue_to_list)	(corewar_t *);
+	void				(*cw_stack_obj_init)		(corewar_t *);
+	void				(*cw_queue_obj_init)		(corewar_t *);
+	void				(*cw_destructor)			(corewar_t **);
 }						corewar_t;
 
 #endif

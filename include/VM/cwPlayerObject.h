@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:19:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/21 15:46:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/26 17:29:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,24 @@
 typedef struct		player_s
 {
 	int				id;
-	int				codeSize;
-	int				carriageId;
-	int				binaryLabel;
+	int				code_size;
+	int				carriage_id;
+	int				binary_label;
 
-	unsigned char	*pCode;
-	unsigned char	*pName;
-	unsigned char	*pSource;
-	unsigned char	*pComment;
+	unsigned char	*p_code;
+	unsigned char	*p_name;
+	unsigned char	*p_source;
+	unsigned char	*p_comment;
 
-	struct player_s	*pNext;
-	struct player_s	*pPrev;
+	struct player_s	*p_next;
+	struct player_s	*p_prev;
 
-	void			(*cwConstructor)	(player_t **);
-	void			(*cwSetId)			(player_t *, int *, int, int);
-	void			(*cwReadFile)		(player_t *, const char *);
-	void			(*cwSelfBuild)		(player_t *);
-	void			(*cwSelfValidate)	(player_t *);
-	void			(*cwDestructor)		(player_t **);
+	void			(*cw_constructor)	(player_t **);
+	void			(*cw_set_id)		(player_t *, int *, int, int);
+	void			(*cw_read_file)		(player_t *, const char *);
+	void			(*cw_self_build)	(player_t *);
+	void			(*cw_self_validate)	(player_t *);
+	void			(*cw_destructor)	(player_t **);
 }					player_t;
 
 #endif

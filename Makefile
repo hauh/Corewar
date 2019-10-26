@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/24 19:27:41 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/26 18:01:19 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,15 +20,17 @@ VM_DIR_INCLUDE	:=		include/VM
 VIS_DIR_INCLUDE :=		include/VIS
 DIR_BIN			:=		bin/
 
-VM_SOURCE		:=		cwCarriageObject.c \
-							cwCommandObject.c \
-								cwBufferObject.c \
-									cwPlayerObject.c \
-										cwArenaObject.c \
-											cwErrorObject.c \
-												cwGameObject.c \
-													cwCallback.c  \
-														cwMain.c
+VM_SOURCE		:=		cw_carriage_object.c \
+							cw_command_object.c \
+								cw_buffer_object.c \
+									cw_player_object.c \
+										cw_arena_object.c \
+											cw_error_object.c \
+												cw_game_object.c \
+													cw_callback.c  \
+														cw_queue_object.c \
+															cw_stack_object.c \
+																cw_main.c
 
 VM_HEADERS		:=		cwCarriageObject.h \
 							cwCommandObject.h \
@@ -37,7 +39,9 @@ VM_HEADERS		:=		cwCarriageObject.h \
 										cwArenaObject.h \
 												cwGameObject.h \
 													cwTypedefObjects.h \
-														corewar.h
+														cwQueueObject.h \
+															cwStackObject.h \
+																corewar.h
 
 OBJ				:=		$(VM_SOURCE:.c=.o)
 OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ))
