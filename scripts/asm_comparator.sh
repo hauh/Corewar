@@ -1,14 +1,28 @@
 #!/bin/bash
 
-S_DIR=./vm_champs/champs/championships/*/*/
-MY_ASM=./asm
-OG_ASM=./vm_champs/asm
+OG_ASM="../vm_champs/asm"
+MY_ASM="../asm"
 GREEN="\e[32m"
 RED="\e[31m"
 YELLOW="\e[1;33m"
 EOC="\e[0m"
 
-for S_FILE in ${S_DIR}*.s ; do
+if [ ! -f "$MY_ASM" ]; then
+	echo "File $MY_ASM does not exist"
+	exit 1
+fi
+
+if [ ! -f "$OG_ASM" ]; then
+	echo "File $OG_ASM does not exist"
+	exit 1
+fi
+
+if [ -z "$1" ] ; then
+	echo "Usage: asm_comparator.sh dirname"
+	exit 1
+fi
+
+for S_FILE in "${1}"*.s ; do
 	${MY_ASM} ${S_FILE} >/dev/null
 	COR="${S_FILE%".s"}.cor"
 	if [[ -e ${COR} ]] ; then
