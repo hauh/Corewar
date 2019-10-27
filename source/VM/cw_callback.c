@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 19:59:22 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 20:09:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,6 @@ void	stiExec(corewar_t *p_game_obj)
 	if (p_game_obj->p_carriage_obj->error_ocurred)
 		return ;
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
-	for (int i = p_game_obj->p_carriage_obj->current_register * CW_REG_SIZE; i < p_game_obj->p_carriage_obj->current_register * CW_REG_SIZE + 4; ++i)
-	{
-		ft_printf("%02x ", p_game_obj->p_carriage_obj->p_registers[i]);
-		if ((i + 1) % 4 == 0)
-			ft_printf("\n");
-	}
-	ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
-	if (p_game_obj->p_arena_obj->cycle_amount >= 5600)
-		exit(1);
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2], p_game_obj->p_carriage_obj->second_arg);
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
 	p_game_obj->p_arena_obj->pa_buffer_set[CW_SPARE_BUF]->s_types.int_value = ((p_game_obj->p_carriage_obj->second_arg == CW_DIR_CODE ? p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2]->s_types.short_value :
