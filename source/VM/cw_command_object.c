@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 20:13:19 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 20:09:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 20:14:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	cw_recognize_command(command_t *p_command_instance, int command)
 	else if (command == CW_LFORK)
 		p_command_instance->cw_put_param(p_command_instance, CW_LFORK, CW_DIR,					CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 1000, CW_FALSE, &lforkExec);
 	else if (command == CW_AFF)
-		p_command_instance->cw_put_param(p_command_instance, CW_AFF,	CW_REG,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 20, CW_TRUE, &affExec);
+		p_command_instance->cw_put_param(p_command_instance, CW_AFF,	CW_REG,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 2, CW_TRUE, &affExec);
 }
 
 static void	cw_constructor(command_t **pp_command_instance)

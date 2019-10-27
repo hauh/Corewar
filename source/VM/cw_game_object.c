@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 19:50:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 20:20:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ static void	cwIntroducePlayers(corewar_t *gameInstance)
 	ft_printf("Introducing contestants...\n");
 	while (iter < gameInstance->carriages_amount)
 	{
-		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
+		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
 		gameInstance->p_carriage_obj->p_owner->id,
 		gameInstance->p_carriage_obj->p_owner->code_size,
 		gameInstance->p_carriage_obj->p_owner->p_name,

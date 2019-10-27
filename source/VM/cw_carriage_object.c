@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 20:09:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 20:19:22 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void		cw_write_operation(carriage_t *p_carriage_instance, arena_t *p_arena_obj, 
 	{
 		p_carriage_instance->current_register = p_arena_obj->p_field[p_carriage_instance->current_location] - 1;
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i)
-			p_carriage_instance->p_registers[i + (p_carriage_instance->current_register * CW_REG_SIZE)] = pBufferObj->p_data[i];
+			p_carriage_instance->p_registers[i + p_carriage_instance->current_register * CW_REG_SIZE] = pBufferObj->p_data[i];
 		p_carriage_instance->cw_move_to(p_carriage_instance, CW_REG_CODE_SIZE);
 	}
 	else if (inputArg == CW_DIR_CODE)
@@ -163,7 +163,7 @@ static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj
 		iter = -1;
 		if ((p_carriage_instance->p_current_command->args >> 16) & 0xff)
 			while (++iter < 3)
-				if ((p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (18 + (iter * 2))) & 0xff)) == p_carriage_instance->second_arg)
+				if ((p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (18 + (iter * 2))))) == p_carriage_instance->second_arg)
 					break;
 		if (iter == 3 && (p_carriage_instance->error_ocurred = CW_TRUE))
 			return ;
