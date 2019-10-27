@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 18:03:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:03:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,9 @@ static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj
 	}
 	else
 	{
-		p_carriage_instance->first_arg		= CW_DIR_CODE;
+		p_carriage_instance->first_arg = CW_DIR_CODE;
 		p_carriage_instance->second_arg	= CW_FALSE;
-		p_carriage_instance->third_arg		= CW_FALSE;
+		p_carriage_instance->third_arg = CW_FALSE;
 	}
 	p_carriage_instance->cw_move_to(p_carriage_instance, p_carriage_instance->p_current_command->type_byte);
 }

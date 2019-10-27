@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 14:46:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:35:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ int				main(int argc, char **argv)
 	p_game_obj->cw_player_obj_init(p_game_obj, argc, argv);
 	p_game_obj->cw_carriage_obj_init(p_game_obj);
 	p_game_obj->cw_command_obj_init(p_game_obj);
+	// for (int i = 1; i < CW_COMMAND_AMOUNT; ++i)
+	// {
+	// 	ft_printf("%d %d %d %d %d %d")
+	// }
 	p_game_obj->cw_arrange_units_on_field(p_game_obj);
 	p_game_obj->cw_introduce_players(p_game_obj);
 	p_game_obj->cw_start_game(p_game_obj);
