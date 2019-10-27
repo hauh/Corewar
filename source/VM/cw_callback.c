@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 19:35:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:37:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ void	ldExec(corewar_t *p_game_obj)
 
 void	stExec(corewar_t *p_game_obj)
 {
-	// if (p_game_obj->p_arena_obj->cycle_amount >= 5558)
-	// {
-	// 	ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
-	// 	exit(1);
-	// }
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
 	p_game_obj->p_carriage_obj->cw_read_operation	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);

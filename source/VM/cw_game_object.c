@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 19:35:40 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:46:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,6 @@ static void	cw_start_game(corewar_t *p_game_instance)
 	while (p_game_instance->p_carriage_obj && ++p_game_instance->p_arena_obj->cycle_amount)
 	{
 		iter = CW_BEGIN_FROM_ZERO;
-		// if (p_game_instance->p_arena_obj->cycle_amount == 3083)
-		// {
-		// 	ft_printf("%d\n", p_game_instance->p_arena_obj->live_amount);
-		// 	exit(1);
-		// }
 		while (iter < p_game_instance->carriages_amount)
 		{
 			p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
@@ -162,7 +157,7 @@ static void	cwIntroducePlayers(corewar_t *gameInstance)
 	ft_printf("Introducing contestants...\n");
 	while (iter < gameInstance->carriages_amount)
 	{
-		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
+		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\")\n",
 		gameInstance->p_carriage_obj->p_owner->id,
 		gameInstance->p_carriage_obj->p_owner->code_size,
 		gameInstance->p_carriage_obj->p_owner->p_name,
