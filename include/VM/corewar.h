@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 18:22:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 13:05:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ void						cw_create_instance_carriage(carriage_t **pp_carriage_obj);
 void						cw_create_instance_buffer(buffer_t **pp_buffer_obj);
 void						cw_create_instance_arena(arena_t **pp_arena_obj);
 void						cw_create_instance_stack(stackk_t **pp_stack_obj);
+void						cw_create_instance_queue(queue_t **pp_queue_obj);
 void						cwErrorCatcher(int error_code, const char *section);
 
 #endif

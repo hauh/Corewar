@@ -6,16 +6,15 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 18:06:48 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:53:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static int		cw_time_to_check(arena_t *p_arena_instance)
+static int		cw_time_to_check(arena_t *p_arena_instance, int last_check_cycle)
 {
-	if (p_arena_instance->cycle_to_die <= 0 ||
-	!(p_arena_instance->cycle_amount % p_arena_instance->cycle_to_die))
+	if (p_arena_instance->cycle_to_die <= 0 || p_arena_instance->cycle_amount - last_check_cycle == p_arena_instance->cycle_to_die)
 		return (CW_TRUE);
 	else
 		return (CW_FALSE);

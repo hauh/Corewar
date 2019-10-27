@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 18:17:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:50:03 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct			corewar_s
 	int					commands_amount;
 	int					carriages_amount;
 	int					queue_size;
+	int					last_check_cycle;
 
 	carriage_t			*p_carriage_obj;
 	command_t			*pa_commands[CW_COMMAND_AMOUNT];
@@ -34,7 +35,7 @@ typedef struct			corewar_s
 
 	queue_t				*p_execution_queue;
 	stackk_t			*p_distribution_stack;
-	queue_t				*p_waiting_queue;
+	carriage_t			*p_waiting_queue;
 
 	void				(*cw_constructor)			(corewar_t **);
 	void				(*cw_carriage_obj_init)		(corewar_t *);
@@ -49,13 +50,13 @@ typedef struct			corewar_s
 	void				(*cw_arrange_units_on_field)(corewar_t *);
 	void				(*cw_introduce_players)		(corewar_t *);
 	void				(*cw_congratulations)		(corewar_t *);
-	void				(*cw_delete_carriage)		(corewar_t *, int *);
 	void				(*cw_main_checking)			(corewar_t *);
 	void				(*cw_start_game)			(corewar_t *);
-	void				(*cw_push_to_queue)			(corewar_t *, carriage_t *);
-	void				(*cw_merge_queue_to_list)	(corewar_t *);
 	void				(*cw_stack_obj_init)		(corewar_t *);
 	void				(*cw_queue_obj_init)		(corewar_t *);
+	void				(*cw_push_to_queue)			(corewar_t *, carriage_t *);
+	void				(*cw_merge_queue_to_list)	(corewar_t *);
+	void				(*cw_delete_carriage)		(corewar_t *, int *);
 	void				(*cw_destructor)			(corewar_t **);
 }						corewar_t;
 

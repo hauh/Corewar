@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 19:56:22 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/27 18:03:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj
 		iter = -1;
 		if ((p_carriage_instance->p_current_command->args >> 24) & 0xff)
 			while (++iter < 3)
-				if (p_carriage_instance->first_arg & (p_carriage_instance->p_current_command->args >> (26 + (iter * 2))))
+				if ((p_carriage_instance->first_arg & (p_carriage_instance->p_current_command->args >> (26 + (iter * 2)))) == p_carriage_instance->first_arg)
 					break;
 		if (iter == 3 && (p_carriage_instance->error_ocurred = CW_TRUE))
 			return ;
@@ -163,7 +163,7 @@ static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj
 		iter = -1;
 		if ((p_carriage_instance->p_current_command->args >> 16) & 0xff)
 			while (++iter < 3)
-				if (p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (18 + (iter * 2))) & 0xff))
+				if ((p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (18 + (iter * 2))) & 0xff)) == p_carriage_instance->second_arg)
 					break;
 		if (iter == 3 && (p_carriage_instance->error_ocurred = CW_TRUE))
 			return ;
@@ -172,7 +172,7 @@ static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj
 		iter = -1;
 		if ((p_carriage_instance->p_current_command->args >> 8) & 0xff)
 			while (++iter < 3)
-				if (p_carriage_instance->third_arg & (p_carriage_instance->p_current_command->args >> (10 + (iter * 2))))
+				if ((p_carriage_instance->third_arg & (p_carriage_instance->p_current_command->args >> (10 + (iter * 2)))) == p_carriage_instance->third_arg)
 					break;
 		if (iter == 3 && (p_carriage_instance->error_ocurred = CW_TRUE))
 			return ;
