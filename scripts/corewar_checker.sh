@@ -4,7 +4,7 @@ OG_COREWAR="../vm_champs/corewar"
 MY_COREWAR="../corewar"
 
 if [ -z "$1" ] ;
-	then echo "Usage: corewar_checker.sh filename"
+	then echo "Usage: corewar_checker.sh filenames ..."
 	exit 1
 fi
 
@@ -23,8 +23,8 @@ STEP=1000
 
 while [ 1 ]; do
 	printf "\rCurrent cycle: $CYCLE"
-	${OG_COREWAR} -d $CYCLE $1 >og_dump
-	${MY_COREWAR} -d $CYCLE $1 >my_dump
+	${OG_COREWAR} -d $CYCLE $@ >og_dump
+	${MY_COREWAR} -d $CYCLE $@ >my_dump
 	if ! diff -q og_dump my_dump &>/dev/null; then
 		if [ $STEP == 1 ]; then
 			printf "\rDifferent output at cycle $CYCLE\n"

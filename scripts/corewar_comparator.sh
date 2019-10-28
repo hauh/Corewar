@@ -3,6 +3,11 @@
 OG_COREWAR="../vm_champs/corewar"
 MY_COREWAR="../corewar"
 
+if [ -z "$1" ]; then
+	echo "Usage: corewar_comparator.sh filenames ..."
+	exit 1
+fi
+
 if [ ! -f "$MY_COREWAR" ]; then
 	echo "File $MY_COREWAR does not exist"
 	exit 1
@@ -13,19 +18,23 @@ if [ ! -f "$OG_COREWAR" ]; then
 	exit 1
 fi
 
-if [ -z "$1" ]; then
-	echo "Usage: corewar_comparator.sh filename [number of cycles (default: 1000)]"
+read -p "Cycle to check: " CYCLE
+
+if [[ ! "$CYCLE" =~ ^[0-9]+$ ]]; then
+	echo "Incorrect number"
 	exit 1
 fi
 
-if [ -n "$2" ]; then
-	CYCLES=$2
-else
-	CYCLES="1000"
+${OG_COREWAR} -d $CYCLE $@ >og_dump
+${MY_COREWAR} -d $CYCLE $@ >my_dump
+
+if diff og_dump my_dump &>/dev/null; then
+	echo "No difference at cycle $CYCLE"
+	rm og_dump
+	rm my_dump
+	exit 0;
 fi
 
-${OG_COREWAR} -d $CYCLES $1 >og_dump
-${MY_COREWAR} -d $CYCLES $1 >my_dump
 printf "\e[1;33mog_dump\n\e[0;m"
 printf "\e[0;32mmy_dump\n\n\e[0;m"
 
