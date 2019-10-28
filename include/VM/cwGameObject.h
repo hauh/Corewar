@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 16:50:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:11:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct			corewar_s
 	int					carriages_amount;
 	int					queue_size;
 	int					last_check_cycle;
+	int					numerate_carriage;
 
 	carriage_t			*p_carriage_obj;
 	command_t			*pa_commands[CW_COMMAND_AMOUNT];

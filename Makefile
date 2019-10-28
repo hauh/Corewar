@@ -6,7 +6,7 @@
 #    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/26 18:01:19 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/28 16:30:58 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,47 +20,63 @@ VM_DIR_INCLUDE	:=		include/VM
 VIS_DIR_INCLUDE :=		include/VIS
 DIR_BIN			:=		bin/
 
-VM_SOURCE		:=		cw_carriage_object.c \
-							cw_command_object.c \
-								cw_buffer_object.c \
-									cw_player_object.c \
-										cw_arena_object.c \
-											cw_error_object.c \
-												cw_game_object.c \
-													cw_callback.c  \
-														cw_queue_object.c \
-															cw_stack_object.c \
-																cw_main.c
+VM_SOURCE		:=		cw_carriage_object.c	\
+						cw_command_object.c		\
+						cw_buffer_object.c		\
+						cw_player_object.c		\
+						cw_arena_object.c		\
+						cw_error_object.c		\
+						cw_game_object.c		\
+						cw_callback.c			\
+						cw_queue_object.c		\
+						cw_stack_object.c		\
+						cw_main.c
 
-VM_HEADERS		:=		cwCarriageObject.h \
-							cwCommandObject.h \
-								cwBufferObject.h \
-									cwPlayerObject.h \
-										cwArenaObject.h \
-												cwGameObject.h \
-													cwTypedefObjects.h \
-														cwQueueObject.h \
-															cwStackObject.h \
-																corewar.h
+VIS_SOURCE		:=		cr_vis_buildmap.c	\
+						cr_vis_control.c	\
+						cr_vis_init.c		\
+						cr_vis_main.c		\
+						cr_vis_printinfo.c	\
+						cr_vis_updatemap.c	\
+
+
+VM_HEADERS		:=		cwCarriageObject.h	\
+						cwCommandObject.h	\
+						cwBufferObject.h	\
+						cwPlayerObject.h	\
+						cwArenaObject.h		\
+						cwGameObject.h		\
+						cwTypedefObjects.h	\
+						cwQueueObject.h		\
+						cwStackObject.h		\
+						corewar.h
+
+VIS_HEADER		:=		cr_vis.h
 
 OBJ				:=		$(VM_SOURCE:.c=.o)
-OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ))
+VIS_OBJ			:=		$(VIS_SOURCE:.c=.o)
+OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))
 
 LIBFT			:=		libft.a
 LIBFTPRINTF		:=		libftprintf.a
 
 vpath %.c $(VM_DIR_SOURCE)
+vpath %.c $(VIS_DIR_SOURCE)
 vpath %.h $(VM_DIR_INCLUDE)
+vpath %.h $(VIS_DIR_INCLUDE)
 vpath %.o $(DIR_BIN)
 vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT) $(LIBFTPRINTF)
+$(NAME): $(OBJ) $(VIS_OBJ) $(LIBFT) $(LIBFTPRINTF)
 	gcc $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 
 $(OBJ):%.o:%.c $(VM_HEADERS) | $(DIR_BIN)
 	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
+
+$(VIS_OBJ):%.o:%.c $(VIS_HEADER)
+	gcc -g -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(VIS_DIR_INCLUDE) -I $(VM_DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
 
 $(DIR_BIN):
 	mkdir -p $@

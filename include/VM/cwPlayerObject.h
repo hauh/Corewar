@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:19:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 17:29:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 14:21:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct		player_s
 	int				code_size;
 	int				carriage_id;
 	int				binary_label;
+	int				live_amount;
 
 	unsigned char	*p_code;
 	unsigned char	*p_name;

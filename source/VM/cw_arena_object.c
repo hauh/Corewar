@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 20:06:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:17:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void		cw_print_field(arena_t *p_arena_instance)
 		++iter;
 	}
 	ft_printf("\n");
+	exit(1);
 }
 
 static void		cw_buffer_init(arena_t *p_arena_instance)

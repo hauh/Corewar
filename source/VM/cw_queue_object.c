@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 18:13:31 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 14:43:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:09:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,6 @@ static int		cw_get_value(queue_t *p_queue_instance, int index)
 	}
 	return (0);
 }
-
-// static void		cw_sort(queue_t *p_queue_instance, int low, int high)
-// {
-// 	int			pivot;
-// 	int			i;
-// 	int			j;
-// 	int			p;
-
-// 	if (low < high)
-// 	{
-// 		pivot =	;
-// 		i = low;
-// 		j = high;
-// 		while (1)
-// 		{
-// 			while()
-// 		}
-// 	}
-// }
 
 static void		cw_print_content(queue_t *p_queue_instance)
 {

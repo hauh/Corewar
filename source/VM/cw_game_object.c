@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 20:20:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:23:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void		cw_main_checking(corewar_t *p_game_instance)
 	p_game_instance->last_check_cycle = p_game_instance->p_arena_obj->cycle_amount;
 	while (iter < p_game_instance->carriages_amount)
 	{
+		p_game_instance->p_carriage_obj ? p_game_instance->p_carriage_obj->p_owner->live_amount = 0 : CW_FALSE;
 		if ((p_game_instance->p_arena_obj->cycle_amount - p_game_instance->p_carriage_obj->last_speak_cycle) >= p_game_instance->p_arena_obj->cycle_to_die || p_game_instance->p_arena_obj->cycle_to_die <= 0)
 			p_game_instance->cw_delete_carriage(p_game_instance, &deleted_count);
 		p_game_instance->p_carriage_obj ? p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next : CW_FALSE;
@@ -112,10 +113,7 @@ static void	cw_start_game(corewar_t *p_game_instance)
 			p_game_instance->cw_main_checking(p_game_instance);
 		p_game_instance->cw_merge_queue_to_list(p_game_instance);
 		if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
-		{
 			p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-			exit(1);
-		}
 	}
 }
 
@@ -126,20 +124,18 @@ static void	cwArrangeUnitsOnField(corewar_t *p_game_instance)
 	int		memoryStep;
 	int		codeIter;
 
-	memoryStep	= MEM_SIZE / p_game_instance->players_amount;
-	iter		= CW_BEGIN_FROM_ZERO;
-	p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_prev;
+	memoryStep = MEM_SIZE / p_game_instance->players_amount;
+	iter = CW_BEGIN_FROM_ZERO;
 	while (iter < p_game_instance->carriages_amount)
 	{
+		p_game_instance->p_carriage_obj	= p_game_instance->p_carriage_obj->p_prev;
 		codeIter = CW_BEGIN_FROM_ZERO;
 		playerLocation = memoryStep * iter;
 		p_game_instance->p_carriage_obj->current_location = playerLocation;
 		while (playerLocation < memoryStep * iter + CHAMP_MAX_SIZE)
 			p_game_instance->p_arena_obj->p_field[playerLocation++] = p_game_instance->p_carriage_obj->p_owner->p_code[codeIter++];
-		p_game_instance->p_carriage_obj	= p_game_instance->p_carriage_obj->p_prev;
 		++iter;
 	}
-	p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
 }
 
 static void	cwCongratulations(corewar_t *p_game_instance)
@@ -157,12 +153,12 @@ static void	cwIntroducePlayers(corewar_t *gameInstance)
 	ft_printf("Introducing contestants...\n");
 	while (iter < gameInstance->carriages_amount)
 	{
+		gameInstance->p_carriage_obj = gameInstance->p_carriage_obj->p_prev;
 		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
 		gameInstance->p_carriage_obj->p_owner->id,
 		gameInstance->p_carriage_obj->p_owner->code_size,
 		gameInstance->p_carriage_obj->p_owner->p_name,
 		gameInstance->p_carriage_obj->p_owner->p_comment);
-		gameInstance->p_carriage_obj = gameInstance->p_carriage_obj->p_next;
 		++iter;
 	}
 }
@@ -253,9 +249,10 @@ static void		cwCarriageObjectInit(corewar_t *p_game_instance)
 		p_carriage_obj->pp_command_container = p_game_instance->pa_commands;
 		p_carriage_obj->cw_set_owner(p_carriage_obj, p_game_instance->p_player_obj, p_game_instance->players_amount);
 		p_carriage_obj->cw_write_owner_id_to_reg(p_carriage_obj);
-		p_game_instance->cw_add_carriage_to_list(p_game_instance, p_carriage_obj, 1);
+		p_game_instance->cw_add_carriage_to_list(p_game_instance, p_carriage_obj, 0);
 		++iter;
 	}
+	p_game_instance->numerate_carriage = p_game_instance->carriages_amount;
 	p_game_instance->p_arena_obj->cw_set_last_survivor(p_game_instance->p_arena_obj, p_game_instance->p_carriage_obj->p_prev->p_owner);
 }
 
@@ -342,6 +339,7 @@ static void		cw_arena_obj_init(corewar_t *gameInstance)
 static void		cw_constructor(corewar_t **pp_game_instance)
 {
 	(*pp_game_instance)->players_amount = 0;
+	(*pp_game_instance)->numerate_carriage = 0;
 	(*pp_game_instance)->commands_amount = 0;
 	(*pp_game_instance)->carriages_amount = 0;
 	(*pp_game_instance)->queue_size = 0;

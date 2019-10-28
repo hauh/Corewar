@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:59:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 12:18:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 14:22:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ static void	cw_constructor(player_t **pp_player_instance)
 	ft_memset((*pp_player_instance)->p_comment, 0, COMMENT_LENGTH);
 	ft_memset((*pp_player_instance)->p_name, 0, PROG_NAME_LENGTH);
 	(*pp_player_instance)->binary_label = 0;
+	(*pp_player_instance)->live_amount = 0;
 	(*pp_player_instance)->carriage_id = 0;
 	(*pp_player_instance)->code_size = 0;
 	(*pp_player_instance)->p_next = NULL;
