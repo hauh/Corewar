@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_updatemap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/24 17:08:29 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/28 16:45:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		cr_vis_getxcolour(int i)
 	if (c == COLOR_PAIR(1))
 		return (1);
 	else if (c == COLOR_PAIR(2))
-		return (2);	
+		return (2);
 	else if (c == COLOR_PAIR(3))
 		return (3);
 	else if (c == COLOR_PAIR(4))
@@ -65,13 +65,13 @@ int		cr_vis_printcar(corewar_t *cr)
 	int			colour;
 	int			i;
 
-	car = cr->pCarriageObj;
+	car = cr->p_carriage_obj;
 	i = -1;
-	while (++i < cr->carriagesAmount)
+	while (++i < cr->carriages_amount)
 	{
-		colour = cr_vis_getxcolour(car->currentLocation);
-		cr_vis_putx(cr->pArenaObj->pField[car->currentLocation], car->currentLocation, colour, 1, cr);
-		car = car->pNext;
+		colour = cr_vis_getxcolour(car->current_location);
+		cr_vis_putx(cr->p_arena_obj->p_field[car->current_location], car->current_location, colour, 1, cr);
+		car = car->p_next;
 	}
 	return (0);
 }
@@ -84,7 +84,7 @@ int		cr_vis_printdiff(corewar_t *cr)
 
 	i = -1;
 	f_vis = cr->vis->field;
-	f_cr = cr->pArenaObj->pField;
+	f_cr = cr->p_arena_obj->p_field;
 	while (++i < MEM_SIZE)
 	{
 		if (f_vis[i] != f_cr[i] || cr_vis_getxrev(i))

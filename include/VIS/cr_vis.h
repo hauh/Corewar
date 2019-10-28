@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/24 17:07:31 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/28 16:42:00 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,18 @@
 ** ---------------------------
 ** Visual typedefs
 */
+
+typedef struct			s_vis
+{
+	int					flow;
+	int					step;
+	int					exit;
+	int					tick;
+	int					fpsdiv;
+	unsigned char		*field;
+	long int			time;
+
+}						t_vis;
 
 enum						e_vis_act
 {

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 16:37:09 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:41:53 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct			corewar_s
 	queue_t				*p_execution_queue;
 	stackk_t			*p_distribution_stack;
 	carriage_t			*p_waiting_queue;
+
+	t_vis				*vis;
 
 	void				(*cw_constructor)			(corewar_t **);
 	void				(*cw_carriage_obj_init)		(corewar_t *);
