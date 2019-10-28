@@ -1,7 +1,7 @@
 #!/bin/bash
 
-OG_COREWAR="./samples/corewar"
-MY_COREWAR="./corewar"
+OG_COREWAR="../vm_champs/corewar"
+MY_COREWAR="../corewar"
 
 if [ ! -f "$MY_COREWAR" ]; then
 	echo "File $MY_COREWAR does not exist"

@@ -1,9 +1,12 @@
-#!bin/sh
+#!/bin/bash
 
-OG_COREWAR="./samples/corewar"
-MY_COREWAR="./corewar"
-CYCLE=1
-STEP=1000
+OG_COREWAR="../vm_champs/corewar"
+MY_COREWAR="../corewar"
+
+if [ -z "$1" ] ;
+	then echo "Usage: corewar_checker.sh filename"
+	exit 1
+fi
 
 if [ ! -f "$MY_COREWAR" ]; then
 	echo "File $MY_COREWAR does not exist"
@@ -15,10 +18,8 @@ if [ ! -f "$OG_COREWAR" ]; then
 	exit 1
 fi
 
-if [ -z "$1" ] ;
-	then echo "Usage: corewar_checker.sh filename"
-	exit 1
-fi
+CYCLE=1
+STEP=1000
 
 while [ 1 ]; do
 	printf "\rCurrent cycle: $CYCLE"
