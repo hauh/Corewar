@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 16:12:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 20:30:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,23 @@ void	liveExec(corewar_t *p_game_obj)
 
 void	ldExec(corewar_t *p_game_obj)
 {
+	if (p_game_obj->p_arena_obj->cycle_amount == 3265)
+		ft_printf("%d\n", p_game_obj->p_carriage_obj->current_location);
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[3] == 0x06)
+	{
+		ft_printf("\n%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		ft_printf("%d\n", p_game_obj->p_carriage_obj->current_location);
+		p_game_obj->p_arena_obj->cw_print_field(p_game_obj->p_arena_obj);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->second_arg);
+
 	p_game_obj->p_carriage_obj->cw_check_carry(p_game_obj->p_carriage_obj);
 }
 
@@ -39,7 +52,7 @@ void	stExec(corewar_t *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
-	p_game_obj->p_carriage_obj->cw_read_operation	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
+	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->second_arg);
 }
 
@@ -52,6 +65,14 @@ void	addExec(corewar_t *p_game_obj)
 	p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->s_types.int_value = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value + p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2]->s_types.int_value;
 	p_game_obj->p_carriage_obj->cw_conversion_value_to_bytes(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], CW_INT);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
@@ -64,6 +85,14 @@ void	subExec(corewar_t *p_game_obj)
 	p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->s_types.int_value = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value - p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2]->s_types.int_value;
 	p_game_obj->p_carriage_obj->cw_conversion_value_to_bytes(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], CW_INT);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
@@ -77,6 +106,14 @@ void	andExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_conversion_value_to_bytes(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], CW_INT);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 }
 
 void	orExec(corewar_t *p_game_obj)
@@ -88,6 +125,14 @@ void	orExec(corewar_t *p_game_obj)
 	p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->s_types.int_value = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value | p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2]->s_types.int_value;
 	p_game_obj->p_carriage_obj->cw_conversion_value_to_bytes(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], CW_INT);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
@@ -100,6 +145,14 @@ void	xorExec(corewar_t *p_game_obj)
 	p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->s_types.int_value = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value ^ p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_2]->s_types.int_value;
 	p_game_obj->p_carriage_obj->cw_conversion_value_to_bytes(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], CW_INT);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
@@ -127,6 +180,14 @@ void	ldiExec(corewar_t *p_game_obj)
 		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[i] = p_game_obj->p_arena_obj->p_field[p_game_obj->p_carriage_obj->current_location];
 	p_game_obj->p_carriage_obj->cw_carriage_return(p_game_obj->p_carriage_obj, CW_ADDIT_SAVE);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 }
 
 void	stiExec(corewar_t *p_game_obj)
@@ -156,9 +217,9 @@ void	forkExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
 	cw_create_instance_carriage(&p_carriage_obj);
 	p_game_obj->p_carriage_obj->cw_copy_reg(p_game_obj->p_carriage_obj, p_carriage_obj);
-	p_carriage_obj->carry					= p_game_obj->p_carriage_obj->carry;
-	p_carriage_obj->last_speak_cycle		= p_game_obj->p_carriage_obj->last_speak_cycle;
-	p_carriage_obj->current_location		= (p_game_obj->p_carriage_obj->current_location + (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value - p_game_obj->p_carriage_obj->odometer) % IDX_MOD) % MEM_SIZE;
+	p_carriage_obj->carry = p_game_obj->p_carriage_obj->carry;
+	p_carriage_obj->last_speak_cycle = p_game_obj->p_carriage_obj->last_speak_cycle;
+	p_carriage_obj->current_location = (p_game_obj->p_carriage_obj->current_location + (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value - p_game_obj->p_carriage_obj->odometer) % IDX_MOD) % MEM_SIZE;
 	if (p_carriage_obj->current_location < 0)
 		p_carriage_obj->current_location = MEM_SIZE + p_carriage_obj->current_location;
 	p_carriage_obj->pp_command_container = p_game_obj->p_carriage_obj->pp_command_container;
@@ -173,6 +234,14 @@ void	lldExec(corewar_t *p_game_obj)
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
 	p_game_obj->p_carriage_obj->cw_read_operation	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->second_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
@@ -191,6 +260,14 @@ void	lldiExec(corewar_t *p_game_obj)
 		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[i] = p_game_obj->p_arena_obj->p_field[p_game_obj->p_carriage_obj->current_location];
 	p_game_obj->p_carriage_obj->cw_carriage_return(p_game_obj->p_carriage_obj, CW_ADDIT_SAVE);
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[0] == 0x0f &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[1] == 0x03 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[2] == 0x70 &&
+		p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3]->p_data[3] == 0x06)
+	{
+		ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
+		exit(1);
+	}
 	p_game_obj->p_carriage_obj->cw_check_carry(p_game_obj->p_carriage_obj);
 }
 
