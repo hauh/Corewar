@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_buildmap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:52:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/24 17:08:06 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/28 16:36:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ int		cr_vis_printattr(int y, int x, char *str, int colour, int reverse)
 {
 	if (colour)
 		attron(COLOR_PAIR(colour));
-	if (reverse)	
+	if (reverse)
 		attron(A_REVERSE);
 	mvaddstr(y, x, str);
 	if (colour)
 		attroff(COLOR_PAIR(colour));
-	if (reverse)	
+	if (reverse)
 		attroff(A_REVERSE);
 	return (0);
 }
@@ -58,7 +58,7 @@ int		cr_vis_drawborder(void)
 			y == V_H - 1 || x == V_W - 2 || x == V_SEP ||
 			x == V_SEP - 1)
 				mvaddstr(y, x, V_BSYM);
-		}	
+		}
 	}
 	return (0);
 }
@@ -68,13 +68,13 @@ int		cr_vis_getcolour(int i, corewar_t *cr)
 	int			colour;
 	player_t	*player;
 
-	player = cr->pPlayerObj;
-	colour = i / (MEM_SIZE / cr->playersAmount);
-	if (cr->playersAmount == 3 && i == MEM_SIZE - 1)
+	player = cr->p_player_obj;
+	colour = i / (MEM_SIZE / cr->players_amount);
+	if (cr->players_amount == 3 && i == MEM_SIZE - 1)
 		return (0);
-	while (colour-- && player->pNext)
-		player = player->pNext;
-	return ((i % (MEM_SIZE / cr->playersAmount)) > player->codeSize - 1 ? 0 : player->id);
+	while (colour-- && player->p_next)
+		player = player->p_next;
+	return ((i % (MEM_SIZE / cr->players_amount)) > player->code_size - 1 ? 0 : player->id);
 }
 
 int		cr_vis_printmap(unsigned char *f, int f_len, corewar_t *cr)

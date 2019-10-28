@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 13:05:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/28 16:34:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include "ft_printf.h"
 # include "libft.h"
+# include "cr_vis.h"
 
 # include "cwArenaObject.h"
 # include "cwBufferObject.h"
