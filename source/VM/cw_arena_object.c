@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 20:33:01 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 15:31:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static void		cw_print_field(arena_t *p_arena_instance)
 	ft_printf("0x0000 : ");
 	while (iter < MEM_SIZE)
 	{
-		if (iter == 475)
-			ft_printf("@{red}%.2x @{eoc}", p_arena_instance->p_field[iter]);
-		else
+		//if (iter == 475)
+		//	ft_printf("@{red}%.2x @{eoc}", p_arena_instance->p_field[iter]);
+		//else
 			ft_printf("%.2x ", p_arena_instance->p_field[iter]);
 		if ((iter + 1) % border == 0 && iter != MEM_SIZE - 1)
 			ft_printf("\n%#06x : ", iter + 1);
