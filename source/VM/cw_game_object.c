@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_object.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/10/29 17:19:46 by vrichese         ###   ########.fr       */
+=======
+/*   Updated: 2019/10/29 15:37:28 by dbrady           ###   ########.fr       */
+>>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,21 +102,53 @@ static void	cw_start_game(corewar_t *p_game_instance)
 {
 	int		iter;
 
-	while (p_game_instance->p_carriage_obj && ++p_game_instance->p_arena_obj->cycle_amount)
+	cr_vis_main(p_game_instance, V_INIT);
+	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
+<<<<<<< HEAD
 		while (++iter < p_game_instance->carriages_amount)
+=======
+		cr_vis_main(p_game_instance, V_CONTROL);
+		if (p_game_instance->vis->exit)
+			p_game_instance->cw_destructor(&p_game_instance);
+		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
+>>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
 		{
-			p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
-			p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
-			p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
-			p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+			p_game_instance->p_arena_obj->cycle_amount += 1;
+			//if (p_game_instance->p_arena_obj->cycle_amount == 7415)
+			//{
+			//	for (int i = 0; i < p_game_instance->carriages_amount; ++i)
+			//	{
+			//		if (p_game_instance->p_carriage_obj->p_current_command && p_game_instance->p_carriage_obj->waiting_time == 1)
+			//			ft_printf("com:%d\n", p_game_instance->p_carriage_obj->p_current_command->id);
+			//		//ft_printf("%d\n", p_game_instance->p_carriage_obj->id);
+			//		p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+			//	}
+			//	exit(1);
+			//}
+			while (++iter < p_game_instance->carriages_amount)
+			{
+				p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
+				p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
+				p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
+				p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+			}
+			if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
+				p_game_instance->cw_main_checking(p_game_instance);
+			p_game_instance->cw_merge_queue_to_list(p_game_instance);
+			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
+				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+			cr_vis_main(p_game_instance, V_UPDATE);
 		}
+<<<<<<< HEAD
 		p_game_instance->cw_merge_queue_to_list(p_game_instance);
 		if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
 			p_game_instance->cw_main_checking(p_game_instance);
 		if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
 			p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+=======
+>>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
 	}
 }
 
@@ -353,6 +389,7 @@ static void		cw_constructor(corewar_t **pp_game_instance)
 
 static void		cw_destructor(corewar_t **pp_game_instance)
 {
+	cr_vis_main(*pp_game_instance, V_CLEANUP);
 	(*pp_game_instance)->p_arena_obj->cw_destructor(&(*pp_game_instance)->p_arena_obj);
 	(*pp_game_instance)->cw_free_all_carriages(*pp_game_instance);
 	(*pp_game_instance)->cw_free_all_players(*pp_game_instance);

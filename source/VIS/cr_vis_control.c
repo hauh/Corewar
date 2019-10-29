@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/24 16:19:49 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/29 17:42:03 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,11 @@ int		cr_vis_keys(corewar_t *cr)
 		vis->fpsdiv = vis->fpsdiv >= 1000 ? 1000 : vis->fpsdiv + 10;
 	if (key == '[')
 		vis->fpsdiv = vis->fpsdiv <= 10 ? 10 : vis->fpsdiv - 10;
+	if (key == KEY_UP)
+		vis->car_place = (vis->car_place + V_CARVOL >= cr->carriages_amount) ?
+		vis->car_place : (vis->car_place + V_CARVOL);
+	if (key == KEY_DOWN)
+		vis->car_place =
+		(vis->car_place <= 0) ? 0 : (vis->car_place - V_CARVOL);
 	return (0);
 }
