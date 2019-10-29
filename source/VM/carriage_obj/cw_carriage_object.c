@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 17:52:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 20:15:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,6 @@ void		cw_write_operation(carriage_t *p_carriage_instance, arena_t *p_arena_obj, 
 			p_carriage_instance->p_registers[i + p_carriage_instance->current_register * CW_REG_SIZE] = pBufferObj->p_data[i];
 		p_carriage_instance->cw_move_to(p_carriage_instance, CW_REG_CODE_SIZE);
 	}
-	else if (inputArg == CW_DIR_CODE)
-	{
-		exit(1);
-		for (int i = 4 - p_carriage_instance->p_current_command->dir_size; i < CW_REG_SIZE; ++i, p_carriage_instance->cw_move_to(p_carriage_instance, 1))
-			p_arena_obj->p_field[p_carriage_instance->current_location] = pBufferObj->p_data[i];
-	}
 	else if (inputArg == CW_IND_CODE)
 	{
 		ft_memset(p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->p_data, 0, CW_REG_SIZE);
@@ -166,112 +160,121 @@ static void	cw_read_operation(carriage_t *p_carriage_instance, arena_t *p_arena_
 
 static void	cw_parse_types(carriage_t *p_carriage_instance, arena_t *p_arena_obj)
 {
+	int		sample;
 	int		iter;
 
 	p_carriage_instance->cw_move_to(p_carriage_instance, CW_NAME_PASS);
-	// if (p_carriage_instance->p_current_command->type_byte)
-	// {
-	// //ft_printf("%08b ", p_carriage_instance->p_current_command->args >> 24 & 0xff);
-	// //ft_printf("%08b ", p_carriage_instance->p_current_command->args >> 16 & 0xff);
-	// //ft_printf("%08b\n", p_carriage_instance->p_current_command->args >> 8 & 0xff);
-	// //ft_printf("%08b\n", p_arena_obj->p_field[p_carriage_instance->current_location]);
-	// 	//if ((p_arena_obj->p_field[p_carriage_instance->current_location] & 0x03) != 0)
-	// 	//{
-	// 	//	p_carriage_instance->error_ocurred = CW_TRUE;
-	// 	//	return ;
-	// 	//}
-	// 	p_carriage_instance->first_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0xc0) >> 6;
-	// 	iter = 0;
-	// 	//if ((p_carriage_instance->p_current_command->args >> 24) & 0xff)
-	// 	//{
-	// 		//if (!p_carriage_instance->first_arg)
-	// 		//	iter = 4;
-	// 		while (++iter <= 3)
-	// 			if ((p_carriage_instance->first_arg & ((p_carriage_instance->p_current_command->args >> (24 + (iter * 2))) & 0xff)) == p_carriage_instance->first_arg)
-	// 				break;
-	// 	//}
-	// 	//else
-	// 	//	if (p_carriage_instance->first_arg != 0)
-	// 	//		iter = 5;
-	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->first_arg);
-	// 	if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
-	// 		return ;
-	// 	p_carriage_instance->second_arg	= (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x30) >> 4;
-	// 	iter = 0;
-	// 	//if ((p_carriage_instance->p_current_command->args >> 16) & 0xff)
-	// 	//{
-	// 		//if (!p_carriage_instance->second_arg)
-	// 		//	iter = 4;
-	// 		while (++iter <= 3)
-	// 			if ((p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (16 + (iter * 2))) & 0xff)) == p_carriage_instance->second_arg)
-	// 				break;
-	// 	//}
-	// 	//else
-	// 	//	if (p_carriage_instance->second_arg != 0)
-	// 	//		iter = 5;
-	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->second_arg);
-	// 	if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
-	// 		return ;
-	// 	p_carriage_instance->third_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x0c) >> 2;
-	// 	iter = 0;
-	// 	//if ((p_carriage_instance->p_current_command->args >> 8) & 0xff)
-	// 	//{
-	// 	//	if (!p_carriage_instance->third_arg)
-	// 	//		iter = 4;
-	// 		while (++iter <= 3)
-	// 			if ((p_carriage_instance->third_arg & ((p_carriage_instance->p_current_command->args >> (8 + (iter * 2))) & 0xff)) == p_carriage_instance->third_arg)
-	// 				break;
-	// 	//}
-	// 	//else
-	// 	//	if (p_carriage_instance->third_arg != 0)
-	// 	//		iter = 5;
-	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->third_arg);
-	// 	if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
-	// 		return ;
-	// 	//ft_printf("...done...\n");
-	// }
 	if (p_carriage_instance->p_current_command->type_byte)
 	{
-		int found = CW_FALSE;
-		p_carriage_instance->first_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0xc0) >> 6;
-		int target = p_carriage_instance->p_current_command->args >> 24 & 0xff;
-		int one = target >> 6 & 0x03;
-		if (one && p_carriage_instance->first_arg == one)
-			found = CW_TRUE;
-		int two = target >> 4 & 0x03;
-		if (two && p_carriage_instance->first_arg == two)
-			found = CW_TRUE;
-		int three = target >> 2 & 0x03;
-		if (three && p_carriage_instance->first_arg == three)
-			found = CW_TRUE;
-		p_carriage_instance->second_arg	= (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x30) >> 4;
-		target = p_carriage_instance->p_current_command->args >> 16 & 0xff;
-		one = target >> 6 & 0x03;
-		if (one && p_carriage_instance->second_arg == one)
-			found = CW_TRUE;
-		two = target >> 4 & 0x03;
-		if (two && p_carriage_instance->second_arg == two)
-			found = CW_TRUE;
-		three = target >> 2 & 0x03;
-		if (three && p_carriage_instance->second_arg == three)
-			found = CW_TRUE;
-		p_carriage_instance->third_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x0c) >> 2;
-		target = p_carriage_instance->p_current_command->args >> 16 & 0xff;
-		one = target >> 6 & 0x03;
-		if (one && p_carriage_instance->third_arg == one)
-			found = CW_TRUE;
-		two = target >> 4 & 0x03;
-		if (two && p_carriage_instance->third_arg == two)
-			found = CW_TRUE;
-		three = target >> 2 & 0x03;
-		if (three && p_carriage_instance->third_arg == three)
-			found = CW_TRUE;
-		if (!found)
-		{
+		if ((p_arena_obj->p_field[p_carriage_instance->current_location] & 0x03) != 0)
 			p_carriage_instance->error_ocurred = CW_TRUE;
-			return ;
+		p_carriage_instance->first_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0xc0) >> 6;
+		iter = 0;
+		sample = p_carriage_instance->p_current_command->args >> 24 & 0xff;
+		if ((p_carriage_instance->p_current_command->args >> 24) & 0xff)
+		{
+			if (!p_carriage_instance->first_arg)
+				iter = 4;
+			while (++iter <= 3)
+				if ((p_carriage_instance->first_arg & ((p_carriage_instance->p_current_command->args >> (24 + (iter * 2))) & 0xff)) == p_carriage_instance->first_arg)
+					break;
 		}
+		else
+			if (p_carriage_instance->first_arg != 0)
+				iter = 5;
+		p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->first_arg);
+		if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
+			return ;
+		p_carriage_instance->second_arg	= (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x30) >> 4;
+		iter = 0;
+		if ((p_carriage_instance->p_current_command->args >> 16) & 0xff)
+		{
+			if (!p_carriage_instance->second_arg)
+				iter = 4;
+			while (++iter <= 3)
+				if ((p_carriage_instance->second_arg & ((p_carriage_instance->p_current_command->args >> (16 + (iter * 2))) & 0xff)) == p_carriage_instance->second_arg)
+					break;
+		}
+		else
+			if (p_carriage_instance->second_arg != 0)
+				iter = 5;
+		p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->second_arg);
+		if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
+			return ;
+		p_carriage_instance->third_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x0c) >> 2;
+		iter = 0;
+		if ((p_carriage_instance->p_current_command->args >> 8) & 0xff)
+		{
+			if (!p_carriage_instance->third_arg)
+				iter = 4;
+			while (++iter <= 3)
+				if ((p_carriage_instance->third_arg & ((p_carriage_instance->p_current_command->args >> (8 + (iter * 2))) & 0xff)) == p_carriage_instance->third_arg)
+					break;
+		}
+		else
+			if (p_carriage_instance->third_arg != 0)
+				iter = 5;
+		p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->third_arg);
+		if ((iter > 3 && (p_carriage_instance->error_ocurred = CW_TRUE)) || p_carriage_instance->error_ocurred)
+			return ;
 	}
+	// if (p_carriage_instance->p_current_command->type_byte)
+	// {
+	// 	int found = CW_FALSE;
+	// 	p_carriage_instance->first_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0xc0) >> 6;
+	// 	int target = p_carriage_instance->p_current_command->args >> 24 & 0xff;
+	// 	int one = target >> 6 & 0x03;
+	// 	if (one && p_carriage_instance->first_arg == one)
+	// 		found = CW_TRUE;
+	// 	int two = target >> 4 & 0x03;
+	// 	if (two && p_carriage_instance->first_arg == two)
+	// 		found = CW_TRUE;
+	// 	int three = target >> 2 & 0x03;
+	// 	if (three && p_carriage_instance->first_arg == three)
+	// 		found = CW_TRUE;
+	// 	if (!found)
+	// 	{
+	// 		p_carriage_instance->error_ocurred = CW_TRUE;
+	// 		return ;
+	// 	}
+	// 	found = CW_FALSE;
+	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->first_arg);
+	// 	p_carriage_instance->second_arg	= (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x30) >> 4;
+	// 	target = p_carriage_instance->p_current_command->args >> 16 & 0xff;
+	// 	one = target >> 6 & 0x03;
+	// 	if (one && p_carriage_instance->second_arg == one)
+	// 		found = CW_TRUE;
+	// 	two = target >> 4 & 0x03;
+	// 	if (two && p_carriage_instance->second_arg == two)
+	// 		found = CW_TRUE;
+	// 	three = target >> 2 & 0x03;
+	// 	if (three && p_carriage_instance->second_arg == three)
+	// 		found = CW_TRUE;
+	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->second_arg);
+	// 	if (!found)
+	// 	{
+	// 		p_carriage_instance->error_ocurred = CW_TRUE;
+	// 		return ;
+	// 	}
+	// 	found = CW_FALSE;
+	// 	p_carriage_instance->third_arg = (p_arena_obj->p_field[p_carriage_instance->current_location] & 0x0c) >> 2;
+	// 	target = p_carriage_instance->p_current_command->args >> 16 & 0xff;
+	// 	one = target >> 6 & 0x03;
+	// 	if (one && p_carriage_instance->third_arg == one)
+	// 		found = CW_TRUE;
+	// 	two = target >> 4 & 0x03;
+	// 	if (two && p_carriage_instance->third_arg == two)
+	// 		found = CW_TRUE;
+	// 	three = target >> 2 & 0x03;
+	// 	if (three && p_carriage_instance->third_arg == three)
+	// 		found = CW_TRUE;
+	// 	p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->third_arg);
+	// 	if (!found)
+	// 	{
+	// 		p_carriage_instance->error_ocurred = CW_TRUE;
+	// 		return ;
+	// 	}
+	// }
 	else
 	{
 		p_carriage_instance->first_arg = CW_DIR_CODE;
@@ -333,7 +336,6 @@ static void	cw_exec_command(carriage_t *p_carriage_instance, corewar_t *pGameIns
 	p_carriage_instance->p_current_command->cw_callback(pGameInstance);
 	if (p_carriage_instance->error_ocurred)
 	{
-		//ft_printf("ERRRRRRRRORRR :O :O :O\n");
 		p_carriage_instance->cw_return_protocol_activate(p_carriage_instance, pGameInstance->p_arena_obj);
 	}
 	p_carriage_instance->p_current_command = NULL;
@@ -389,7 +391,6 @@ static void	cw_return_protocol_activate(carriage_t *p_carriage_instance, arena_t
 				lengthOfBrokenCode += p_carriage_instance->p_current_command->dir_size;
 			else if (((p_arena_obj->p_field[p_carriage_instance->current_location] >> (iter * 2)) & 0x03) == CW_IND_CODE)
 				lengthOfBrokenCode += CW_IND_CODE_SIZE;
-		//ft_printf(">>>>>>>>>>>>>>>>>>>>>>>>%d - %d<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n", lengthOfBrokenCode, p_carriage_instance->p_current_command->dir_size);
 		p_carriage_instance->cw_move_to(p_carriage_instance, lengthOfBrokenCode);
 	}
 	else
@@ -421,6 +422,8 @@ static void	cw_constructor(carriage_t **pp_carriage_instance)
 	(*pp_carriage_instance)->p_prev = NULL;
 	(*pp_carriage_instance)->offset = 0;
 	(*pp_carriage_instance)->checked = 0;
+	(*pp_carriage_instance)->save_point = 0;
+	(*pp_carriage_instance)->error_ocurred = 0;
 }
 
 static void	cw_destructor(carriage_t **pp_carriage_instance)

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_object.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/10/29 17:19:46 by vrichese         ###   ########.fr       */
-=======
-/*   Updated: 2019/10/29 15:37:28 by dbrady           ###   ########.fr       */
->>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
+/*   Updated: 2019/10/29 20:15:20 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,31 +98,16 @@ static void	cw_start_game(corewar_t *p_game_instance)
 {
 	int		iter;
 
-	cr_vis_main(p_game_instance, V_INIT);
+	//cr_vis_main(p_game_instance, V_INIT);
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
-<<<<<<< HEAD
-		while (++iter < p_game_instance->carriages_amount)
-=======
-		cr_vis_main(p_game_instance, V_CONTROL);
-		if (p_game_instance->vis->exit)
-			p_game_instance->cw_destructor(&p_game_instance);
-		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
->>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
-		{
+		//cr_vis_main(p_game_instance, V_CONTROL);
+		//if (p_game_instance->vis->exit)
+		//	p_game_instance->cw_destructor(&p_game_instance);
+		//else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
+		//{
 			p_game_instance->p_arena_obj->cycle_amount += 1;
-			//if (p_game_instance->p_arena_obj->cycle_amount == 7415)
-			//{
-			//	for (int i = 0; i < p_game_instance->carriages_amount; ++i)
-			//	{
-			//		if (p_game_instance->p_carriage_obj->p_current_command && p_game_instance->p_carriage_obj->waiting_time == 1)
-			//			ft_printf("com:%d\n", p_game_instance->p_carriage_obj->p_current_command->id);
-			//		//ft_printf("%d\n", p_game_instance->p_carriage_obj->id);
-			//		p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
-			//	}
-			//	exit(1);
-			//}
 			while (++iter < p_game_instance->carriages_amount)
 			{
 				p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
@@ -139,20 +120,13 @@ static void	cw_start_game(corewar_t *p_game_instance)
 			p_game_instance->cw_merge_queue_to_list(p_game_instance);
 			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
 				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-			cr_vis_main(p_game_instance, V_UPDATE);
-		}
-<<<<<<< HEAD
-		p_game_instance->cw_merge_queue_to_list(p_game_instance);
-		if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
-			p_game_instance->cw_main_checking(p_game_instance);
-		if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
-			p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-=======
->>>>>>> f3cba0b7a42058ca168c548e922c92f66e29b76e
+		//	if (p_game_instance->p_arena_obj->cycle_amount >= 3800)
+		//		cr_vis_main(p_game_instance, V_UPDATE);
+		//}
 	}
 }
 
-static void	cwArrangeUnitsOnField(corewar_t *p_game_instance)
+static void	cw_arrange_units_on_field(corewar_t *p_game_instance)
 {
 	int		iter;
 	int		playerLocation;
@@ -288,7 +262,7 @@ static void		cwCarriageObjectInit(corewar_t *p_game_instance)
 		++iter;
 	}
 	p_game_instance->numerate_carriage = p_game_instance->carriages_amount;
-	p_game_instance->p_arena_obj->cw_set_last_survivor(p_game_instance->p_arena_obj, p_game_instance->p_carriage_obj->p_prev->p_owner);
+	p_game_instance->p_arena_obj->p_last_survivor = p_game_instance->p_carriage_obj->p_prev->p_owner;
 }
 
 static void		cw_queue_obj_init(corewar_t *p_game_instance)
@@ -359,7 +333,6 @@ static void		cwPlayerObjectInit(corewar_t *p_game_instance, int argc, char **arg
 		p_game_instance->p_player_obj = p_game_instance->p_player_obj->p_next;
 		++iter;
 	}
-	p_game_instance->p_arena_obj->cw_set_last_survivor(p_game_instance->p_arena_obj, p_game_instance->p_player_obj->p_prev);
 }
 
 static void		cw_arena_obj_init(corewar_t *gameInstance)
@@ -373,17 +346,17 @@ static void		cw_arena_obj_init(corewar_t *gameInstance)
 
 static void		cw_constructor(corewar_t **pp_game_instance)
 {
+	(*pp_game_instance)->queue_size = 0;
 	(*pp_game_instance)->players_amount = 0;
 	(*pp_game_instance)->numerate_carriage = 0;
 	(*pp_game_instance)->commands_amount = 0;
 	(*pp_game_instance)->carriages_amount = 0;
-	(*pp_game_instance)->queue_size = 0;
 	(*pp_game_instance)->last_check_cycle = 0;
 	(*pp_game_instance)->visualizator = CW_FALSE;
 	(*pp_game_instance)->load_dump = CW_FALSE;
-	(*pp_game_instance)->p_carriage_obj = NULL;
-	(*pp_game_instance)->p_player_obj = NULL;
 	(*pp_game_instance)->p_arena_obj = NULL;
+	(*pp_game_instance)->p_player_obj = NULL;
+	(*pp_game_instance)->p_carriage_obj = NULL;
 	(*pp_game_instance)->p_waiting_queue = NULL;
 }
 
@@ -404,23 +377,23 @@ extern void		cw_create_instance_game(corewar_t **pp_game_obj)
 		cwErrorCatcher(CW_NOT_ALLOCATED, CW_GAME);
 	(*pp_game_obj)->cw_constructor = cw_constructor;
 	(*pp_game_obj)->cw_destructor = cw_destructor;
+	(*pp_game_obj)->cw_arrange_units_on_field = cw_arrange_units_on_field;
+	(*pp_game_obj)->cw_add_carriage_to_list = cw_add_carriage_to_list;
+	(*pp_game_obj)->cw_merge_queue_to_list = cw_merge_queue_to_list;
 	(*pp_game_obj)->cw_carriage_obj_init = cwCarriageObjectInit;
 	(*pp_game_obj)->cw_command_obj_init = cwCommandObjectInit;
+	(*pp_game_obj)->cw_free_all_command = cw_free_all_command;
 	(*pp_game_obj)->cw_player_obj_init = cwPlayerObjectInit;
 	(*pp_game_obj)->cw_arena_obj_init = cw_arena_obj_init;
-	(*pp_game_obj)->cw_add_carriage_to_list = cw_add_carriage_to_list;
+	(*pp_game_obj)->cw_start_game = cw_start_game;
+	(*pp_game_obj)->cw_main_checking = cw_main_checking;
+	(*pp_game_obj)->cw_delete_carriage = cw_delete_carriage;
+	(*pp_game_obj)->cw_free_all_players = cwFreeAllPlayer;
 	(*pp_game_obj)->cw_add_player_to_list = cwAddPlayerToList;
 	(*pp_game_obj)->cw_free_all_carriages = cwFreeAllCarriage;
-	(*pp_game_obj)->cw_free_all_players = cwFreeAllPlayer;
-	(*pp_game_obj)->cw_free_all_command = cw_free_all_command;
-	(*pp_game_obj)->cw_delete_carriage = cw_delete_carriage;
-	(*pp_game_obj)->cw_main_checking = cw_main_checking;
-	(*pp_game_obj)->cw_start_game = cw_start_game;
-	(*pp_game_obj)->cw_arrange_units_on_field = cwArrangeUnitsOnField;
 	(*pp_game_obj)->cw_introduce_players = cwIntroducePlayers;
 	(*pp_game_obj)->cw_congratulations = cwCongratulations;
 	(*pp_game_obj)->cw_push_to_queue = cw_push_to_queue;
-	(*pp_game_obj)->cw_merge_queue_to_list	= cw_merge_queue_to_list;
 	(*pp_game_obj)->cw_queue_obj_init = cw_queue_obj_init;
 	(*pp_game_obj)->cw_stack_obj_init = cw_stack_obj_init;
 	(*pp_game_obj)->cw_constructor(pp_game_obj);

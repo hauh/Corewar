@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 16:51:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 20:04:38 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define CW_ARENA_OBJECT_H
 
 # include "cwTypedefObjects.h"
+
+# define AR_CYCLE_TO_DIE	p_arena_instance->cycle_to_die
+# define AR_CYCLE_AMOUNT	p_arena_instance->cycle_amount
+# define AR_CHECK_AMOUNT	p_arena_instance->check_amount
+# define AR_LIVE_AMOUNT		p_arena_instance->live_amount
+# define AR_FIELD			p_arena_instance->p_field
 
 typedef enum		set_buffer_e
 {
@@ -38,7 +44,6 @@ typedef struct		arena_s
 	buffer_t		*pa_buffer_set[CW_BUFFER_AMOUNT];
 
 	void			(*cw_constructor)		(arena_t **);
-	void			(*cw_set_last_survivor)	(arena_t *, player_t *);
 	int				(*cw_time_to_check)		(arena_t *, int);
 	void			(*cw_buffer_init)		(arena_t *);
 	void			(*cw_print_field)		(arena_t *);

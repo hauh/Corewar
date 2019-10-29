@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printcar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 17:47:36 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/29 18:42:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 	{
 		if (i == 32)
 			y += 1;
-		mvprintw(y, V_SEPSEP + 9 + (i % 32) * 4, "% -4d", reg[i]);
+		mvprintw(y, V_SEPSEP + 9 + (i % 32) * 4, "% -2x", reg[i]);
 		i += 1;
 	}
 }
@@ -45,7 +45,7 @@ void					cr_vis_printcarinfo(corewar_t *cr)
 	int y;
 
 	y = 3;
-	
+
 	car = cr_vis_getcarp(cr, cr->vis->car_place);
 	attron(A_BOLD);
 	mvprintw(2, V_SEPSEP + 9, "currently viewing carriages %d through %d   ...   place: %d | car_id: %d | amount: %d | reg_len: %d | carvol: %d",

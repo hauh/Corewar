@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
+#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/29 16:38:41 by dbrady           ###   ########.fr        #
+#    Updated: 2019/10/29 19:58:42 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,14 @@ OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))
 LIBFT			:=		libft.a
 LIBFTPRINTF		:=		libftprintf.a
 
-vpath %.c $(VM_DIR_SOURCE)
+vpath %.c $(VM_DIR_SOURCE) $(VM_DIR_SOURCE)/game_obj		\
+							$(VM_DIR_SOURCE)/arena_obj		\
+							$(VM_DIR_SOURCE)/buffer_obj		\
+							$(VM_DIR_SOURCE)/callbacks		\
+							$(VM_DIR_SOURCE)/carriage_obj	\
+							$(VM_DIR_SOURCE)/command_obj	\
+							$(VM_DIR_SOURCE)/player_obj		\
+							$(VM_DIR_SOURCE)/rest
 vpath %.c $(VIS_DIR_SOURCE)
 vpath %.h $(VM_DIR_INCLUDE)
 vpath %.h $(VIS_DIR_INCLUDE)

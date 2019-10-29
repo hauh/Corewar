@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 17:14:31 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/29 18:46:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		cr_vis_main(corewar_t *cr, int action)
 	}
 	else if (action == V_CLEANUP)
 		cr_vis_cleanup(cr);
-	if (cr->vis)
+	if (cr->vis && cr->p_arena_obj->cycle_amount >= 3800)
 	{
 		cr_vis_printinfo(cr);
 		refresh();
