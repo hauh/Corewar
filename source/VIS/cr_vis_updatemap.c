@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_updatemap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/28 16:45:53 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 16:37:12 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		cr_vis_checkzero(int i)
 	return (1);
 }
 
-int		cr_vis_printcar(corewar_t *cr)
+int		cr_vis_printcarmap(corewar_t *cr)
 {
 	carriage_t	*car;
 	int			colour;
@@ -99,6 +99,6 @@ int		cr_vis_printdiff(corewar_t *cr)
 int		cr_vis_updatemap(corewar_t *cr)
 {
 	cr_vis_printdiff(cr);
-	cr_vis_printcar(cr);
+	cr_vis_printcarmap(cr);
 	return (0);
 }

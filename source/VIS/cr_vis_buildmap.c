@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_buildmap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:52:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/28 16:48:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 15:42:47 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ int		cr_vis_drawborder(void)
 	int y;
 
 	y = -1;
-	while (++y < 68)
+	while (++y < V_H)
 	{
 		x = -1;
-		while (++x < 260)
+		while (++x < V_W)
 		{
 			if (x == 0 || x == 1 || y == 0 || x == V_W - 1 ||
-			y == V_H - 1 || x == V_W - 2 || x == V_SEP ||
-			x == V_SEP - 1)
+			y == V_H - 1 || x == V_W - 2 || x == V_SEP + 2 ||
+			x == V_SEP + 1)
 				mvaddstr(y, x, V_BSYM);
 		}
 	}

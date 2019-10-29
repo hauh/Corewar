@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 16:42:00 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/29 17:41:31 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@
 ** Visual defines
 */
 
-# define V_W 260
-# define V_H 68
+# define V_W 420
+# define V_H 100
+# define V_SEP 136
+# define V_SEPSEP (V_SEP + 60)
+# define V_CARVOL (V_H / 3 - 3)
 # define V_BSYM "\xe2\x96\x88"
 # define V_BHALF "\xe2\x96\x93"
 # define V_BQUARTER "\xe2\x96\x91"
-# define V_SEP 200
+
 
 /*
 ** ---------------------------
@@ -55,7 +58,7 @@ typedef struct			s_vis
 	int					fpsdiv;
 	unsigned char		*field;
 	long int			time;
-
+	int					car_place;
 }						t_vis;
 
 enum						e_vis_act
@@ -88,6 +91,7 @@ int							cr_vis_timer				(corewar_t *cr);
 int							cr_vis_keys					(corewar_t *cr);
 int							cr_vis_updatemap			(corewar_t *cr);
 int							cr_vis_printinfo			(corewar_t *cr);
+void						cr_vis_printcarinfo			(corewar_t *cr);
 
 /*
 ** ---------------------------
