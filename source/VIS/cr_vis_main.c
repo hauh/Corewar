@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 18:46:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:47 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		cr_vis_cleanup(corewar_t *cr)
+int		cr_vis_cleanup(t_corewar *cr)
 {
 	endwin();
 	if (cr)
@@ -28,7 +28,7 @@ int		cr_vis_cleanup(corewar_t *cr)
 	return (0);
 }
 
-int		cr_vis_main(corewar_t *cr, int action)
+int		cr_vis_main(t_corewar *cr, int action)
 {
 	if (action == V_INIT)
 		cr_vis_initvis(cr);

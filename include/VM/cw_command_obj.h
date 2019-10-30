@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cwCommandObject.h                                  :+:      :+:    :+:   */
+/*   cw_command_obj.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:22:50 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/26 17:10:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 15:40:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CW_COMMAND_OBJECT_H
 # define CW_COMMAND_OBJECT_H
 
-#include "cwTypedefObjects.h"
+#include "cw_obj_container.h"
 
-typedef struct		command_s
+typedef struct		s_command
 {
 	int				id;
 	int				args;
@@ -24,11 +24,14 @@ typedef struct		command_s
 	int				waiting_time;
 	int				type_byte;
 
-	void			(*cw_constructor)	(command_t **);
-	void			(*cw_recognize)		(command_t *, int);
-	void			(*cw_put_param)		(command_t *, int, int, int, int, int, int, int, int, void (*f)(corewar_t *));
-	void			(*cw_callback)		(corewar_t *);
-	void			(*cw_destructor)	(command_t **);
-}					command_t;
+	void			(*cw_constructor)	(t_command **);
+	void			(*cw_recognize)		(t_command *, int);
+	void			(*cw_put_param)		(t_command *, int, int, int, int, int, int, int, int, void (*f)(t_corewar *));
+	void			(*cw_callback)		(t_corewar *);
+	void			(*cw_destructor)	(t_command **);
+}					t_command;
+
+void	cw_put_param(t_command *p_command_instance, int id, int first_arg, int second_arg, int third_arg, int dir_size, int change_carry, int waiting_time, int type_byte, void (*f)(t_corewar *));
+void	cw_recognize_command(t_command *p_command_instance, int command);
 
 #endif

@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cwPlayerObject.h                                   :+:      :+:    :+:   */
+/*   cw_player_obj.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:19:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 14:21:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 15:57:23 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CW_PLAYER_OBJECT_H
 # define CW_PLAYER_OBJECT_H
 
-# include "cwTypedefObjects.h"
+# include "cw_obj_container.h"
 
-typedef struct		player_s
+typedef struct		s_player
 {
 	int				id;
 	int				code_size;
@@ -28,15 +28,20 @@ typedef struct		player_s
 	unsigned char	*p_source;
 	unsigned char	*p_comment;
 
-	struct player_s	*p_next;
-	struct player_s	*p_prev;
+	struct s_player	*p_next;
+	struct s_player	*p_prev;
 
-	void			(*cw_constructor)	(player_t **);
-	void			(*cw_set_id)		(player_t *, int *, int, int);
-	void			(*cw_read_file)		(player_t *, const char *);
-	void			(*cw_self_build)	(player_t *);
-	void			(*cw_self_validate)	(player_t *);
-	void			(*cw_destructor)	(player_t **);
-}					player_t;
+	void			(*cw_constructor)	(t_player **);
+	void			(*cw_set_id)		(t_player *, int *, int, int);
+	void			(*cw_read_file)		(t_player *, const char *);
+	void			(*cw_self_build)	(t_player *);
+	void			(*cw_self_validate)	(t_player *);
+	void			(*cw_destructor)	(t_player **);
+}					t_player;
+
+void	cw_set_id(t_player *p_player_instance, int *p_busy_byte, int id, int custom_id);
+void	cw_read_file(t_player *p_player_instance, const char *p_file);
+void	cw_self_validate(t_player *p_player_instance);
+void	cw_self_build(t_player *p_player_instance);
 
 #endif

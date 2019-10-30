@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_control.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 17:42:03 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:45 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		cr_vis_timer(corewar_t *cr)
+int		cr_vis_timer(t_corewar *cr)
 {
 	long int	check;
 	t_vis		*vis;
@@ -31,7 +31,7 @@ int		cr_vis_timer(corewar_t *cr)
 	return (0);
 }
 
-int		cr_vis_keys(corewar_t *cr)
+int		cr_vis_keys(t_corewar *cr)
 {
 	int key;
 	t_vis		*vis;

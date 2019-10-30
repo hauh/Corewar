@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printinfo.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 17:14:49 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	cr_vis_clearinfo()
 	ft_strdel(&x);
 }
 
-int		cr_vis_lastlive(corewar_t *cr, int id)
+int		cr_vis_lastlive(t_corewar *cr, int id)
 {
-	carriage_t	*car;
+	t_carriage	*car;
 	int			life;
 	int			barrier;
 
@@ -47,10 +47,10 @@ int		cr_vis_lastlive(corewar_t *cr, int id)
 	return (cr->p_arena_obj->cycle_amount - life);
 }
 
-int		cr_vis_printplayers(corewar_t *cr)
+int		cr_vis_printplayers(t_corewar *cr)
 {
 	int			i;
-	player_t	*p;
+	t_player	*p;
 
 	i = 0;
 	p = cr->p_player_obj;
@@ -67,7 +67,7 @@ int		cr_vis_printplayers(corewar_t *cr)
 	return (0);
 }
 
-int		cr_vis_printhealth(corewar_t *cr)
+int		cr_vis_printhealth(t_corewar *cr)
 {
 	int y;
 	int	step;
@@ -101,7 +101,7 @@ int		cr_vis_printhealth(corewar_t *cr)
 	return (0);
 }
 
-int		cr_vis_printinfo(corewar_t *cr)
+int		cr_vis_printinfo(t_corewar *cr)
 {
 	cr_vis_clearinfo();
 	cr_vis_printcarinfo(cr);

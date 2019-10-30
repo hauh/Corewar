@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 14:41:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/27 13:56:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 14:53:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void		cw_print_content(stackk_t *p_stack_instance)
+static void		cw_print_content(t_stack *p_stack_instance)
 {
 	int			iter;
 
@@ -32,13 +32,13 @@ static void		cw_print_content(stackk_t *p_stack_instance)
 	}
 }
 
-static void		cw_distribute_carriage(stackk_t *p_stack_instance, queue_t *p_waiting_queue, arena_t *p_arena_obj)
+static void		cw_distribute_carriage(t_stack *p_stack_instance, t_queue *p_waiting_queue, t_arena *p_arena_obj)
 {
-	carriage_t	*tmp;
+	t_carriage	*tmp;
 
 	while(p_stack_instance->p_current_carriage && p_stack_instance->p_current_carriage->checked != p_arena_obj->cycle_amount)
 	{
-		p_stack_instance->p_current_carriage->cw_set_command_time(p_stack_instance->p_current_carriage, p_arena_obj);
+		p_stack_instance->p_current_carriage->cw_set_t_commandime(p_stack_instance->p_current_carriage, p_arena_obj);
 		if (p_stack_instance->p_current_carriage->p_current_command && !p_stack_instance->p_current_carriage->error_ocurred)
 		{
 			p_stack_instance->cw_pop(p_stack_instance, &tmp);
@@ -54,19 +54,19 @@ static void		cw_distribute_carriage(stackk_t *p_stack_instance, queue_t *p_waiti
 		p_stack_instance->current_waiting_time = 0;
 }
 
-static void		cw_peek(stackk_t *p_stack_instance, carriage_t **p_peeking_carriage)
+static void		cw_peek(t_stack *p_stack_instance, t_carriage **p_peeking_carriage)
 {
 	if (p_peeking_carriage)
 		*p_peeking_carriage = p_stack_instance->p_current_carriage;
 }
 
-static void		cw_reverse_rotate(stackk_t *p_stack_instance)
+static void		cw_reverse_rotate(t_stack *p_stack_instance)
 {
 	if (p_stack_instance->p_current_carriage)
 		p_stack_instance->p_current_carriage = p_stack_instance->p_current_carriage->p_prev;
 }
 
-static void		cw_rotate(stackk_t *p_stack_instance, int cycle_amount)
+static void		cw_rotate(t_stack *p_stack_instance, int cycle_amount)
 {
 	if (p_stack_instance->p_current_carriage)
 	{
@@ -75,9 +75,9 @@ static void		cw_rotate(stackk_t *p_stack_instance, int cycle_amount)
 	}
 }
 
-static void 	cw_pop(stackk_t *p_stack_instance, carriage_t **p_deleting_carriage)
+static void 	cw_pop(t_stack *p_stack_instance, t_carriage **p_deleting_carriage)
 {
-	carriage_t	*free_tmp;
+	t_carriage	*free_tmp;
 
 	if (p_stack_instance->p_current_carriage)
 	{
@@ -93,7 +93,7 @@ static void 	cw_pop(stackk_t *p_stack_instance, carriage_t **p_deleting_carriage
 	}
 }
 
-static void		cw_push(stackk_t *p_stack_instance, carriage_t *p_adding_carriage)
+static void		cw_push(t_stack *p_stack_instance, t_carriage *p_adding_carriage)
 {
 	if (p_adding_carriage)
 	{
@@ -115,7 +115,7 @@ static void		cw_push(stackk_t *p_stack_instance, carriage_t *p_adding_carriage)
 	}
 }
 
-static void		cw_constructor(stackk_t	**pp_stack_instance)
+static void		cw_constructor(t_stack	**pp_stack_instance)
 {
 	(*pp_stack_instance)->p_current_carriage = NULL;
 	(*pp_stack_instance)->max_carriage_number = 0;
@@ -123,16 +123,16 @@ static void		cw_constructor(stackk_t	**pp_stack_instance)
 	(*pp_stack_instance)->current_waiting_time = 1;
 }
 
-static void		cw_destructor(stackk_t **pp_stack_instance)
+static void		cw_destructor(t_stack **pp_stack_instance)
 {
 	free(*pp_stack_instance);
 	*pp_stack_instance = NULL;
 }
 
-extern void		cw_create_instance_stack(stackk_t **pp_stack_obj)
+extern void		cw_create_instance_stack(t_stack **pp_stack_obj)
 {
-	if (!(*pp_stack_obj = (stackk_t *)malloc(sizeof(stackk_t))))
-		cwErrorCatcher(CW_NOT_ALLOCATED, "Qeueue has not been created");
+	if (!(*pp_stack_obj = (t_stack *)malloc(sizeof(t_stack))))
+		cw_error_catcher(CW_NOT_ALLOCATED, "Qeueue has not been created");
 	(*pp_stack_obj)->cw_constructor = cw_constructor;
 	(*pp_stack_obj)->cw_destructor = cw_destructor;
 	(*pp_stack_obj)->cw_push = cw_push;

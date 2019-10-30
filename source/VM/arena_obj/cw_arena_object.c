@@ -6,67 +6,24 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 20:12:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 16:58:54 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static int		cw_time_to_check(arena_t *p_arena_instance, int last_check)
-{
-	if (AR_CYCLE_TO_DIE <= 0 || AR_CYCLE_AMOUNT - last_check == AR_CYCLE_TO_DIE)
-		return (CW_TRUE);
-	else
-		return (CW_FALSE);
-}
-
-static void		cw_print_field(arena_t *p_arena_instance)
-{
-	int			border;
-	int			iter;
-
-	iter = CW_ITERATOR;
-	border = sqrt(MEM_SIZE);
-	ft_printf("0x0000 : ");
-	while (++iter < MEM_SIZE)
-	{
-		ft_printf("%.2x ", AR_FIELD[iter]);
-		if ((iter + 1) % border == 0 && iter != MEM_SIZE - 1)
-			ft_printf("\n%#06x : ", iter + 1);
-	}
-	ft_printf("\n");
-	exit(1);
-}
-
-static void		cw_buffer_init(arena_t *p_arena_instance)
-{
-	buffer_t	*buffer_obj;
-	int			buf_iter;
-
-	buf_iter = CW_ITERATOR;
-	while (++buf_iter < CW_BUFFER_AMOUNT)
-	{
-		cw_create_instance_buffer(&buffer_obj);
-		p_arena_instance->pa_buffer_set[buf_iter] = buffer_obj;
-	}
-}
-
-static void		cw_constructor(arena_t **pp_arena_instance)
+static void		cw_constructor(t_arena **pp_arena_instance)
 {
 	if (!((*pp_arena_instance)->p_field =
 	(unsigned char *)malloc(sizeof(unsigned char) * MEM_SIZE)))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
+		cw_error_catcher(CW_NOT_ALLOCATED, CW_ARENA);
 	ft_memset((*pp_arena_instance)->p_field, 0, MEM_SIZE);
-	(*pp_arena_instance)->live_amount = 0;
-	(*pp_arena_instance)->cycle_amount = 0;
-	(*pp_arena_instance)->check_amount = 0;
 	(*pp_arena_instance)->cycle_to_die = CYCLE_TO_DIE;
-	(*pp_arena_instance)->p_last_survivor = NULL;
 }
 
-static void		cw_destructor(arena_t **pp_arena_instance)
+static void		cw_destructor(t_arena **pp_arena_instance)
 {
-	int			iter;
+	t_iterator	iter;
 
 	iter = CW_ITERATOR;
 	while (++iter < CW_BUFFER_AMOUNT)
@@ -77,10 +34,11 @@ static void		cw_destructor(arena_t **pp_arena_instance)
 	*pp_arena_instance = NULL;
 }
 
-extern void		cw_create_instance_arena(arena_t **pp_arena_obj)
+extern void		cw_create_instance_arena(t_arena **pp_arena_obj)
 {
-	if (!(*pp_arena_obj = (arena_t *)malloc(sizeof(arena_t))))
-		cwErrorCatcher(CW_NOT_ALLOCATED, CW_ARENA);
+	if (!(*pp_arena_obj = (t_arena *)malloc(sizeof(t_arena))))
+		cw_error_catcher(CW_NOT_ALLOCATED, CW_ARENA);
+	ft_memset(*pp_arena_obj, 0, sizeof(t_arena));
 	(*pp_arena_obj)->cw_constructor = cw_constructor;
 	(*pp_arena_obj)->cw_destructor = cw_destructor;
 	(*pp_arena_obj)->cw_buffer_init = cw_buffer_init;

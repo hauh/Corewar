@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 18:41:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 15:12:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	liveExec(corewar_t *p_game_obj)
+void	live_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -26,7 +26,7 @@ void	liveExec(corewar_t *p_game_obj)
 	p_game_obj->p_arena_obj->live_amount += 1;
 }
 
-void	ldExec(corewar_t *p_game_obj)
+void	ld_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -35,7 +35,7 @@ void	ldExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry(p_game_obj->p_carriage_obj);
 }
 
-void	stExec(corewar_t *p_game_obj)
+void	st_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -43,7 +43,7 @@ void	stExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->second_arg);
 }
 
-void	addExec(corewar_t *p_game_obj)
+void	add_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -55,7 +55,7 @@ void	addExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	subExec(corewar_t *p_game_obj)
+void	sub_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -67,7 +67,7 @@ void	subExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	andExec(corewar_t *p_game_obj)
+void	and_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -79,7 +79,7 @@ void	andExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	orExec(corewar_t *p_game_obj)
+void	or_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -91,7 +91,7 @@ void	orExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	xorExec(corewar_t *p_game_obj)
+void	xor_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -103,7 +103,7 @@ void	xorExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	zjmpExec(corewar_t *p_game_obj)
+void	zjmp_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -112,7 +112,7 @@ void	zjmpExec(corewar_t *p_game_obj)
 		p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value - p_game_obj->p_carriage_obj->odometer);
 }
 
-void	ldiExec(corewar_t *p_game_obj)
+void	ldi_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types (p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -129,7 +129,7 @@ void	ldiExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_write_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_3], p_game_obj->p_carriage_obj->third_arg);
 }
 
-void	stiExec(corewar_t *p_game_obj)
+void	sti_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types (p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -147,9 +147,9 @@ void	stiExec(corewar_t *p_game_obj)
 
 }
 
-void	forkExec(corewar_t *p_game_obj)
+void	fork_exec(t_corewar *p_game_obj)
 {
-	carriage_t *p_carriage_obj;
+	t_carriage *p_carriage_obj;
 
 	p_game_obj->p_carriage_obj->cw_parse_types (p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -167,7 +167,7 @@ void	forkExec(corewar_t *p_game_obj)
 	p_game_obj->cw_push_to_queue(p_game_obj, p_carriage_obj);
 }
 
-void	lldExec(corewar_t *p_game_obj)
+void	lld_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types	(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -176,7 +176,7 @@ void	lldExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry	(p_game_obj->p_carriage_obj);
 }
 
-void	lldiExec(corewar_t *p_game_obj)
+void	lldi_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types (p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -194,9 +194,9 @@ void	lldiExec(corewar_t *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_check_carry(p_game_obj->p_carriage_obj);
 }
 
-void	lforkExec(corewar_t *p_game_obj)
+void	lfork_exec(t_corewar *p_game_obj)
 {
-	carriage_t *p_carriage_obj;
+	t_carriage *p_carriage_obj;
 
 	p_game_obj->p_carriage_obj->cw_parse_types (p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
@@ -214,7 +214,7 @@ void	lforkExec(corewar_t *p_game_obj)
 	p_game_obj->cw_push_to_queue(p_game_obj, p_carriage_obj);
 }
 
-void	affExec(corewar_t *p_game_obj)
+void	aff_exec(t_corewar *p_game_obj)
 {
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;

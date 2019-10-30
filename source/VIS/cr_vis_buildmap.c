@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_buildmap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:52:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 15:42:47 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:39 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void		cr_vis_putx(int num, int i, int colour, int rev, corewar_t *cr)
+void		cr_vis_putx(int num, int i, int colour, int rev, t_corewar *cr)
 {
 	char	ret[3];
 	char	*power = "0123456789abcdef";
@@ -63,10 +63,10 @@ int		cr_vis_drawborder(void)
 	return (0);
 }
 
-int		cr_vis_getcolour(int i, corewar_t *cr)
+int		cr_vis_getcolour(int i, t_corewar *cr)
 {
 	int			colour;
-	player_t	*player;
+	t_player	*player;
 
 	player = cr->p_player_obj;
 	colour = i / (MEM_SIZE / cr->players_amount);
@@ -77,7 +77,7 @@ int		cr_vis_getcolour(int i, corewar_t *cr)
 	return ((i % (MEM_SIZE / cr->players_amount)) > player->code_size - 1 ? 0 : player->id);
 }
 
-int		cr_vis_printmap(unsigned char *f, int f_len, corewar_t *cr)
+int		cr_vis_printmap(unsigned char *f, int f_len, t_corewar *cr)
 {
 	int		i;
 

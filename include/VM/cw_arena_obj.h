@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cwArenaObject.h                                    :+:      :+:    :+:   */
+/*   cw_arena_obj.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 20:04:38 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 16:59:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CW_ARENA_OBJECT_H
-# define CW_ARENA_OBJECT_H
+#ifndef CW_ARENA_OBJ_H
+# define CW_ARENA_OBJ_H
 
-# include "cwTypedefObjects.h"
+# include "cw_obj_container.h"
 
+# define AR_LAST_SURVIVOR	p_arena_instance->p_last_survivor
 # define AR_CYCLE_TO_DIE	p_arena_instance->cycle_to_die
 # define AR_CYCLE_AMOUNT	p_arena_instance->cycle_amount
 # define AR_CHECK_AMOUNT	p_arena_instance->check_amount
 # define AR_LIVE_AMOUNT		p_arena_instance->live_amount
+# define AR_BUFFERS			p_arena_instance->pa_buffer_set
 # define AR_FIELD			p_arena_instance->p_field
 
-typedef enum		set_buffer_e
+typedef enum		e_set_buffer
 {
 	CW_VALUE_BUF_1,
 	CW_VALUE_BUF_2,
@@ -29,25 +31,29 @@ typedef enum		set_buffer_e
 	CW_SYSTEM_BUF,
 	CW_SPARE_BUF,
 	CW_BUFFER_AMOUNT
-}					set_buffer_t;
+}					t_set_buffer;
 
-typedef struct		arena_s
+typedef struct		s_arena
 {
-	int				live_amount;
-	int				check_amount;
 	int				cycle_to_die;
+	t_counter		live_amount;
+	t_counter		check_amount;
 	unsigned long	cycle_amount;
 
 	unsigned char	*p_field;
 
-	player_t		*p_last_survivor;
-	buffer_t		*pa_buffer_set[CW_BUFFER_AMOUNT];
+	t_player		*p_last_survivor;
+	t_buffer		*pa_buffer_set[CW_BUFFER_AMOUNT];
 
-	void			(*cw_constructor)		(arena_t **);
-	int				(*cw_time_to_check)		(arena_t *, int);
-	void			(*cw_buffer_init)		(arena_t *);
-	void			(*cw_print_field)		(arena_t *);
-	void			(*cw_destructor)		(arena_t **);
-}					arena_t;
+	void			(*cw_constructor)	(struct s_arena **);
+	int				(*cw_time_to_check)	(struct s_arena *, int);
+	void			(*cw_print_field)	(struct s_arena *);
+	void			(*cw_buffer_init)	(struct s_arena *);
+	void			(*cw_destructor)	(struct s_arena **);
+}					t_arena;
+
+int					cw_time_to_check(t_arena *p_arena_instance, int last_check);
+void				cw_print_field	(t_arena *p_arena_instance);
+void				cw_buffer_init	(t_arena *p_arena_instance);
 
 #endif

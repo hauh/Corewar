@@ -6,15 +6,15 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 18:42:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static carriage_t		*cr_vis_getcarp(corewar_t *cr, int place)
+static t_carriage		*cr_vis_getcarp(t_corewar *cr, int place)
 {
-	carriage_t *car;
+	t_carriage *car;
 
 	car = cr->p_carriage_obj;
 	while (car->id != 1 && place)
@@ -39,9 +39,9 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 	}
 }
 
-void					cr_vis_printcarinfo(corewar_t *cr)
+void					cr_vis_printcarinfo(t_corewar *cr)
 {
-	carriage_t *car;
+	t_carriage *car;
 	int y;
 
 	y = 3;

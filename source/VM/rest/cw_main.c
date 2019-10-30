@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 19:39:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 16:35:56 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int				main(int argc, char **argv)
 {
-	corewar_t	*p_game_obj;
+	t_corewar	*p_game_obj;
 
 	cw_create_instance_game(&p_game_obj);
 	p_game_obj->cw_arena_obj_init(p_game_obj);

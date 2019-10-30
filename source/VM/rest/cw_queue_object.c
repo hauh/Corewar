@@ -6,15 +6,15 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 18:13:31 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/28 16:09:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 14:53:40 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static int		cw_get_value(queue_t *p_queue_instance, int index)
+static int		cw_get_value(t_queue *p_queue_instance, int index)
 {
-	carriage_t	*iter;
+	t_carriage	*iter;
 	int			tmp;
 
 	iter = p_queue_instance->p_current_carriage;
@@ -28,7 +28,7 @@ static int		cw_get_value(queue_t *p_queue_instance, int index)
 	return (0);
 }
 
-static void		cw_print_content(queue_t *p_queue_instance)
+static void		cw_print_content(t_queue *p_queue_instance)
 {
 	int			iter;
 
@@ -48,15 +48,15 @@ static void		cw_print_content(queue_t *p_queue_instance)
 	}
 }
 
-static void		cw_peek(queue_t *p_queue_instance, carriage_t **p_peeking_carriage)
+static void		cw_peek(t_queue *p_queue_instance, t_carriage **p_peeking_carriage)
 {
 	if (p_peeking_carriage)
 		*p_peeking_carriage = p_queue_instance->p_current_carriage;
 }
 
-static void		cw_dequeue(queue_t *p_queue_instance, carriage_t **p_deleting_carriage)
+static void		cw_dequeue(t_queue *p_queue_instance, t_carriage **p_deleting_carriage)
 {
-	carriage_t *free_tmp;
+	t_carriage *free_tmp;
 
 	if (p_queue_instance->p_current_carriage)
 	{
@@ -75,7 +75,7 @@ static void		cw_dequeue(queue_t *p_queue_instance, carriage_t **p_deleting_carri
 	}
 }
 
-static void		cw_enqueue(queue_t *p_queue_instance, carriage_t *p_adding_carraige)
+static void		cw_enqueue(t_queue *p_queue_instance, t_carriage *p_adding_carraige)
 {
 	if (p_adding_carraige)
 	{
@@ -96,22 +96,22 @@ static void		cw_enqueue(queue_t *p_queue_instance, carriage_t *p_adding_carraige
 	}
 }
 
-static void		cw_constructor(queue_t **pp_queue_instance)
+static void		cw_constructor(t_queue **pp_queue_instance)
 {
 	(*pp_queue_instance)->p_current_carriage = NULL;
 	(*pp_queue_instance)->size = 0;
 }
 
-static void		cw_destructor(queue_t **pp_queue_instance)
+static void		cw_destructor(t_queue **pp_queue_instance)
 {
 	free(*pp_queue_instance);
 	*pp_queue_instance = NULL;
 }
 
-extern void		cw_create_instance_queue(queue_t **pp_queue_obj)
+extern void		cw_create_instance_queue(t_queue **pp_queue_obj)
 {
-	if (!(*pp_queue_obj = (queue_t *)malloc(sizeof(queue_t))))
-		cwErrorCatcher(CW_NOT_ALLOCATED, "Queue object has not been created");
+	if (!(*pp_queue_obj = (t_queue *)malloc(sizeof(t_queue))))
+		cw_error_catcher(CW_NOT_ALLOCATED, "Queue object has not been created");
 	(*pp_queue_obj)->cw_constructor = cw_constructor;
 	(*pp_queue_obj)->cw_destructor = cw_destructor;
 	(*pp_queue_obj)->cw_enqueue = cw_enqueue;

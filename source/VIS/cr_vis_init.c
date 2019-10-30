@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:44:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/28 16:43:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 14:30:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		cr_vis_initvis(corewar_t *cr)
+int		cr_vis_initvis(t_corewar *cr)
 {
 	t_vis *tmp;
 

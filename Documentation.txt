@@ -3,14 +3,14 @@ For this shit code doesn't exist any documentation, will be better if you do not
 /* Visualizator for VM */
 
 Basically, you only need to know about two functions:
-	-> int cr_vis_main (corewar_t *cr, int act);
+	-> int cr_vis_main (t_corewar *cr, int act);
 			where 'cr' is a main game object and 'act' is the needed action
 			there are five actions in total:
 				V_INIT,								// initialise the map (use once at the begining)
 				V_CONTROL,							// update time(for framerate) and check key input (use as often as you can)
 				V_UPDATE,							// draw current map/info in terminal (use every time you want to display changed data)
 				V_CLEANUP							// clean allocated memory and get rid of the visuals (use once at the end)
-	-> void cr_vis_putx (int num, int i, int colour, int rev, corewar_t *cr);
+	-> void cr_vis_putx (int num, int i, int colour, int rev, t_corewar *cr);
 			where 'num' is a value of a char
 			'i' is a position on the map(index in an array)
 			'colour' is a desired drawing colour (use id of a player)
