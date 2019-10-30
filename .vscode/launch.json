@@ -9,7 +9,11 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/corewar",
+<<<<<<< HEAD
 			"args": ["samples/champs/maxidef.cor"],
+=======
+			"args": ["-v", "samples/champs/Gagnant.cor", "samples/champs/Gagnant.cor"],
+>>>>>>> 7a9bc5ca301a17988538017cc3f48d5c944b7928
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
