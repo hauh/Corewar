@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/29 17:42:03 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/30 16:14:22 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,9 @@ int		cr_vis_keys(corewar_t *cr)
 	if (key == KEY_DOWN)
 		vis->car_place =
 		(vis->car_place <= 0) ? 0 : (vis->car_place - V_CARVOL);
+	if (key == 'c')
+		vis->carinfo = vis->carinfo ? 0 : 1;
+	if (key == 'i')
+		vis->info = vis->info ? 0 : 1;
 	return (0);
 }

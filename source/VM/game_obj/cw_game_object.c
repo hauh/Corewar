@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_object.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 20:15:20 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 15:54:43 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,16 @@ static void	cw_start_game(corewar_t *p_game_instance)
 {
 	int		iter;
 
-	//cr_vis_main(p_game_instance, V_INIT);
+	cr_vis_main(p_game_instance, V_INIT);
+	p_game_instance->vis->startfrom = 6969;
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
-		//cr_vis_main(p_game_instance, V_CONTROL);
-		//if (p_game_instance->vis->exit)
-		//	p_game_instance->cw_destructor(&p_game_instance);
-		//else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
-		//{
+		cr_vis_main(p_game_instance, V_CONTROL);
+		if (p_game_instance->vis->exit)
+			p_game_instance->cw_destructor(&p_game_instance);
+		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
+		{
 			p_game_instance->p_arena_obj->cycle_amount += 1;
 			while (++iter < p_game_instance->carriages_amount)
 			{
@@ -120,9 +121,8 @@ static void	cw_start_game(corewar_t *p_game_instance)
 			p_game_instance->cw_merge_queue_to_list(p_game_instance);
 			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
 				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-		//	if (p_game_instance->p_arena_obj->cycle_amount >= 3800)
-		//		cr_vis_main(p_game_instance, V_UPDATE);
-		//}
+			cr_vis_main(p_game_instance, V_UPDATE);
+		}
 	}
 }
 

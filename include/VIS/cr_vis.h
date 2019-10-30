@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/29 17:41:31 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/30 16:14:09 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ typedef struct			s_vis
 	int					exit;
 	int					tick;
 	int					fpsdiv;
+	int					carinfo;
+	int					info;
+	int					startfrom;
 	unsigned char		*field;
 	long int			time;
 	int					car_place;
