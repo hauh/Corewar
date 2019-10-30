@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:07:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 19:28:25 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void		cw_constructor(t_corewar **pp_game_instance)
 	(*pp_game_instance)->p_player_obj = NULL;
 	(*pp_game_instance)->p_carriage_obj = NULL;
 	(*pp_game_instance)->p_waiting_queue = NULL;
+	(*pp_game_instance)->test = 0;
 }
 
 static void		cw_destructor(t_corewar **pp_game_instance)

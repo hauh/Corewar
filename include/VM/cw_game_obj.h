@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:07:41 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 19:28:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct			s_corewar
 	t_carriage			*p_waiting_queue;
 
 	t_vis				*vis;
+
+	int test;
 
 	void				(*cw_constructor)			(t_corewar **);
 	void				(*cw_carriage_obj_init)		(t_corewar *);

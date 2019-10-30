@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:10:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:25:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 20:14:35 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ void		cw_write_operation(t_carriage *p_carriage_instance, t_arena *p_arena_obj, 
 		p_carriage_instance->cw_conversion_bytes_to_value(p_carriage_instance, p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF], CW_SHORT);
 		if (p_carriage_instance->p_current_command->id != CW_LLD)
 			p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value %= IDX_MOD;
+		p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value %= MEM_SIZE;
 		p_carriage_instance->cw_save_pos(p_carriage_instance, CW_ADDIT_SAVE);
 		p_carriage_instance->cw_move_to	(p_carriage_instance, p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value - p_carriage_instance->odometer);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i, p_carriage_instance->cw_move_to(p_carriage_instance, 1))
 		{
 			p_arena_obj->p_field[p_carriage_instance->current_location] = pBufferObj->p_data[i];
-			if (p_carriage_instance->game_ref->visualizator)
-				cr_vis_putx(pBufferObj->p_data[i], p_carriage_instance->current_location, p_carriage_instance->p_owner->id, 0, p_carriage_instance->game_ref);
+			//if (p_carriage_instance->game_ref->visualizator)
+			//	cr_vis_putx(pBufferObj->p_data[i], p_carriage_instance->current_location, p_carriage_instance->p_owner->id, 0, p_carriage_instance->game_ref);
 		}
 		p_carriage_instance->cw_carriage_return(p_carriage_instance, CW_ADDIT_SAVE);
 	}
@@ -70,6 +71,7 @@ void	cw_read_operation(t_carriage *p_carriage_instance, t_arena *p_arena_obj, t_
 		p_carriage_instance->cw_conversion_bytes_to_value(p_carriage_instance, p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF], CW_SHORT);
 		if (p_carriage_instance->p_current_command->id != CW_LLD)
 			p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value %= IDX_MOD;
+			p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value %= MEM_SIZE;
 		p_carriage_instance->cw_save_pos(p_carriage_instance, CW_ADDIT_SAVE);
 		p_carriage_instance->cw_move_to(p_carriage_instance, p_arena_obj->pa_buffer_set[CW_SYSTEM_BUF]->s_types.short_value - p_carriage_instance->odometer);
 		for (int i = CW_INT; i < CW_REG_SIZE; ++i, p_carriage_instance->cw_move_to(p_carriage_instance, 1))

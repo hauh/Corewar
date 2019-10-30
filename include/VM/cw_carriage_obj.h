@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:18:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 19:22:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ typedef struct			s_carriage
 	void				(*cw_check_carry)				(t_carriage *);
 	void 				(*cw_write_owner_id_to_reg)		(t_carriage *);
 	void				(*cw_copy_reg)					(t_carriage *, t_carriage *);
-	void				(*cw_reg_check)					(t_carriage *, t_arena *, int);
+	void				(*cw_reg_check)					(t_carriage *, t_arena *, int, int *);
 	void				(*cw_destructor)				(t_carriage **);
 }						t_carriage;
 
-void	cw_reg_check(t_carriage *p_carriage_instance, t_arena *p_arena_obj, int type);
+void	cw_reg_check(t_carriage *p_carriage_instance, t_arena *p_arena_obj, int type, int *);
 void	cw_copy_reg(t_carriage *p_carriage_instance, t_carriage *p_copying_carriage);
 void	cw_write_owner_id_to_reg(t_carriage *p_carriage_instance);
 void	cw_check_carry(t_carriage *p_carriage_instance);

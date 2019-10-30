@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:06:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 18:22:18 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,28 @@ static void	cw_constructor(t_carriage **pp_carriage_instance)
 	if (!((*pp_carriage_instance)->p_registers = (unsigned char *)malloc(sizeof(unsigned char) * (CW_REG_NUMBER * CW_REG_SIZE))))
 		cw_error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
 	ft_memset((*pp_carriage_instance)->p_registers, 0, CW_REG_NUMBER * CW_REG_SIZE);
+	(*pp_carriage_instance)->id = 0;
+	(*pp_carriage_instance)->carry = 0;
+	(*pp_carriage_instance)->odometer = 0;
+	(*pp_carriage_instance)->save_point = 0;
+	(*pp_carriage_instance)->waiting_time = 0;
+	(*pp_carriage_instance)->addit_odometer = 0;
+	(*pp_carriage_instance)->last_speak_cycle = 0;
+	(*pp_carriage_instance)->addit_save_point = 0;
+	(*pp_carriage_instance)->current_location = 0;
+	(*pp_carriage_instance)->current_register = 0;
+	(*pp_carriage_instance)->error_ocurred = 0;
+	(*pp_carriage_instance)->first_arg = 0;
+	(*pp_carriage_instance)->second_arg = 0;
+	(*pp_carriage_instance)->third_arg = 0;
+	(*pp_carriage_instance)->offset = 0;
+	(*pp_carriage_instance)->checked = 0;
+	(*pp_carriage_instance)->p_next = NULL;
+	(*pp_carriage_instance)->p_prev = NULL;
+	(*pp_carriage_instance)->pp_command_container = NULL;
+	(*pp_carriage_instance)->p_current_command = NULL;
+	(*pp_carriage_instance)->p_owner = NULL;
+	(*pp_carriage_instance)->game_ref = NULL;
 }
 
 static void	cw_destructor(t_carriage **pp_carriage_instance)
@@ -30,7 +52,7 @@ extern void	cw_create_instance_carriage(t_carriage **pp_carriage_obj)
 {
 	if (!(*pp_carriage_obj = (t_carriage *)malloc(sizeof(t_carriage))))
 		cw_error_catcher(CW_NOT_ALLOCATED, CW_CARRIAGE);
-	ft_memset(*pp_carriage_obj, 0, sizeof(t_carriage));
+	//ft_memset(*pp_carriage_obj, 0, sizeof(t_carriage));
 	(*pp_carriage_obj)->cw_constructor = cw_constructor;
 	(*pp_carriage_obj)->cw_destructor = cw_destructor;
 	(*pp_carriage_obj)->cw_conversion_value_to_bytes = cw_conversion_value_to_bytes;
