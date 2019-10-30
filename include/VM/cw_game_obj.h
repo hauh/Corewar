@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:04:37 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:07:41 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct			s_corewar
 	void				(*cw_stack_obj_init)		(t_corewar *);
 	void				(*cw_queue_obj_init)		(t_corewar *);
 	void				(*cw_push_to_queue)			(t_corewar *, t_carriage *);
-	void				(*cw_merge_t_queueo_list)	(t_corewar *);
+	void				(*cw_merge_queue_to_list)	(t_corewar *);
 	void				(*cw_delete_carriage)		(t_corewar *, int *);
 	void				(*cw_destructor)			(t_corewar **);
 }						t_corewar;
@@ -81,6 +81,6 @@ void	cw_start_game(t_corewar *p_game_instance);
 void	cw_main_checking(t_corewar *p_game_instance);
 void	cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car);
 void	cw_push_to_queue(t_corewar *p_game_instance, t_carriage *p_adding_carriage);
-void	cw_merge_t_queueo_list(t_corewar *p_game_instance);
+void	cw_merge_queue_to_list(t_corewar *p_game_instance);
 
 #endif

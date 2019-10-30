@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:05:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:09:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void		cw_merge_t_queueo_list(t_corewar *p_game_instance)
+void		cw_merge_queue_to_list(t_corewar *p_game_instance)
 {
 	t_carriage	*p_tmp_carriage;
 	int			iter;
@@ -94,7 +94,7 @@ void		cw_main_checking(t_corewar *p_game_instance)
 	p_game_instance->p_arena_obj->live_amount = 0;
 }
 
-static void	cw_start_game(t_corewar *p_game_instance)
+void	cw_start_game(t_corewar *p_game_instance)
 {
 	int		iter;
 

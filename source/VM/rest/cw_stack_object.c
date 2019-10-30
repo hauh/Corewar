@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 14:41:17 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 14:53:40 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:08:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void		cw_distribute_carriage(t_stack *p_stack_instance, t_queue *p_waitin
 
 	while(p_stack_instance->p_current_carriage && p_stack_instance->p_current_carriage->checked != p_arena_obj->cycle_amount)
 	{
-		p_stack_instance->p_current_carriage->cw_set_t_commandime(p_stack_instance->p_current_carriage, p_arena_obj);
+		p_stack_instance->p_current_carriage->cw_set_command_time(p_stack_instance->p_current_carriage, p_arena_obj);
 		if (p_stack_instance->p_current_carriage->p_current_command && !p_stack_instance->p_current_carriage->error_ocurred)
 		{
 			p_stack_instance->cw_pop(p_stack_instance, &tmp);

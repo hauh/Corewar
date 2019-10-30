@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:05:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:07:19 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ extern void		cw_create_instance_game(t_corewar **pp_game_obj)
 	(*pp_game_obj)->cw_destructor = cw_destructor;
 	(*pp_game_obj)->cw_arrange_units_on_field = cw_arrange_units_on_field;
 	(*pp_game_obj)->cw_add_carriage_to_list = cw_add_t_carriageo_list;
-	(*pp_game_obj)->cw_merge_t_queueo_list = cw_merge_t_queueo_list;
+	(*pp_game_obj)->cw_merge_queue_to_list = cw_merge_queue_to_list;
 	(*pp_game_obj)->cw_carriage_obj_init = cw_carriage_obj_init;
 	(*pp_game_obj)->cw_command_obj_init = cw_command_obj_init;
 	(*pp_game_obj)->cw_free_all_commands = cw_free_all_commands;
