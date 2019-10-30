@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:25:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:06:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ extern void	cw_create_instance_carriage(t_carriage **pp_carriage_obj)
 	(*pp_carriage_obj)->cw_save_pos = cw_save_pos;
 	(*pp_carriage_obj)->cw_move_to = cw_move_to;
 	(*pp_carriage_obj)->cw_exec_command = cw_exec_command;
-	(*pp_carriage_obj)->cw_set_t_commandime = cw_set_t_commandime;
+	(*pp_carriage_obj)->cw_set_command_time = cw_set_t_commandime;
 	(*pp_carriage_obj)->cw_reduce_time = cw_reduce_waiting_time;
 	(*pp_carriage_obj)->cw_write_owner_id_to_reg = cw_write_owner_id_to_reg;
 	(*pp_carriage_obj)->cw_carriage_return = cw_carriage_return;

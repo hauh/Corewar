@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 14:30:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:03:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,9 @@ int		cr_vis_keys(t_corewar *cr)
 	if (key == KEY_DOWN)
 		vis->car_place =
 		(vis->car_place <= 0) ? 0 : (vis->car_place - V_CARVOL);
+	if (key == 'c')
+		vis->carinfo = vis->carinfo ? 0 : 1;
+	if (key == 'i')
+		vis->info = vis->info ? 0 : 1;
 	return (0);
 }

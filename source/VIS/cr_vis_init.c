@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:44:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 14:30:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:03:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int		cr_vis_initvis(t_corewar *cr)
 	tmp->field = (unsigned char *)malloc(MEM_SIZE);
 	ft_memmove(tmp->field, cr->p_arena_obj->p_field, MEM_SIZE);
 	tmp->fpsdiv = 420;
+	tmp->info = 1;
 	cr->vis = tmp;
 	cr_vis_drawborder();
 	cr_vis_printmap(cr->p_arena_obj->p_field, MEM_SIZE, cr);

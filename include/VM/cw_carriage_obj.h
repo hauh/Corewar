@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:27:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:05:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct			s_carriage
 	void				(*cw_constructor)				(t_carriage **);
 	void				(*cw_save_pos)					(t_carriage *, t_flag);
 	void				(*cw_exec_command)				(t_carriage *, t_corewar *);
-	void				(*cw_set_t_commandime)			(t_carriage *, t_arena *);
+	void				(*cw_set_command_time)			(t_carriage *, t_arena *);
 	void				(*cw_reduce_time)				(t_carriage *);
 	void				(*cw_parse_types)				(t_carriage *, t_arena *);
 	void				(*cw_move_to)					(t_carriage *, int);

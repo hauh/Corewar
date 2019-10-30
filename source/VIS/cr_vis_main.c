@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 14:30:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:03:54 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ int		cr_vis_main(t_corewar *cr, int action)
 		cr_vis_timer(cr);
 		cr_vis_keys(cr);
 	}
-	else if (action == V_UPDATE)
+	else if (action == V_UPDATE && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom)
 	{
 		cr_vis_updatemap(cr);
 		cr->vis->step = 0;
 		cr->vis->tick = 0;
 	}
-	else if (action == V_CLEANUP)
-		cr_vis_cleanup(cr);
-	if (cr->vis && cr->p_arena_obj->cycle_amount >= 3800)
+	if (cr->vis && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom)
 	{
 		cr_vis_printinfo(cr);
 		refresh();
 	}
+	if (action == V_CLEANUP)
+		cr_vis_cleanup(cr);
 	return (0);
 }
