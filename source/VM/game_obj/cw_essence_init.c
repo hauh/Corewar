@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:39:47 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:18:28 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void		cw_carriage_obj_init(t_corewar *p_game_instance)
 		p_carriage_obj->pp_command_container = p_game_instance->pa_commands;
 		p_carriage_obj->cw_set_owner(p_carriage_obj, p_game_instance->p_player_obj, p_game_instance->players_amount);
 		p_carriage_obj->cw_write_owner_id_to_reg(p_carriage_obj);
+		p_carriage_obj->game_ref = p_game_instance;
 		p_game_instance->cw_add_carriage_to_list(p_game_instance, p_carriage_obj, 0);
 		++iter;
 	}

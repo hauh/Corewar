@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:05:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:18:04 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct			s_carriage
 	t_command			**pp_command_container;
 	t_command			*p_current_command;
 	t_player			*p_owner;
+	t_corewar			*game_ref;
 
 	void				(*cw_constructor)				(t_carriage **);
 	void				(*cw_save_pos)					(t_carriage *, t_flag);

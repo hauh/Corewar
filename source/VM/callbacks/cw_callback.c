@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 15:12:40 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 17:25:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,11 @@ void	sti_exec(t_corewar *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_save_pos(p_game_obj->p_carriage_obj, CW_ADDIT_SAVE);
 	p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_SPARE_BUF]->s_types.int_value - p_game_obj->p_carriage_obj->odometer);
 	for (int i = CW_INT; i < CW_REG_SIZE; ++i, p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, 1))
+	{
 		p_game_obj->p_arena_obj->p_field[p_game_obj->p_carriage_obj->current_location] = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[i];
+		if (p_game_obj->visualizator)
+			cr_vis_putx(p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[i], p_game_obj->p_carriage_obj->current_location, p_game_obj->p_carriage_obj->p_owner->id, 0, p_game_obj->p_carriage_obj->game_ref);
+	}
 	p_game_obj->p_carriage_obj->cw_carriage_return(p_game_obj->p_carriage_obj, CW_ADDIT_SAVE);
 
 }
