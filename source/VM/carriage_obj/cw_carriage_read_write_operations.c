@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_carriage_read_write_operations.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:10:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:25:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 18:39:34 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

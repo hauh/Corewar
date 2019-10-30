@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:25:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/30 18:19:02 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,19 @@ void	cw_start_game(t_corewar *p_game_instance)
 {
 	int		iter;
 
-	cr_vis_main(p_game_instance, V_INIT);
-	p_game_instance->vis->startfrom = 6969;
+	if (p_game_instance->visualizator == CW_TRUE)
+	{
+		cr_vis_main(p_game_instance, V_INIT);
+		p_game_instance->vis->startfrom = 1;
+	}
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
-		cr_vis_main(p_game_instance, V_CONTROL);
-		if (p_game_instance->vis->exit)
+		if (p_game_instance->visualizator == CW_TRUE)
+			cr_vis_main(p_game_instance, V_CONTROL);
+		if (p_game_instance->visualizator == CW_TRUE && p_game_instance->vis->exit)
 			p_game_instance->cw_destructor(&p_game_instance);
-		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
+		else if (p_game_instance->visualizator == CW_FALSE || ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick))
 		{
 			p_game_instance->p_arena_obj->cycle_amount += 1;
 			while (++iter < p_game_instance->carriages_amount)
@@ -121,7 +125,8 @@ void	cw_start_game(t_corewar *p_game_instance)
 			p_game_instance->cw_merge_queue_to_list(p_game_instance);
 			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
 				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-			cr_vis_main(p_game_instance, V_UPDATE);
+			if (p_game_instance->visualizator == CW_TRUE)
+				cr_vis_main(p_game_instance, V_UPDATE);
 		}
 	}
 }
