@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
+#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/30 16:44:00 by vrichese         ###   ########.fr        #
+#    Updated: 2019/10/31 14:56:35 by dbrady           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ VIS_SOURCE		:=		cr_vis_buildmap.c	\
 						cr_vis_printinfo.c	\
 						cr_vis_updatemap.c	\
 						cr_vis_printcar.c	\
+						cr_vis_welcomescr.c \
 
 
 VM_HEADERS		:=		cw_carriage_obj.h\

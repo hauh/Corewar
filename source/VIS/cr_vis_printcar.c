@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printcar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 14:30:50 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 14:33:32 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static t_carriage		*cr_vis_getcarp(t_corewar *cr, int place)
 	car = cr->p_carriage_obj;
 	while (car->id != 1 && place)
 	{
+		if (car->p_next == cr->p_carriage_obj)
+			return (car);
 		car = car->p_next;
 		place -= 1;
 	}
@@ -39,31 +41,40 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 	}
 }
 
+static void				cr_vis_bbmvprintw(t_carriage *car, int y)
+{
+	mvprintw(y, V_SEPSEP + 9, "id: % 6d | own: % 6d | car: % 6d | do: % 6d"
+" | sp: % 6d | wt: % 6d | ad: % 6d | lsc: % 6d | asp: % 6d | cl: % 6d | cr:"
+" % 6d | eo: % 6d | fa: % 6d | sa: % 6d | ta: % 6d | off: % 6d ",
+car->id, car->p_owner->id, car->carry, car->odometer, car->save_point,
+car->waiting_time, car->addit_odometer, car->last_speak_cycle,
+car->addit_save_point, car->current_location, car->current_register,
+car->error_ocurred, car->first_arg, car->second_arg, car->third_arg,
+car->offset);
+}
+
 void					cr_vis_printcarinfo(t_corewar *cr)
 {
-	t_carriage *car;
-	int y;
+	t_carriage	*car;
+	int			y;
+	char		owner[2];
 
+	ft_bzero(owner, 2);
 	y = 3;
-
 	car = cr_vis_getcarp(cr, cr->vis->car_place);
 	attron(A_BOLD);
-	mvprintw(2, V_SEPSEP + 9, "currently viewing carriages %d through %d   ...   place: %d | car_id: %d | amount: %d | reg_len: %d | carvol: %d",
-	car->id, cr_vis_getcarp(cr, cr->vis->car_place + (V_CARVOL - 1))->id, cr->vis->car_place, car->id, cr->carriages_amount, CW_REG_SIZE * CW_REG_NUMBER, V_CARVOL);
+	mvprintw(2, V_SEPSEP + 9, "currently viewing carriages %d through %d",
+car->id, cr_vis_getcarp(cr, cr->vis->car_place + (V_CARVOL - 1))->id,
+cr->vis->car_place);
 	while (y / 3 - 1 < V_CARVOL)
 	{
 		attron(A_BOLD);
-		mvprintw(y, V_SEPSEP + 9, "id: % 6d | own: % 6d | car: % 6d | do: % 6d "
-		"| sp: % 6d | wt: % 6d | ad: % 6d | lsc: % 6d | asp: % 6d | cl: % 6d "
-		"| cr: % 6d | eo: % 6d | fa: % 6d | sa: % 6d | ta: % 6d | off: % 6d ",
-		car->id, car->p_owner->id,
-		car->carry, car->odometer, car->save_point, car->waiting_time,
-		car->addit_odometer, car->last_speak_cycle, car->addit_save_point,
-		car->current_location, car->current_register, car->error_ocurred,
-		car->first_arg, car->second_arg, car->third_arg, car->offset);
+		cr_vis_bbmvprintw(car, y);
+		owner[0] = car->p_owner->id + '0';
+		cr_vis_printattr(y, V_SEPSEP + 32, owner, car->p_owner->id, 0);
 		attroff(A_BOLD);
 		cr_vis_printreg(car->p_registers, y + 1);
-		if (car->id == 1)
+		if (car->p_next == cr->p_carriage_obj)
 			break ;
 		car = car->p_next;
 		y += 3;

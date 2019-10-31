@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 12:34:52 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 15:44:47 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	cw_start_game(t_corewar *p_game_instance)
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
-		if (p_game_instance->visualizator == CW_TRUE)
+		if (p_game_instance->visualizator == CW_TRUE && p_game_instance->p_carriage_obj)
 			cr_vis_main(p_game_instance, V_CONTROL);
 		if (p_game_instance->visualizator == CW_TRUE && p_game_instance->vis->exit)
 			p_game_instance->cw_destructor(&p_game_instance);
@@ -128,7 +128,7 @@ void	cw_start_game(t_corewar *p_game_instance)
 			p_game_instance->cw_merge_queue_to_list(p_game_instance);
 			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
 				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-			if (p_game_instance->visualizator == CW_TRUE)
+			if (p_game_instance->visualizator == CW_TRUE && p_game_instance->p_carriage_obj)
 				cr_vis_main(p_game_instance, V_UPDATE);
 		}
 	}

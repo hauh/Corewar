@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 17:03:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 15:25:56 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,20 @@ int		cr_vis_cleanup(t_corewar *cr)
 
 int		cr_vis_main(t_corewar *cr, int action)
 {
-	if (action == V_INIT)
+	if (action == V_INIT && cr->p_carriage_obj)
 		cr_vis_initvis(cr);
-	else if (action == V_CONTROL)
+	else if (action == V_CONTROL && cr->p_carriage_obj)
 	{
 		cr_vis_timer(cr);
 		cr_vis_keys(cr);
 	}
-	else if (action == V_UPDATE && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom)
+	else if (action == V_UPDATE && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom && cr->p_carriage_obj)
 	{
 		cr_vis_updatemap(cr);
 		cr->vis->step = 0;
 		cr->vis->tick = 0;
 	}
-	if (cr->vis && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom)
+	if (cr->vis && cr->p_arena_obj->cycle_amount >= cr->vis->startfrom && cr->p_carriage_obj)
 	{
 		cr_vis_printinfo(cr);
 		refresh();

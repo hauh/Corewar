@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:52:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/31 13:27:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 16:34:37 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int		cr_vis_printattr(int y, int x, char *str, int colour, int reverse)
 		attron(COLOR_PAIR(colour));
 	if (reverse)
 		attron(A_REVERSE);
-	//attron(A_BOLD);
+	// attron(A_BOLD);
 	mvaddstr(y, x, str);
-	//attron(A_BOLD);
+	// attroff(A_BOLD);
 	if (colour)
 		attroff(COLOR_PAIR(colour));
 	if (reverse)
