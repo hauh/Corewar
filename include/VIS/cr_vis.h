@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:04:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 12:57:08 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
 ** Visual defines
 */
 
-# define V_W 420
+//# define V_W 420 // <- с каретками
+
+# define V_W 136 + 60
 # define V_H 100
 # define V_SEP 136
 # define V_SEPSEP (V_SEP + 60)

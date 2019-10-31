@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_callback.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/10/30 20:08:38 by vrichese         ###   ########.fr       */
-=======
-/*   Updated: 2019/10/30 18:39:22 by dbrady           ###   ########.fr       */
->>>>>>> 7a9bc5ca301a17988538017cc3f48d5c944b7928
+/*   Updated: 2019/10/31 12:34:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +155,8 @@ void	sti_exec(t_corewar *p_game_obj)
 	for (int i = CW_INT; i < CW_REG_SIZE; ++i, p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, 1))
 	{
 		p_game_obj->p_arena_obj->p_field[p_game_obj->p_carriage_obj->current_location] = p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[i];
-		//if (p_game_obj->visualizator)
-		//	cr_vis_putx(p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[i], p_game_obj->p_carriage_obj->current_location, p_game_obj->p_carriage_obj->p_owner->id, 0, p_game_obj->p_carriage_obj->game_ref);
+		if (p_game_obj->visualizator)
+			cr_vis_putx(p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->p_data[i], p_game_obj->p_carriage_obj->current_location, p_game_obj->p_carriage_obj->p_owner->id, 0, p_game_obj->p_carriage_obj->game_ref);
 	}
 	p_game_obj->p_carriage_obj->cw_carriage_return(p_game_obj->p_carriage_obj, CW_ADDIT_SAVE);
 
@@ -184,6 +180,7 @@ void	fork_exec(t_corewar *p_game_obj)
 	p_carriage_obj->pp_command_container = p_game_obj->p_carriage_obj->pp_command_container;
 	p_carriage_obj->p_owner = p_game_obj->p_carriage_obj->p_owner;
 	p_carriage_obj->id = ++p_game_obj->numerate_carriage;
+	p_carriage_obj->game_ref = p_game_obj->p_carriage_obj->game_ref;
 	p_game_obj->cw_push_to_queue(p_game_obj, p_carriage_obj);
 }
 
@@ -234,6 +231,7 @@ void	lfork_exec(t_corewar *p_game_obj)
 	p_carriage_obj->pp_command_container = p_game_obj->p_carriage_obj->pp_command_container;
 	p_carriage_obj->p_owner = p_game_obj->p_carriage_obj->p_owner;
 	p_carriage_obj->id = ++p_game_obj->numerate_carriage;
+	p_carriage_obj->game_ref = p_game_obj->p_carriage_obj->game_ref;
 	p_game_obj->cw_push_to_queue(p_game_obj, p_carriage_obj);
 }
 

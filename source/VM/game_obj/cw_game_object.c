@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_object.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/10/30 19:28:25 by vrichese         ###   ########.fr       */
-=======
-/*   Updated: 2019/10/30 18:16:08 by dbrady           ###   ########.fr       */
->>>>>>> 7a9bc5ca301a17988538017cc3f48d5c944b7928
+/*   Updated: 2019/10/31 12:30:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +26,7 @@ static void		cw_constructor(t_corewar **pp_game_instance)
 	(*pp_game_instance)->p_player_obj = NULL;
 	(*pp_game_instance)->p_carriage_obj = NULL;
 	(*pp_game_instance)->p_waiting_queue = NULL;
-<<<<<<< HEAD
-	(*pp_game_instance)->test = 0;
-=======
 	(*pp_game_instance)->vis = NULL;
->>>>>>> 7a9bc5ca301a17988538017cc3f48d5c944b7928
 }
 
 static void		cw_destructor(t_corewar **pp_game_instance)

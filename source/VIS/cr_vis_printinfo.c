@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 17:03:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 12:55:10 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ int		cr_vis_printhealth(t_corewar *cr)
 int		cr_vis_printinfo(t_corewar *cr)
 {
 	cr_vis_clearinfo();
-	if (cr->vis->carinfo)
-		cr_vis_printcarinfo(cr);
+	// if (cr->vis->carinfo)
+	// 	cr_vis_printcarinfo(cr);
 	if (cr->vis->info)
 	{
 		attron(A_BOLD);
