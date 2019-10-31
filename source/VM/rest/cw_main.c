@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 17:19:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 19:44:51 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@ int				main(int argc, char **argv)
 	p_game_obj->cw_arrange_units_on_field(p_game_obj);
 	p_game_obj->cw_introduce_players(p_game_obj);
 	p_game_obj->cw_start_game(p_game_obj);
-	if (p_game_obj->visualizator)
-		cr_vis_winner(p_game_obj);
-	else
-		p_game_obj->cw_congratulations(p_game_obj);
-	//ft_printf("%d\n", p_game_obj->p_arena_obj->cycle_amount);
 	p_game_obj->cw_destructor(&p_game_obj);
 	return (CW_SUCCESS);
 }

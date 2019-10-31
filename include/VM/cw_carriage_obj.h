@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 19:22:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 19:58:30 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	cw_carriage_return(t_carriage *p_carriage_instance, int whereExactly);
 void	cw_move_to(t_carriage *pCarraigeInstance, int distance);
 void	cw_save_pos(t_carriage *p_carriage_instance, int whichExactly);
 void	cw_reduce_waiting_time(t_carriage *pCarraigeInstance);
-void	cw_exec_command(t_carriage *p_carriage_instance, t_corewar *pGameInstance);
+void	cw_exec_command(t_carriage *p_carriage_instance, t_corewar *p_game_instance);
 void	cw_set_t_commandime(t_carriage *p_carriage_instance, t_arena *pArenaInstance);
 void	cw_set_owner(t_carriage *p_carriage_instance, t_player *pPlayerList, int playersAmount);
 void	cw_skip_damaged_command(t_carriage *p_carriage_instance, t_arena *p_arena_obj);

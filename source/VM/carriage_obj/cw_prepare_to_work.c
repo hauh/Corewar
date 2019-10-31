@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:18:37 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 19:25:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 20:24:20 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	cw_reduce_waiting_time(t_carriage *pCarraigeInstance)
 		pCarraigeInstance->waiting_time -= 1;
 }
 
-void	cw_exec_command(t_carriage *p_carriage_instance, t_corewar *pGameInstance)
+void	cw_exec_command(t_carriage *p_carriage_instance, t_corewar *p_game_instance)
 {
 	if (p_carriage_instance->waiting_time || p_carriage_instance->error_ocurred)
 		return ;
-	p_carriage_instance->p_current_command->cw_callback(pGameInstance);
+	p_carriage_instance->p_current_command->cw_callback(p_game_instance);
 	if (p_carriage_instance->error_ocurred)
-		p_carriage_instance->cw_skip_damaged_command(p_carriage_instance, pGameInstance->p_arena_obj);
+		p_carriage_instance->cw_skip_damaged_command(p_carriage_instance, p_game_instance->p_arena_obj);
 	p_carriage_instance->p_current_command = NULL;
 	p_carriage_instance->waiting_time = 0;
 }
@@ -40,6 +40,7 @@ void	cw_set_t_commandime(t_carriage *p_carriage_instance, t_arena *pArenaInstanc
 		p_carriage_instance->error_ocurred = CW_TRUE;
 		return ;
 	}
+	ft_printf("%d\n", p_carriage_instance->current_location);
 	p_carriage_instance->offset = 0;
 	p_carriage_instance->error_ocurred = CW_FALSE;
 	p_carriage_instance->p_current_command = p_carriage_instance->pp_command_container[pArenaInstance->p_field[p_carriage_instance->current_location]];

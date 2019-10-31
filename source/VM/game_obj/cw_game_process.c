@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 17:29:50 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/31 20:23:12 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,8 @@ void	cw_start_game(t_corewar *p_game_instance)
 				cr_vis_main(p_game_instance, V_UPDATE);
 		}
 	}
+	if (p_game_instance->visualizator)
+		cr_vis_winner(p_game_instance);
+	else
+		p_game_instance->cw_congratulations(p_game_instance);
 }
