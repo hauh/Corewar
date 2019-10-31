@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 15:44:47 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/10/31 17:29:50 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,7 @@ void	cw_start_game(t_corewar *p_game_instance)
 	int		iter;
 
 	if (p_game_instance->visualizator == CW_TRUE)
-	{
 		cr_vis_main(p_game_instance, V_INIT);
-		p_game_instance->vis->startfrom = 1;
-	}
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 16:34:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 17:30:31 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct			s_vis
 	int					fpsdiv;
 	int					carinfo;
 	int					info;
-	int					startfrom;
 	unsigned char		*field;
 	long int			time;
 	int					car_place;
