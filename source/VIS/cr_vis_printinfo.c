@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printinfo.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/31 12:55:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 14:07:15 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,16 @@ int		cr_vis_printhealth(t_corewar *cr)
 
 int		cr_vis_printinfo(t_corewar *cr)
 {
-	cr_vis_clearinfo();
-	// if (cr->vis->carinfo)
-	// 	cr_vis_printcarinfo(cr);
-	if (cr->vis->info)
+	if (cr->vis->carinfo != -1 || cr->vis->info != -1)
+		cr_vis_clearinfo();
+	if (!cr->vis->carinfo && !cr->vis->info)
+	{
+		cr->vis->carinfo = -1;
+		cr->vis->info = -1;
+	}
+	if (cr->vis->carinfo == 1)
+		cr_vis_printcarinfo(cr);
+	if (cr->vis->info == 1)
 	{
 		attron(A_BOLD);
 		mvprintw(2, V_SEP + 18, "<< %s >>", (cr->vis->flow || cr->vis->step) ? "running" : "paused");

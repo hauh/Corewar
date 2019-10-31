@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_control.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 17:03:49 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 14:09:16 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int		cr_vis_keys(t_corewar *cr)
 		vis->car_place =
 		(vis->car_place <= 0) ? 0 : (vis->car_place - V_CARVOL);
 	if (key == 'c')
-		vis->carinfo = vis->carinfo ? 0 : 1;
+		vis->carinfo = (vis->carinfo == 1) ? 0 : 1;
 	if (key == 'i')
-		vis->info = vis->info ? 0 : 1;
+		vis->info = (vis->info == 1) ? 0 : 1;
 	return (0);
 }

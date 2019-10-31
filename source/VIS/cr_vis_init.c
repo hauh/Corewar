@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:44:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 17:03:51 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 14:51:59 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int		cr_vis_initvis(t_corewar *cr)
 	tmp->fpsdiv = 420;
 	tmp->info = 1;
 	cr->vis = tmp;
+	cr_vis_welcome(cr);
 	cr_vis_drawborder();
 	cr_vis_printmap(cr->p_arena_obj->p_field, MEM_SIZE, cr);
 	refresh();
