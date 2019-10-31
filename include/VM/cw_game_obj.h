@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 19:28:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 16:30:34 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct			s_corewar
 {
 	t_flag				load_dump;
 	t_flag				visualizator;
+	t_flag				visual_cycle;
 
 	int					players_amount;
 	int					commands_amount;

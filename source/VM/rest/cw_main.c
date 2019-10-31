@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 12:35:21 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 16:25:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int				main(int argc, char **argv)
 	p_game_obj->cw_introduce_players(p_game_obj);
 	p_game_obj->cw_start_game(p_game_obj);
 	p_game_obj->cw_congratulations(p_game_obj);
-	//ft_printf("%032b\n", p_game_obj->test);
+	ft_printf("%032b\n", p_game_obj->test);
 	p_game_obj->cw_destructor(&p_game_obj);
 	return (CW_SUCCESS);
 }

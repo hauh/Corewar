@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 17:18:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 16:33:32 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ void		cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv)
 				else if (*(argv[iter]) == 'd' && iter + 1 < argc)
 					(p_game_instance->load_dump = ft_atoi(argv[iter + 1])) < CW_MIN_DUMP_CYCLE ?
 						cw_error_catcher(CW_NOT_VALID_KEY, "Not valid nubmer near -d") :
+							CW_FALSE;
+				else if (*(argv[iter]) == 's' && iter + 1 < argc)
+					(p_game_instance->visual_cycle = ft_atoi(argv[iter + 1])) < CW_MIN_DUMP_CYCLE ?
+						cw_error_catcher(CW_NOT_VALID_KEY, "Not valid nubmer near -s") :
 							CW_FALSE;
 				else if (*(argv[iter]) == 'v')
 					p_game_instance->visualizator = CW_TRUE;

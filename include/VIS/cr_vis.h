@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 12:57:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 13:16:30 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@
 
 //# define V_W 420 // <- с каретками
 
-# define V_W 136 + 60
+# define V_W 200 + 60
 # define V_H 100
-# define V_SEP 136
+# define V_SEP 200
 # define V_SEPSEP (V_SEP + 60)
 # define V_CARVOL (V_H / 3 - 3)
 # define V_BSYM "\xe2\x96\x88"

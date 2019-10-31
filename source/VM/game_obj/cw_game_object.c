@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 12:30:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/10/31 16:30:58 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void		cw_constructor(t_corewar **pp_game_instance)
 	(*pp_game_instance)->commands_amount = 0;
 	(*pp_game_instance)->carriages_amount = 0;
 	(*pp_game_instance)->last_check_cycle = 0;
+	(*pp_game_instance)->visual_cycle = 0;
 	(*pp_game_instance)->visualizator = CW_FALSE;
 	(*pp_game_instance)->load_dump = CW_FALSE;
 	(*pp_game_instance)->p_arena_obj = NULL;
