@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 20:12:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/01 18:25:06 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,24 @@ void	xor_exec(t_corewar *p_game_obj)
 
 void	zjmp_exec(t_corewar *p_game_obj)
 {
+
 	p_game_obj->test |= (1 << p_game_obj->p_carriage_obj->p_current_command->id);
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
+	//if (p_game_obj->p_arena_obj->cycle_amount == 23139)
+	//{
+	//	ft_printf("%d\n", p_game_obj->p_carriage_obj->current_location);
+	//	ft_printf("%d\n", p_game_obj->p_carriage_obj->carry);
+	//	ft_printf("%d\n", p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value);
+	//}
 	if (p_game_obj->p_carriage_obj->carry)
-		p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value - p_game_obj->p_carriage_obj->odometer);
+		p_game_obj->p_carriage_obj->cw_move_to(p_game_obj->p_carriage_obj, (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.short_value % IDX_MOD) - p_game_obj->p_carriage_obj->odometer);
+	//if (p_game_obj->p_arena_obj->cycle_amount == 23139)
+	//{
+	//	ft_printf("%d\n", p_game_obj->p_carriage_obj->current_location);
+	//	exit(1);
+	//}
 }
 
 void	ldi_exec(t_corewar *p_game_obj)
