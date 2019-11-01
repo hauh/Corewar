@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:07:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 19:04:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/01 13:56:24 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,65 +104,81 @@ void		cw_skip_damaged_command(t_carriage *p_carriage_instance, t_arena *p_arena_
 
 void	cw_parse_types(t_carriage *p_carriage_instance, t_arena *p_arena_obj)
 {
-	int		sample1;
-	int		sample2;
-	int		sample3;
-	int		found = CW_FALSE;
-	int 	f_s;
-	int		s_s;
-	int		t_s;
+	int		sample;
+	int		found;
 	int		iter;
 
 	p_carriage_instance->cw_move_to(p_carriage_instance, CW_NAME_PASS);
-	p_carriage_instance->offset = 0;
+	found = CW_FALSE;
 	if (p_carriage_instance->p_current_command->type_byte)
 	{
-		sample1 = p_carriage_instance->p_current_command->args >> 24 & 0xff;
-	 	sample2 = p_carriage_instance->p_current_command->args >> 16 & 0xff;
-	 	sample3 = p_carriage_instance->p_current_command->args >> 8 & 0xff;
-		f_s = sample1 >> 6 & 0x03;
-		!f_s ? f_s = 2147483647 : 0;
-		s_s = sample1 >> 4 & 0x03;
-		!s_s ? s_s = 2147483647 : 0;
-		t_s = sample1 >> 2 & 0x03;
-		!t_s ? t_s = 2147483647 : 0;
+		sample = p_carriage_instance->p_current_command->args >> 24 & 0xff;
 		p_carriage_instance->first_arg = p_arena_obj->p_field[p_carriage_instance->current_location] >> 6 & 0x03;
-		if (p_carriage_instance->first_arg == f_s || p_carriage_instance->first_arg == s_s || p_carriage_instance->first_arg == t_s)
+		if (p_carriage_instance->first_arg == (!(sample >> 6 & 0x03) ? 2147483647 : (sample >> 6 & 0x03))
+			|| p_carriage_instance->first_arg == (!(sample >> 4 & 0x03) ? 2147483647 : (sample >> 4 & 0x03))
+			|| p_carriage_instance->first_arg == (!(sample >> 2 & 0x03) ? 2147483647 : (sample >> 2 & 0x03)))
 			found = CW_TRUE;
-		p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->first_arg, &found);
+		p_carriage_instance->first_arg == CW_REG_CODE ? p_carriage_instance->offset += CW_REG_CODE_SIZE : CW_FALSE;
+		p_carriage_instance->first_arg == CW_DIR_CODE ? p_carriage_instance->offset += p_carriage_instance->p_current_command->dir_size : CW_FALSE;
+		p_carriage_instance->first_arg == CW_IND_CODE ? p_carriage_instance->offset += CW_IND_CODE_SIZE : CW_FALSE;
+		if (p_carriage_instance->first_arg == CW_REG_CODE)
+		{
+			if (p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] < 1
+			|| p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] > 16)
+			{
+				p_carriage_instance->error_ocurred = CW_TRUE;
+				found = CW_FALSE;
+			}
+		}
 		if (!found && (p_carriage_instance->error_ocurred = CW_TRUE))
 			return;
 		found = CW_FALSE;
-		if (sample2)
+	 	sample = p_carriage_instance->p_current_command->args >> 16 & 0xff;
+		if (sample)
 		{
-	 		f_s = sample2 >> 6 & 0x03;
-			!f_s ? f_s = 2147483647 : 0;
-			s_s = sample2 >> 4 & 0x03;
-			!s_s ? s_s = 2147483647 : 0;
-			t_s = sample2 >> 2 & 0x03;
-			!t_s ? t_s = 2147483647 : 0;
 			p_carriage_instance->second_arg	= p_arena_obj->p_field[p_carriage_instance->current_location] >> 4 & 0x03;
-			if (p_carriage_instance->second_arg == f_s || p_carriage_instance->second_arg == s_s || p_carriage_instance->second_arg == t_s)
+			if (p_carriage_instance->second_arg == (!(sample >> 6 & 0x03) ? 2147483647 : (sample >> 6 & 0x03))
+			|| p_carriage_instance->second_arg == (!(sample >> 4 & 0x03) ? 2147483647 : (sample >> 4 & 0x03))
+			|| p_carriage_instance->second_arg == (!(sample >> 2 & 0x03) ? 2147483647 : (sample >> 2 & 0x03)))
 				found = CW_TRUE;
-			p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->second_arg, &found);
+			p_carriage_instance->second_arg == CW_REG_CODE ? p_carriage_instance->offset += CW_REG_CODE_SIZE : CW_FALSE;
+			p_carriage_instance->second_arg == CW_DIR_CODE ? p_carriage_instance->offset += p_carriage_instance->p_current_command->dir_size : CW_FALSE;
+			p_carriage_instance->second_arg == CW_IND_CODE ? p_carriage_instance->offset += CW_IND_CODE_SIZE : CW_FALSE;
+			if (p_carriage_instance->second_arg == CW_REG_CODE)
+			{
+				if (p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] < 1
+				|| p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] > 16)
+				{
+					p_carriage_instance->error_ocurred = CW_TRUE;
+					found = CW_FALSE;
+				}
+			}
 			if (!found && (p_carriage_instance->error_ocurred = CW_TRUE))
 				return;
 			found = CW_FALSE;
 		}
 		else
 			p_carriage_instance->second_arg = 0;
-		if (sample3)
+	 	sample = p_carriage_instance->p_current_command->args >> 8 & 0xff;
+		if (sample)
 		{
-			f_s = sample3 >> 6 & 0x03;
-			!f_s ? f_s = 2147483647 : 0;
-			s_s = sample3 >> 4 & 0x03;
-			!s_s ? s_s = 2147483647 : 0;
-			t_s = sample3 >> 2 & 0x03;
-			!t_s ? t_s = 2147483647 : 0;
 	 		p_carriage_instance->third_arg = p_arena_obj->p_field[p_carriage_instance->current_location] >> 2 & 0x03;
-			if (p_carriage_instance->third_arg == f_s || p_carriage_instance->third_arg == s_s || p_carriage_instance->third_arg == t_s)
+			if (p_carriage_instance->third_arg == (!(sample >> 6 & 0x03) ? 2147483647 : (sample >> 6 & 0x03))
+			|| p_carriage_instance->third_arg == (!(sample >> 4 & 0x03) ? 2147483647 : (sample >> 4 & 0x03))
+			|| p_carriage_instance->third_arg == (!(sample >> 2 & 0x03) ? 2147483647 : (sample >> 2 & 0x03)))
 				found = CW_TRUE;
-			p_carriage_instance->cw_reg_check(p_carriage_instance, p_arena_obj, p_carriage_instance->second_arg, &found);
+			p_carriage_instance->third_arg == CW_REG_CODE ? p_carriage_instance->offset += CW_REG_CODE_SIZE : CW_FALSE;
+			p_carriage_instance->third_arg == CW_DIR_CODE ? p_carriage_instance->offset += p_carriage_instance->p_current_command->dir_size : CW_FALSE;
+			p_carriage_instance->third_arg == CW_IND_CODE ? p_carriage_instance->offset += CW_IND_CODE_SIZE : CW_FALSE;
+			if (p_carriage_instance->third_arg == CW_REG_CODE)
+			{
+				if (p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] < 1
+				|| p_arena_obj->p_field[(p_carriage_instance->current_location + p_carriage_instance->offset) % MEM_SIZE] > 16)
+				{
+					p_carriage_instance->error_ocurred = CW_TRUE;
+					found = CW_FALSE;
+				}
+			}
 			if (!found && (p_carriage_instance->error_ocurred = CW_TRUE))
 				return;
 		}
