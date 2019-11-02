@@ -19,7 +19,9 @@ if [ ! -f "$OG_COREWAR" ]; then
 	exit 1
 fi
 
-GREEN=""
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
 MAGENTA="\e[35m"
 EOC="\e[0m"
 
@@ -39,8 +41,15 @@ for COR_FILE_1 in ${S_FILES_LIST[@]} ; do
 	for COR_FILE_2 in ${S_FILES_LIST[@]} ; do
 		for COR_FILE_3 in ${S_FILES_LIST[@]} ; do
 			for COR_FILE_4 in ${S_FILES_LIST[@]} ; do
-				printf "$(basename ${COR_FILE_1}) $(basename ${COR_FILE_2}) $(basename ${COR_FILE_3}) $(basename ${COR_FILE_4})\e[K\r"
-				./corewar_checker.sh ${COR_FILE_1} ${COR_FILE_2} ${COR_FILE_3} ${COR_FILE_4} &>/dev/null
+				printf "$(basename ${COR_FILE_1}) $(basename ${COR_FILE_2}) $(basename ${COR_FILE_3}) $(basename ${COR_FILE_4})\n"
+				./corewar_checker.sh ${COR_FILE_1} ${COR_FILE_2} ${COR_FILE_3} ${COR_FILE_4}
+				if [ $? == 0 ] ; then
+					printf "${GREEN}OK${EOC}\n"
+				elif [ $? == 2] ; then
+					printf "${YELLOW}ERR${EOC}"
+				else
+					printf "${RED}KO${EOC}\n"
+				fi
 			done
 		done
 	done
