@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 19:25:56 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 20:07:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void		cw_main_checking(t_corewar *p_game_instance)
 	while (++iter < p_game_instance->carriages_amount && p_game_instance->p_carriage_obj)
 	{
 		p_game_instance->p_carriage_obj ? p_game_instance->p_carriage_obj->p_owner->live_amount = 0 : CW_FALSE;
-		if (p_game_instance->p_arena_obj->cycle_to_die <= p_game_instance->p_arena_obj->cycle_amount - p_game_instance->p_carriage_obj->last_speak_cycle || p_game_instance->p_arena_obj->cycle_to_die <= 0)
+		if (p_game_instance->p_arena_obj->cycle_to_die <= (p_game_instance->p_arena_obj->cycle_amount - p_game_instance->p_carriage_obj->last_speak_cycle) || p_game_instance->p_arena_obj->cycle_to_die <= 0)
 			p_game_instance->cw_delete_carriage(p_game_instance, &deleted_count);
 		else
 			p_game_instance->p_carriage_obj ? p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next : CW_FALSE;
@@ -119,9 +119,9 @@ static void		cw_start_game(t_corewar *p_game_instance)
 					p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
 					p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
 				}
+				p_game_instance->cw_merge_queue_to_list(p_game_instance);
 				if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
 					p_game_instance->cw_main_checking(p_game_instance);
-				p_game_instance->cw_merge_queue_to_list(p_game_instance);
 				if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
 					p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
 			//}
