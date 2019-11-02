@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 17:10:13 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 19:25:56 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,22 +104,27 @@ static void		cw_start_game(t_corewar *p_game_instance)
 	if (p_game_instance->visualizator)
 		p_game_instance->cw_start_graphic_game(p_game_instance);
 	else
-		while (p_game_instance->p_carriage_obj)
+		while (p_game_instance->p_carriage_obj && ++p_game_instance->p_arena_obj->cycle_amount)
 		{
 			iter = CW_ITERATOR;
-			p_game_instance->p_arena_obj->cycle_amount += 1;
-			while (++iter < p_game_instance->carriages_amount)
-			{
-				p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
-				p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
-				p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
-				p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
-			}
-			if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
-				p_game_instance->cw_main_checking(p_game_instance);
-			p_game_instance->cw_merge_queue_to_list(p_game_instance);
-			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
-				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+			//if (p_game_instance->p_arena_obj->cycle_amount == p_game_instance->scheduler->)
+			//{
+			//	p_game_instance->p_distribution_stack->cw_distribute();
+			//	p_game_instance->p_execution_queue->exec();
+			//	p_game_instance->p_waiting_queue->cw_reduce_time();
+				while (++iter < p_game_instance->carriages_amount)
+				{
+					p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
+					p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
+					p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
+					p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+				}
+				if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
+					p_game_instance->cw_main_checking(p_game_instance);
+				p_game_instance->cw_merge_queue_to_list(p_game_instance);
+				if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
+					p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+			//}
 		}
 }
 
@@ -165,3 +170,34 @@ extern void		cw_game_process_linker(t_corewar *p_game_instance)
 	p_game_instance->cw_push_to_queue		= cw_push_to_queue;
 	p_game_instance->cw_start_game			= cw_start_game;
 }
+
+// static void		cw_start_game(t_corewar *p_game_instance)
+// {
+// 	int			iter;
+
+// 	if (p_game_instance->visualizator)
+// 		p_game_instance->cw_start_graphic_game(p_game_instance);
+// 	else
+// 		while (p_game_instance->p_carriage_obj && ++p_game_instance->p_arena_obj->cycle_amount)
+// 		{
+// 			iter = CW_ITERATOR;
+// 			if (p_game_instance->p_arena_obj->cycle_amount == p_game_instance->scheduler->)
+// 			{
+// 				p_game_instance->p_distribution_stack->cw_distribute();
+// 				p_game_instance->p_execution_queue->exec();
+// 				p_game_instance->p_waiting_queue->cw_reduce_time();
+// 				while (++iter < p_game_instance->carriages_amount)
+// 				{
+// 					p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
+// 					p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
+// 					p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
+// 					p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+// 				}
+// 				if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
+// 					p_game_instance->cw_main_checking(p_game_instance);
+// 				p_game_instance->cw_merge_queue_to_list(p_game_instance);
+// 				if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
+// 					p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+// 			}
+// 		}
+// }

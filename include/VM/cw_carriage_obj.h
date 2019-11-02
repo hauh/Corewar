@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:18:15 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 15:23:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 18:42:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ typedef struct			s_carriage
 	int					current_location;
 	char				current_register;
 	int					error_ocurred;
-	int					first_arg;
-	int					second_arg;
-	int					third_arg;
+	int					args;
+	int					wake_up;
 	int					offset;
 	int					checked;
 

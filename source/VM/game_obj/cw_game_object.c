@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 16:03:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 19:06:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void		cw_constructor(t_corewar **pp_game_instance)
+static void	cw_constructor(t_corewar **pp_game_instance)
 {
 	(*pp_game_instance)->queue_size = 0;
 	(*pp_game_instance)->players_amount = 0;
@@ -26,11 +26,11 @@ static void		cw_constructor(t_corewar **pp_game_instance)
 	(*pp_game_instance)->p_arena_obj = NULL;
 	(*pp_game_instance)->p_player_obj = NULL;
 	(*pp_game_instance)->p_carriage_obj = NULL;
-	(*pp_game_instance)->p_waiting_queue = NULL;
+	(*pp_game_instance)->p_scheduler = NULL;
 	(*pp_game_instance)->vis = NULL;
 }
 
-static void		cw_destructor(t_corewar **pp_game_instance)
+static void	cw_destructor(t_corewar **pp_game_instance)
 {
 	cr_vis_main(*pp_game_instance, V_CLEANUP);
 	(*pp_game_instance)->p_arena_obj->cw_destructor(&(*pp_game_instance)->p_arena_obj);
@@ -41,7 +41,7 @@ static void		cw_destructor(t_corewar **pp_game_instance)
 	*pp_game_instance = NULL;
 }
 
-extern void		cw_create_instance_game(t_corewar **pp_game_obj)
+extern void	cw_create_instance_game(t_corewar **pp_game_obj)
 {
 	if (!(*pp_game_obj = (t_corewar *)malloc(sizeof(t_corewar))))
 		cw_error_catcher(CW_NOT_ALLOCATED, CW_GAME);

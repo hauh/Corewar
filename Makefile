@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
+#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/10/31 14:56:35 by dbrady           ###   ########.fr        #
+#    Updated: 2019/11/02 19:25:49 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,9 +39,9 @@ VM_SOURCE		:=		cw_carriage_object.c					\
 							cw_essence_init.c					\
 							cw_game_process.c					\
 						cw_callback.c							\
-						cw_queue_object.c						\
-						cw_stack_object.c						\
 						cw_main.c
+						#cw_queue_object.c
+						#cw_stack_object.c
 
 VIS_SOURCE		:=		cr_vis_buildmap.c	\
 						cr_vis_control.c	\

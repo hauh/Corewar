@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:19:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 15:57:23 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 18:52:22 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,10 @@ typedef struct		s_player
 	void			(*cw_destructor)	(t_player **);
 }					t_player;
 
-void	cw_set_id(t_player *p_player_instance, int *p_busy_byte, int id, int custom_id);
-void	cw_read_file(t_player *p_player_instance, const char *p_file);
-void	cw_self_validate(t_player *p_player_instance);
-void	cw_self_build(t_player *p_player_instance);
+void				cw_create_instance_player(t_player **pp_player_obj);
+void				cw_set_id(t_player *p_player_instance, int *p_busy_byte, int id, int custom_id);
+void				cw_read_file(t_player *p_player_instance, const char *p_file);
+void				cw_self_validate(t_player *p_player_instance);
+void				cw_self_build(t_player *p_player_instance);
 
 #endif

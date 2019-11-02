@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printcar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/31 14:33:32 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/02 17:48:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,15 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 
 static void				cr_vis_bbmvprintw(t_carriage *car, int y)
 {
-	mvprintw(y, V_SEPSEP + 9, "id: % 6d | own: % 6d | car: % 6d | do: % 6d"
-" | sp: % 6d | wt: % 6d | ad: % 6d | lsc: % 6d | asp: % 6d | cl: % 6d | cr:"
-" % 6d | eo: % 6d | fa: % 6d | sa: % 6d | ta: % 6d | off: % 6d ",
-car->id, car->p_owner->id, car->carry, car->odometer, car->save_point,
-car->waiting_time, car->addit_odometer, car->last_speak_cycle,
-car->addit_save_point, car->current_location, car->current_register,
-car->error_ocurred, car->first_arg, car->second_arg, car->third_arg,
-car->offset);
+//	mvprintw(y, V_SEPSEP + 9, "id: % 6d | own: % 6d | car: % 6d | do: % 6d"
+//" | sp: % 6d | wt: % 6d | ad: % 6d | lsc: % 6d | asp: % 6d | cl: % 6d | cr:"
+//" % 6d | eo: % 6d | fa: % 6d | sa: % 6d | ta: % 6d | off: % 6d ",
+//car->id, car->p_owner->id, car->carry, car->odometer, car->save_point,
+//car->waiting_time, car->addit_odometer, car->last_speak_cycle,
+//car->addit_save_point, car->current_location, car->current_register,
+//car->error_ocurred, car->first_arg, car->second_arg, car->third_arg,
+//car->offset);
+;
 }
 
 void					cr_vis_printcarinfo(t_corewar *cr)

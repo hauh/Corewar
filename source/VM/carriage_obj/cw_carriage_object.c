@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 18:57:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 14:38:25 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 17:28:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ static void	cw_constructor(t_carriage **pp_carriage_instance)
 	(*pp_carriage_instance)->current_location = 0;
 	(*pp_carriage_instance)->current_register = 0;
 	(*pp_carriage_instance)->error_ocurred = 0;
-	(*pp_carriage_instance)->first_arg = 0;
-	(*pp_carriage_instance)->second_arg = 0;
-	(*pp_carriage_instance)->third_arg = 0;
+	(*pp_carriage_instance)->args = 0;
 	(*pp_carriage_instance)->offset = 0;
 	(*pp_carriage_instance)->checked = 0;
 	(*pp_carriage_instance)->p_next = NULL;

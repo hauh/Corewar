@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:18:37 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 17:20:22 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 17:48:50 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	cw_exec_command(t_carriage *p_carriage_instance, t_corewar *p_game_instance
 	if (p_carriage_instance->waiting_time || p_carriage_instance->error_ocurred)
 		return ;
 	p_carriage_instance->p_current_command->cw_callback(p_game_instance);
-	if (p_carriage_instance->error_ocurred)
-		p_carriage_instance->cw_skip_damaged_command(p_carriage_instance, p_game_instance->p_arena_obj);
 	p_carriage_instance->p_current_command = NULL;
 	p_carriage_instance->waiting_time = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 18:33:15 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 18:52:29 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,8 +179,6 @@ void	lldi_exec	(t_corewar *game);
 void	lfork_exec	(t_corewar *game);
 void	aff_exec	(t_corewar *game);
 
-void	cw_create_instance_game(t_corewar **pp_game_obj);
-void	cw_create_instance_player(t_player **pp_player_obj);
 void	cw_create_instance_command(t_command **pp_command_obj);
 void	cw_create_instance_carriage(t_carriage **pp_carriage_obj);
 void	cw_create_instance_buffer(t_buffer **pp_buffer_obj);

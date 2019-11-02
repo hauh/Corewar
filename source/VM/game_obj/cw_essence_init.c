@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 15:36:05 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 19:26:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,11 @@ static void		cw_queue_obj_init(t_corewar *p_game_instance)
 
 static void		cw_stack_obj_init(t_corewar *p_game_instance)
 {
-	t_stack		*stack;
-
-	cw_create_instance_stack(&stack);
-	p_game_instance->p_distribution_stack = stack;
+	;
+	//t_stack		*stack;
+//
+	//cw_create_instance_stack(&stack);
+	//p_game_instance->p_distribution_stack = stack;
 }
 
 static void		cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv)

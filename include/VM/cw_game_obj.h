@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 16:02:42 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 19:25:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,21 @@ typedef struct			s_corewar
 	t_command			*pa_commands[CW_COMMAND_AMOUNT];
 	t_player			*p_player_obj;
 	t_arena				*p_arena_obj;
+	t_scheduler			*p_scheduler;
 
-	t_queue				*p_execution_queue;
-	t_stack				*p_distribution_stack;
 	t_carriage			*p_waiting_queue;
+	t_stack				*p_distribution_stack;
 
 	t_vis				*vis;
 
-	int test;
+	int					test;
 
 	void				(*cw_constructor)			(t_corewar **);
 	void				(*cw_carriage_obj_init)		(t_corewar *);
 	void				(*cw_command_obj_init)		(t_corewar *);
 	void				(*cw_player_obj_init)		(t_corewar *, int, char **);
 	void				(*cw_arena_obj_init)		(t_corewar *);
-	void				(*cw_add_carriage_to_list)(t_corewar *, t_carriage *, int);
+	void				(*cw_add_carriage_to_list)	(t_corewar *, t_carriage *, int);
 	void				(*cw_add_player_to_list)	(t_corewar *, t_player *);
 	void				(*cw_free_all_carriages)	(t_corewar *);
 	void				(*cw_free_all_players)		(t_corewar *);
@@ -67,8 +67,9 @@ typedef struct			s_corewar
 	void				(*cw_destructor)			(t_corewar **);
 }						t_corewar;
 
-void	cw_game_process_linker(t_corewar *p_game_instance);
-void	cw_essence_init_linker(t_corewar *p_game_instance);
-void	cw_game_functions_linker(t_corewar *p_game_instance);
+void					cw_create_instance_game(t_corewar **pp_game_obj);
+void					cw_game_process_linker(t_corewar *p_game_instance);
+void					cw_essence_init_linker(t_corewar *p_game_instance);
+void					cw_game_functions_linker(t_corewar *p_game_instance);
 
 #endif
