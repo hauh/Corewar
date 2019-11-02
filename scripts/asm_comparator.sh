@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OG_ASM="../vm_champs/asm"
+OG_ASM="../samples/asm"
 MY_ASM="../asm"
 
 if [ -z "$1" ] ; then
