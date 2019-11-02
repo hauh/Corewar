@@ -25,8 +25,8 @@ if [[ ! "$CYCLE" =~ ^[0-9]+$ ]]; then
 	exit 1
 fi
 
-${OG_COREWAR} -d $CYCLE $@ >og_dump
-${MY_COREWAR} -d $CYCLE $@ >my_dump
+${OG_COREWAR} -d $CYCLE $@ &>og_dump
+${MY_COREWAR} -d $CYCLE $@ &>my_dump
 
 if diff og_dump my_dump &>/dev/null; then
 	echo "No difference at cycle $CYCLE"
@@ -37,5 +37,6 @@ fi
 
 printf "\e[1;33mog_dump\n\e[0;m"
 printf "\e[0;32mmy_dump\n\n\e[0;m"
-
 diff -y --width=400 --suppress-common-lines og_dump my_dump | sed $'s/|\\\t/\\\n/g' | sed n\;G
+rm og_dump
+rm my_dump
