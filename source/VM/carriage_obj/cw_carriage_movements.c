@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:07:42 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 13:56:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 17:14:16 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,12 @@ void		cw_skip_damaged_command(t_carriage *p_carriage_instance, t_arena *p_arena_
 	if (p_carriage_instance->p_current_command->type_byte)
 	{
 		f = p_arena_obj->p_field[p_carriage_instance->current_location] >> 6 & 0x03;
-		if (p_carriage_instance->p_current_command->args >> 24 & 0xff)
-		{
-			if (f == CW_REG_CODE)
-				lengthOfBrokenCode += CW_REG_CODE_SIZE;
-			else if (f == CW_DIR_CODE)
-				lengthOfBrokenCode += p_carriage_instance->p_current_command->dir_size;
-			else if (f == CW_IND_CODE)
-				lengthOfBrokenCode += CW_IND_CODE_SIZE;
-		}
+		if (f == CW_REG_CODE)
+			lengthOfBrokenCode += CW_REG_CODE_SIZE;
+		else if (f == CW_DIR_CODE)
+			lengthOfBrokenCode += p_carriage_instance->p_current_command->dir_size;
+		else if (f == CW_IND_CODE)
+			lengthOfBrokenCode += CW_IND_CODE_SIZE;
 		s = p_arena_obj->p_field[p_carriage_instance->current_location] >> 4 & 0x03;
 		if (p_carriage_instance->p_current_command->args >> 16 & 0xff)
 		{

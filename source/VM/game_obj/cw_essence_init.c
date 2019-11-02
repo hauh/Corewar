@@ -6,16 +6,16 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 17:27:24 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 15:36:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cw_command_obj_init(t_corewar *p_game_instance)
+static void		cw_command_obj_init(t_corewar *p_game_instance)
 {
-	t_command		*pCommandObj;
-	int				iter;
+	t_command	*pCommandObj;
+	int			iter;
 
 	iter = CW_BEGIN_FROM_ONE;
 	while (iter < CW_COMMAND_AMOUNT)
@@ -27,7 +27,7 @@ void	cw_command_obj_init(t_corewar *p_game_instance)
 	}
 }
 
-void		cw_carriage_obj_init(t_corewar *p_game_instance)
+static void		cw_carriage_obj_init(t_corewar *p_game_instance)
 {
 	t_carriage	*p_carriage_obj;
 	int			iter;
@@ -48,20 +48,20 @@ void		cw_carriage_obj_init(t_corewar *p_game_instance)
 	p_game_instance->p_arena_obj->p_last_survivor = p_game_instance->p_carriage_obj->p_prev->p_owner;
 }
 
-void		cw_queue_obj_init(t_corewar *p_game_instance)
+static void		cw_queue_obj_init(t_corewar *p_game_instance)
 {
 	;
 }
 
-void		cw_stack_obj_init(t_corewar *p_game_instance)
+static void		cw_stack_obj_init(t_corewar *p_game_instance)
 {
-	t_stack 	*stack;
+	t_stack		*stack;
 
 	cw_create_instance_stack(&stack);
 	p_game_instance->p_distribution_stack = stack;
 }
 
-void		cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv)
+static void		cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv)
 {
 	t_player	*p_player_obj;
 	int			standartId;
@@ -122,11 +122,21 @@ void		cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv)
 	}
 }
 
-void		cw_arena_obj_init(t_corewar *gameInstance)
+static void		cw_arena_obj_init(t_corewar *p_game_instance)
 {
 	t_arena		*p_arena_obj;
 
 	cw_create_instance_arena(&p_arena_obj);
 	p_arena_obj->cw_buffer_init(p_arena_obj);
-	gameInstance->p_arena_obj = p_arena_obj;
+	p_game_instance->p_arena_obj = p_arena_obj;
+}
+
+extern void		cw_essence_init_linker(t_corewar *p_game_instance)
+{
+	p_game_instance->cw_carriage_obj_init	= cw_carriage_obj_init;
+	p_game_instance->cw_command_obj_init	= cw_command_obj_init;
+	p_game_instance->cw_player_obj_init		= cw_player_obj_init;
+	p_game_instance->cw_arena_obj_init		= cw_arena_obj_init;
+	p_game_instance->cw_stack_obj_init		= cw_stack_obj_init;
+	p_game_instance->cw_queue_obj_init		= cw_queue_obj_init;
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 16:30:34 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:02:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct			s_corewar
 	void				(*cw_congratulations)		(t_corewar *);
 	void				(*cw_main_checking)			(t_corewar *);
 	void				(*cw_start_game)			(t_corewar *);
+	void				(*cw_start_graphic_game)	(t_corewar *);
 	void				(*cw_stack_obj_init)		(t_corewar *);
 	void				(*cw_queue_obj_init)		(t_corewar *);
 	void				(*cw_push_to_queue)			(t_corewar *, t_carriage *);
@@ -66,24 +67,8 @@ typedef struct			s_corewar
 	void				(*cw_destructor)			(t_corewar **);
 }						t_corewar;
 
-void	cw_arena_obj_init(t_corewar *gameInstance);
-void	cw_player_obj_init(t_corewar *p_game_instance, int argc, char **argv);
-void	cw_stack_obj_init(t_corewar *p_game_instance);
-void	cw_queue_obj_init(t_corewar *p_game_instance);
-void	cw_carriage_obj_init(t_corewar *p_game_instance);
-void	cw_command_obj_init(t_corewar *p_game_instance);
-void	cw_add_player_to_list(t_corewar *p_game_instance, t_player *pPlayerAdding);
-void	cw_add_t_carriageo_list(t_corewar *p_game_instance, t_carriage *pCarriageAdding, int ascending);
-void	cw_free_all_players(t_corewar *p_game_instance);
-void	cw_free_all_carriages(t_corewar *p_game_instance);
-void	cw_free_all_commands(t_corewar *p_game_instance);
-void	cw_introduce_players(t_corewar *gameInstance);
-void	cw_congratulations(t_corewar *p_game_instance);
-void	cw_arrange_units_on_field(t_corewar *p_game_instance);
-void	cw_start_game(t_corewar *p_game_instance);
-void	cw_main_checking(t_corewar *p_game_instance);
-void	cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car);
-void	cw_push_to_queue(t_corewar *p_game_instance, t_carriage *p_adding_carriage);
-void	cw_merge_queue_to_list(t_corewar *p_game_instance);
+void	cw_game_process_linker(t_corewar *p_game_instance);
+void	cw_essence_init_linker(t_corewar *p_game_instance);
+void	cw_game_functions_linker(t_corewar *p_game_instance);
 
 #endif

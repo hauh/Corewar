@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:08:56 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 14:39:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:24:43 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ typedef struct s_vis		t_vis;
 typedef int					t_flag;
 typedef int					t_mark;
 typedef	int					t_counter;
+typedef unsigned long		t_lcounter;
 typedef int					t_iterator;
+typedef unsigned char		t_byte;
 
 # include "cw_arena_obj.h"
 # include "cw_buffer_obj.h"

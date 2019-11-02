@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 18:25:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 17:10:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@ void	live_exec(t_corewar *p_game_obj)
 	p_game_obj->p_carriage_obj->cw_parse_types(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj);
 	if (p_game_obj->p_carriage_obj->error_ocurred) return ;
 	p_game_obj->p_carriage_obj->cw_read_operation(p_game_obj->p_carriage_obj, p_game_obj->p_arena_obj, p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1], p_game_obj->p_carriage_obj->first_arg);
-	if (-p_game_obj->p_carriage_obj->p_owner->id == p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value)
+	if (p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value <= -1 && p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value >= -4)
 	{
-		p_game_obj->p_arena_obj->p_last_survivor = p_game_obj->p_carriage_obj->p_owner;
-		p_game_obj->p_carriage_obj->p_owner->live_amount += 1;
+		for (int i = 0; i < p_game_obj->players_amount; ++i)
+		{
+			if (p_game_obj->p_player_obj->id == -p_game_obj->p_arena_obj->pa_buffer_set[CW_VALUE_BUF_1]->s_types.int_value)
+				p_game_obj->p_arena_obj->p_last_survivor = p_game_obj->p_player_obj;
+			p_game_obj->p_player_obj = p_game_obj->p_player_obj->p_next;
+		}
+		p_game_obj->p_arena_obj->p_last_survivor->live_amount += 1;
 	}
 	p_game_obj->p_carriage_obj->last_speak_cycle = p_game_obj->p_arena_obj->cycle_amount;
 	p_game_obj->p_arena_obj->live_amount += 1;

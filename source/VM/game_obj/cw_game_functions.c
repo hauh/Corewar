@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:41:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:43:58 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:03:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cw_arrange_units_on_field(t_corewar *p_game_instance)
+static void	cw_arrange_units_on_field(t_corewar *p_game_instance)
 {
 	int		iter;
 	int		playerLocation;
@@ -33,16 +33,19 @@ void	cw_arrange_units_on_field(t_corewar *p_game_instance)
 	}
 }
 
-void	cw_congratulations(t_corewar *p_game_instance)
+static void	cw_congratulations(t_corewar *p_game_instance)
 {
-	ft_printf("Contestant %d, \"%s\", has won !\n",
-	p_game_instance->p_arena_obj->p_last_survivor->id,
-	p_game_instance->p_arena_obj->p_last_survivor->p_name);
+	if (p_game_instance->visualizator)
+		cr_vis_winner(p_game_instance);
+	else
+		ft_printf("Contestant %d, \"%s\", has won !\n",
+		p_game_instance->p_arena_obj->p_last_survivor->id,
+		p_game_instance->p_arena_obj->p_last_survivor->p_name);
 }
 
-void	cw_introduce_players(t_corewar *gameInstance)
+static void	cw_introduce_players(t_corewar *gameInstance)
 {
-	int				iter;
+	int		iter;
 
 	iter = CW_BEGIN_FROM_ZERO;
 	ft_printf("Introducing contestants...\n");
@@ -58,7 +61,7 @@ void	cw_introduce_players(t_corewar *gameInstance)
 	}
 }
 
-void	cw_free_all_commands(t_corewar *p_game_instance)
+static void	cw_free_all_commands(t_corewar *p_game_instance)
 {
 	int		iter;
 
@@ -70,17 +73,17 @@ void	cw_free_all_commands(t_corewar *p_game_instance)
 	}
 }
 
-void	cw_free_all_carriages(t_corewar *p_game_instance)
+static void	cw_free_all_carriages(t_corewar *p_game_instance)
 {
 	;
 }
 
-void	cw_free_all_players(t_corewar *p_game_instance)
+static void	cw_free_all_players(t_corewar *p_game_instance)
 {
 	;
 }
 
-void	cw_add_t_carriageo_list(t_corewar *p_game_instance, t_carriage *pCarriageAdding, int ascending)
+static void	cw_add_t_carriageo_list(t_corewar *p_game_instance, t_carriage *pCarriageAdding, int ascending)
 {
 	if (!p_game_instance->p_carriage_obj)
 	{
@@ -99,7 +102,7 @@ void	cw_add_t_carriageo_list(t_corewar *p_game_instance, t_carriage *pCarriageAd
 	}
 }
 
-void	cw_add_player_to_list(t_corewar *p_game_instance, t_player *pPlayerAdding)
+static void	cw_add_player_to_list(t_corewar *p_game_instance, t_player *pPlayerAdding)
 {
 	if (!p_game_instance->p_player_obj)
 	{
@@ -114,4 +117,16 @@ void	cw_add_player_to_list(t_corewar *p_game_instance, t_player *pPlayerAdding)
 		p_game_instance->p_player_obj->p_prev->p_next	= pPlayerAdding;
 		p_game_instance->p_player_obj->p_prev		= pPlayerAdding;
 	}
+}
+
+extern void	cw_game_functions_linker(t_corewar *p_game_instance)
+{
+	p_game_instance->cw_arrange_units_on_field	= cw_arrange_units_on_field;
+	p_game_instance->cw_add_carriage_to_list	= cw_add_t_carriageo_list;
+	p_game_instance->cw_free_all_commands		= cw_free_all_commands;
+	p_game_instance->cw_free_all_players		= cw_free_all_players;
+	p_game_instance->cw_add_player_to_list		= cw_add_player_to_list;
+	p_game_instance->cw_free_all_carriages		= cw_free_all_carriages;
+	p_game_instance->cw_introduce_players		= cw_introduce_players;
+	p_game_instance->cw_congratulations			= cw_congratulations;
 }

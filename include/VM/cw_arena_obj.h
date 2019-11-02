@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:59:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:29:00 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define AR_BUFFERS			p_arena_instance->pa_buffer_set
 # define AR_FIELD			p_arena_instance->p_field
 
+# define AR_DUMP_EXIT		1
+
 typedef enum		e_set_buffer
 {
 	CW_VALUE_BUF_1,
@@ -36,13 +38,15 @@ typedef enum		e_set_buffer
 typedef struct		s_arena
 {
 	int				cycle_to_die;
+
 	t_counter		live_amount;
 	t_counter		check_amount;
-	unsigned long	cycle_amount;
+	t_lcounter		cycle_amount;
 
-	unsigned char	*p_field;
+	t_byte			*p_field;
 
 	t_player		*p_last_survivor;
+
 	t_buffer		*pa_buffer_set[CW_BUFFER_AMOUNT];
 
 	void			(*cw_constructor)	(struct s_arena **);
@@ -52,8 +56,6 @@ typedef struct		s_arena
 	void			(*cw_destructor)	(struct s_arena **);
 }					t_arena;
 
-int					cw_time_to_check(t_arena *p_arena_instance, int last_check);
-void				cw_print_field	(t_arena *p_arena_instance);
-void				cw_buffer_init	(t_arena *p_arena_instance);
+void				cw_arena_functions_linker(t_arena *p_arena_instance);
 
 #endif

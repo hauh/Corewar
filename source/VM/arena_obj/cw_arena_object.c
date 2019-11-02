@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:14:53 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 16:58:54 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:29:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ extern void		cw_create_instance_arena(t_arena **pp_arena_obj)
 	ft_memset(*pp_arena_obj, 0, sizeof(t_arena));
 	(*pp_arena_obj)->cw_constructor = cw_constructor;
 	(*pp_arena_obj)->cw_destructor = cw_destructor;
-	(*pp_arena_obj)->cw_buffer_init = cw_buffer_init;
-	(*pp_arena_obj)->cw_print_field = cw_print_field;
-	(*pp_arena_obj)->cw_time_to_check = cw_time_to_check;
 	(*pp_arena_obj)->cw_constructor(pp_arena_obj);
+	cw_arena_functions_linker(*pp_arena_obj);
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/31 19:43:28 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 16:03:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,8 @@ extern void		cw_create_instance_game(t_corewar **pp_game_obj)
 		cw_error_catcher(CW_NOT_ALLOCATED, CW_GAME);
 	(*pp_game_obj)->cw_constructor = cw_constructor;
 	(*pp_game_obj)->cw_destructor = cw_destructor;
-	(*pp_game_obj)->cw_arrange_units_on_field = cw_arrange_units_on_field;
-	(*pp_game_obj)->cw_add_carriage_to_list = cw_add_t_carriageo_list;
-	(*pp_game_obj)->cw_merge_queue_to_list = cw_merge_queue_to_list;
-	(*pp_game_obj)->cw_carriage_obj_init = cw_carriage_obj_init;
-	(*pp_game_obj)->cw_command_obj_init = cw_command_obj_init;
-	(*pp_game_obj)->cw_free_all_commands = cw_free_all_commands;
-	(*pp_game_obj)->cw_player_obj_init = cw_player_obj_init;
-	(*pp_game_obj)->cw_arena_obj_init = cw_arena_obj_init;
-	(*pp_game_obj)->cw_start_game = cw_start_game;
-	(*pp_game_obj)->cw_main_checking = cw_main_checking;
-	(*pp_game_obj)->cw_delete_carriage = cw_delete_carriage;
-	(*pp_game_obj)->cw_free_all_players = cw_free_all_players;
-	(*pp_game_obj)->cw_add_player_to_list = cw_add_player_to_list;
-	(*pp_game_obj)->cw_free_all_carriages = cw_free_all_carriages;
-	(*pp_game_obj)->cw_introduce_players = cw_introduce_players;
-	(*pp_game_obj)->cw_congratulations = cw_congratulations;
-	(*pp_game_obj)->cw_push_to_queue = cw_push_to_queue;
-	(*pp_game_obj)->cw_queue_obj_init = cw_queue_obj_init;
-	(*pp_game_obj)->cw_stack_obj_init = cw_stack_obj_init;
 	(*pp_game_obj)->cw_constructor(pp_game_obj);
+	cw_game_process_linker(*pp_game_obj);
+	cw_essence_init_linker(*pp_game_obj);
+	cw_game_functions_linker(*pp_game_obj);
 }

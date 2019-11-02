@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 18:38:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/02 17:10:13 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void		cw_merge_queue_to_list(t_corewar *p_game_instance)
+static void		cw_merge_queue_to_list(t_corewar *p_game_instance)
 {
 	t_carriage	*p_tmp_carriage;
 	int			iter;
@@ -31,7 +31,7 @@ void		cw_merge_queue_to_list(t_corewar *p_game_instance)
 	p_game_instance->queue_size = 0;
 }
 
-void		cw_push_to_queue(t_corewar *p_game_instance,
+static void		cw_push_to_queue(t_corewar *p_game_instance,
 									t_carriage *p_adding_carriage)
 {
 	p_game_instance->queue_size += 1;
@@ -50,7 +50,7 @@ void		cw_push_to_queue(t_corewar *p_game_instance,
 	}
 }
 
-void		cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car)
+static void		cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car)
 {
 	t_carriage	*p_tmp_carrriage;
 
@@ -70,9 +70,9 @@ void		cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car)
 	*p_del_car += 1;
 }
 
-void		cw_main_checking(t_corewar *p_game_instance)
+static void		cw_main_checking(t_corewar *p_game_instance)
 {
-	t_carriage 	*tmp;
+	t_carriage	*tmp;
 	int			deleted_count;
 	int			iter;
 
@@ -97,20 +97,45 @@ void		cw_main_checking(t_corewar *p_game_instance)
 	p_game_instance->p_arena_obj->live_amount = 0;
 }
 
-void	cw_start_game(t_corewar *p_game_instance)
+static void		cw_start_game(t_corewar *p_game_instance)
 {
-	int		iter;
+	int			iter;
 
-	if (p_game_instance->visualizator == CW_TRUE)
-		cr_vis_main(p_game_instance, V_INIT);
+	if (p_game_instance->visualizator)
+		p_game_instance->cw_start_graphic_game(p_game_instance);
+	else
+		while (p_game_instance->p_carriage_obj)
+		{
+			iter = CW_ITERATOR;
+			p_game_instance->p_arena_obj->cycle_amount += 1;
+			while (++iter < p_game_instance->carriages_amount)
+			{
+				p_game_instance->p_carriage_obj->cw_set_command_time(p_game_instance->p_carriage_obj, p_game_instance->p_arena_obj);
+				p_game_instance->p_carriage_obj->cw_reduce_time(p_game_instance->p_carriage_obj);
+				p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
+				p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
+			}
+			if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
+				p_game_instance->cw_main_checking(p_game_instance);
+			p_game_instance->cw_merge_queue_to_list(p_game_instance);
+			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
+				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
+		}
+}
+
+static void		cw_start_graphic_game(t_corewar *p_game_instance)
+{
+	int			iter;
+
+	cr_vis_main(p_game_instance, V_INIT);
 	while (p_game_instance->p_carriage_obj)
 	{
 		iter = CW_ITERATOR;
-		if (p_game_instance->visualizator == CW_TRUE && p_game_instance->p_carriage_obj)
+		if (p_game_instance->p_carriage_obj)
 			cr_vis_main(p_game_instance, V_CONTROL);
-		if (p_game_instance->visualizator == CW_TRUE && p_game_instance->vis->exit)
+		if (p_game_instance->vis->exit)
 			p_game_instance->cw_destructor(&p_game_instance);
-		else if (p_game_instance->visualizator == CW_FALSE || ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick))
+		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
 		{
 			p_game_instance->p_arena_obj->cycle_amount += 1;
 			while (++iter < p_game_instance->carriages_amount)
@@ -120,19 +145,23 @@ void	cw_start_game(t_corewar *p_game_instance)
 				p_game_instance->p_carriage_obj->cw_exec_command(p_game_instance->p_carriage_obj, p_game_instance);
 				p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
 			}
-			//for (int i = 0; i < p_game_instance->carriages_amount; ++i, p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next)
-			//	ft_printf("%#06x\n", p_game_instance->p_carriage_obj->current_location);
 			if (p_game_instance->p_arena_obj->cw_time_to_check(p_game_instance->p_arena_obj, p_game_instance->last_check_cycle))
 				p_game_instance->cw_main_checking(p_game_instance);
 			p_game_instance->cw_merge_queue_to_list(p_game_instance);
-			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount)
+			if (p_game_instance->load_dump == p_game_instance->p_arena_obj->cycle_amount && p_game_instance->p_carriage_obj)
 				p_game_instance->p_arena_obj->cw_print_field(p_game_instance->p_arena_obj);
-			if (p_game_instance->visualizator == CW_TRUE && p_game_instance->p_carriage_obj)
+			if (p_game_instance->p_carriage_obj)
 				cr_vis_main(p_game_instance, V_UPDATE);
 		}
 	}
-	if (p_game_instance->visualizator)
-		cr_vis_winner(p_game_instance);
-	else
-		p_game_instance->cw_congratulations(p_game_instance);
+}
+
+extern void		cw_game_process_linker(t_corewar *p_game_instance)
+{
+	p_game_instance->cw_merge_queue_to_list	= cw_merge_queue_to_list;
+	p_game_instance->cw_start_graphic_game	= cw_start_graphic_game;
+	p_game_instance->cw_delete_carriage		= cw_delete_carriage;
+	p_game_instance->cw_main_checking		= cw_main_checking;
+	p_game_instance->cw_push_to_queue		= cw_push_to_queue;
+	p_game_instance->cw_start_game			= cw_start_game;
 }
