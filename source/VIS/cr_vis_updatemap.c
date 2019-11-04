@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_updatemap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/10/30 14:30:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/04 14:00:24 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,6 @@ int		cr_vis_getxrev(int i)
 	return (0);
 }
 
-int		cr_vis_checkzero(int i)
-{
-	int y;
-	int x;
-
-	x = (i * 3) % (V_SEP - 8) + 5;
-	y = (i * 3) / (V_SEP - 8) + 2;
-	if (((mvinch(y, x) & A_CHARTEXT) == '0') && ((mvinch(y, x + 1) & A_CHARTEXT) == '0'))
-		return (0);
-	return (1);
-}
-
 int		cr_vis_printcarmap(t_corewar *cr)
 {
 	t_carriage	*car;
@@ -70,7 +58,8 @@ int		cr_vis_printcarmap(t_corewar *cr)
 	while (++i < cr->carriages_amount)
 	{
 		colour = cr_vis_getxcolour(car->current_location);
-		cr_vis_putx(cr->p_arena_obj->p_field[car->current_location], car->current_location, colour, 1, cr);
+		cr_vis_putx(cr->p_arena_obj->p_field[car->current_location],
+		car->current_location, colour, 1);
 		car = car->p_next;
 	}
 	return (0);
@@ -79,19 +68,13 @@ int		cr_vis_printcarmap(t_corewar *cr)
 int		cr_vis_printdiff(t_corewar *cr)
 {
 	int				i;
-	unsigned char	*f_vis;
-	unsigned char	*f_cr;
 
 	i = -1;
-	f_vis = cr->vis->field;
-	f_cr = cr->p_arena_obj->p_field;
 	while (++i < MEM_SIZE)
 	{
-		if (f_vis[i] != f_cr[i] || cr_vis_getxrev(i))
-		{
-			cr_vis_putx(f_cr[i], i, cr_vis_getxcolour(i), 0, cr);
-			f_vis[i] = f_cr[i];
-		}
+		if (cr_vis_getxrev(i))
+			cr_vis_putx(cr->p_arena_obj->p_field[i],
+			i, cr_vis_getxcolour(i), 0);
 	}
 	return (0);
 }
