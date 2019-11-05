@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:10:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 17:12:32 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/05 12:06:42 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void		cw_write_operation(t_carriage *p_carriage_instance, t_arena *p_arena_obj, 
 		{
 			p_arena_obj->p_field[p_carriage_instance->current_location] = pBufferObj->p_data[i];
 			if (p_carriage_instance->game_ref->visualizator)
-				cr_vis_putx(pBufferObj->p_data[i], p_carriage_instance->current_location, p_carriage_instance->p_owner->id, 0, p_carriage_instance->game_ref);
+				cr_vis_putx(pBufferObj->p_data[i], p_carriage_instance->current_location, p_carriage_instance->p_owner->id, 0);
 		}
 		p_carriage_instance->cw_carriage_return(p_carriage_instance, CW_ADDIT_SAVE);
 	}

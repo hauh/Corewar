@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 17:08:54 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/05 14:10:01 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void	cr_vis_morekeys(t_corewar *cr, int key)
 	if (key == 'i')
 		vis->info = (vis->info == 1) ? 0 : 1;
 	if (key == 'k')
-		cr_vis_sound(cr->vis, V_MSTART, 'k');
+		cr_vis_sound(cr->vis, 'k');
 	if (key == 'b')
-		cr_vis_sound(cr->vis, V_MSTART, 'b');
+		cr_vis_sound(cr->vis, 'b');
 	if (key == 'h')
-		cr_vis_sound(cr->vis, V_MSTOP, 'h');
+		cr_vis_sound(cr->vis, 'h');
 }
 
 int		cr_vis_keys(t_corewar *cr)
