@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:29:33 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/01 13:45:06 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/06 15:38:01 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,8 @@ void	cw_write_owner_id_to_reg(t_carriage *p_carriage_instance)
 	int		iter;
 
 	iter = CW_ITERATOR;
-	while (iter < CW_REG_SIZE)
-	{
+	while (++iter < CW_REG_SIZE)
 		p_carriage_instance->p_registers[iter] = (-p_carriage_instance->p_owner->id << (iter * 8)) >> 24;
-		++iter;
-	}
 }
 
 void	cw_check_carry(t_carriage *p_carriage_instance)
