@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/06 13:21:44 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/06 15:53:35 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,16 @@ static void		cw_delete_carriage(t_corewar *p_game_instance, int *p_del_car)
 	if (p_game_instance->p_carriage_obj)
 	{
 		if (p_game_instance->p_carriage_obj->p_next == p_game_instance->p_carriage_obj)
+		{
+			p_tmp_carrriage->cw_destructor(&p_tmp_carrriage);
 			p_game_instance->p_carriage_obj = NULL;
+		}
 		else
 		{
 			p_game_instance->p_carriage_obj->p_prev->p_next	= p_game_instance->p_carriage_obj->p_next;
 			p_game_instance->p_carriage_obj->p_next->p_prev	= p_game_instance->p_carriage_obj->p_prev;
 			p_game_instance->p_carriage_obj = p_game_instance->p_carriage_obj->p_next;
-			//p_tmp_carrriage->cw_destructor(&p_tmp_carrriage);
+			p_tmp_carrriage->cw_destructor(&p_tmp_carrriage);
 		}
 	}
 	*p_del_car += 1;

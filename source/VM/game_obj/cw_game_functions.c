@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:41:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 16:03:44 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/06 16:02:09 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,35 @@ static void	cw_free_all_commands(t_corewar *p_game_instance)
 
 static void	cw_free_all_carriages(t_corewar *p_game_instance)
 {
-	;
+	t_carriage *c1;
+	t_carriage *c2;
+
+	if (p_game_instance->p_carriage_obj)
+	{
+		c1 = p_game_instance->p_carriage_obj;
+		c2 = c2->p_next;
+		while (c2 != p_game_instance->p_carriage_obj)
+		{
+			c2 = c1->p_next;
+			c1->cw_destructor(&c1);
+			c1 = c2;
+		}
+	}
 }
 
 static void	cw_free_all_players(t_corewar *p_game_instance)
 {
-	;
+	t_player *p1;
+	t_player *p2;
+
+	p1 = p_game_instance->p_player_obj;
+	p2 = p_game_instance->p_player_obj->p_next;
+	while (p2 != p_game_instance->p_player_obj)
+	{
+		p2 = p1->p_next;
+		p1->cw_destructor(&p1);
+		p1 = p2;
+	}
 }
 
 static void	cw_add_t_carriageo_list(t_corewar *p_game_instance, t_carriage *pCarriageAdding, int ascending)
