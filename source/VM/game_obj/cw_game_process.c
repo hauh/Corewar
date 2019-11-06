@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 20:22:17 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/06 13:21:44 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static void		cw_start_graphic_game(t_corewar *p_game_instance)
 		if (p_game_instance->p_carriage_obj)
 			cr_vis_main(p_game_instance, V_CONTROL);
 		if (p_game_instance->vis->exit)
-			p_game_instance->cw_destructor(&p_game_instance);
+			return ;
 		else if ((p_game_instance->vis->step || p_game_instance->vis->flow) && p_game_instance->vis->tick)
 		{
 			p_game_instance->p_arena_obj->cycle_amount += 1;
