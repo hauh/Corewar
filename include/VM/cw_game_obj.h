@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_obj.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/02 19:25:11 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/11 16:20:48 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct			s_corewar
 	t_flag				load_dump;
 	t_flag				visualizator;
 	t_flag				visual_cycle;
+	t_flag				sellout;
 
 	int					players_amount;
 	int					commands_amount;

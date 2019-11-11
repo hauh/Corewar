@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 14:00:24 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/11 16:20:56 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int		cr_vis_printdiff(t_corewar *cr)
 
 int		cr_vis_updatemap(t_corewar *cr)
 {
+	if (cr->sellout)
+		cr_vis_sound_sellout(cr);
 	cr_vis_printdiff(cr);
 	cr_vis_printcarmap(cr);
 	return (0);

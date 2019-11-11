@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/05 14:10:07 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/11 16:08:45 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void						cr_vis_clearbox				(int part);
 int							cr_vis_printhealth			(t_corewar *cr);
 int							cr_vis_lastlive				(t_corewar *cr, int id);
 void						cr_vis_sound				(t_vis *vis, int piece);
+void						cr_vis_sound_sellout		(t_corewar *cr);
 
 /*
 ** ---------------------------
