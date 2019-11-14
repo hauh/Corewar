@@ -6,55 +6,113 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:36:54 by vrichese          #+#    #+#             */
-/*   Updated: 2019/10/30 15:40:10 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/09 18:38:42 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cw_put_param(t_command *p_command_instance, int id, int first_arg, int second_arg, int third_arg, int dir_size, int change_carry, int waiting_time, int type_byte, void (*f)(t_corewar *))
+static void	cw_put_param(t_command *p_command_instance,
+							size_t attributes, void (*f)(t_corewar *))
 {
-	p_command_instance->id = id;
-	p_command_instance->args = (first_arg << 24) | (second_arg << 16) | (third_arg << 8);
-	p_command_instance->dir_size = dir_size;
-	p_command_instance->change_carry = change_carry;
-	p_command_instance->waiting_time = waiting_time;
-	p_command_instance->type_byte = type_byte;
-	p_command_instance->cw_callback = f;
+	CO_ID_I = attributes >> 56 & 0xff;
+	CO_ARGS_I = ((attributes >> 48 & 0xff) << 24) |
+				((attributes >> 40 & 0xff) << 16) |
+				((attributes >> 32 & 0xff) << 8);
+	CO_CALLBACK_I = f;
+	CO_DIR_SIZE_I = attributes >> 24 & 0xff;
+	CO_TYPE_BYTE_I = attributes & 0x3f;
+	CO_CHANGE_CARRY_I = attributes >> 16 & 0xff;
+	CO_WAITING_TIME_I = attributes >> 6 & 0x3ff;
 }
 
-void	cw_recognize_command(t_command *p_command_instance, int command)
+static int	cw_recognize_command3(t_command *p_c_i, int com, size_t at)
 {
-	if (command == CW_LIVE)
-		p_command_instance->cw_put_param(p_command_instance, CW_LIVE,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 10, CW_FALSE, &live_exec);
-	else if (command == CW_LD)
-		p_command_instance->cw_put_param(p_command_instance, CW_LD,	CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 5, CW_TRUE, &ld_exec);
-	else if (command == CW_ST)
-		p_command_instance->cw_put_param(p_command_instance, CW_ST,	CW_REG,						CW_REG | CW_IND,			CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 5, CW_TRUE, &st_exec);
-	else if (command == CW_ADD)
-		p_command_instance->cw_put_param(p_command_instance, CW_ADD,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &add_exec);
-	else if (command == CW_SUB)
-		p_command_instance->cw_put_param(p_command_instance, CW_SUB,	CW_REG,						CW_REG,						CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &sub_exec);
-	else if (command == CW_AND)
-		p_command_instance->cw_put_param(p_command_instance, CW_AND,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &and_exec);
-	else if (command == CW_OR)
-		p_command_instance->cw_put_param(p_command_instance, CW_OR,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &or_exec);
-	else if (command == CW_XOR)
-		p_command_instance->cw_put_param(p_command_instance, CW_XOR,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR | CW_IND,	CW_REG,				CW_DIR_CODE_SIZE, CW_TRUE, 6, CW_TRUE, &xor_exec);
-	else if (command == CW_ZJMP)
-		p_command_instance->cw_put_param(p_command_instance, CW_ZJMP,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 20, CW_FALSE, &zjmp_exec);
-	else if (command == CW_LDI)
-		p_command_instance->cw_put_param(p_command_instance, CW_LDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &ldi_exec);
-	else if (command == CW_STI)
-		p_command_instance->cw_put_param(p_command_instance, CW_STI,	CW_REG,						CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,	CW_SHDIR_CODE_SIZE, CW_FALSE, 25, CW_TRUE, &sti_exec);
-	else if (command == CW_FORK)
-		p_command_instance->cw_put_param(p_command_instance, CW_FORK,	CW_DIR,						CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 800, CW_FALSE, &fork_exec);
-	else if (command == CW_LLD)
-		p_command_instance->cw_put_param(p_command_instance, CW_LLD,	CW_DIR | CW_IND,			CW_REG,						CW_FALSE,			CW_DIR_CODE_SIZE, CW_TRUE, 10, CW_TRUE, &lld_exec);
-	else if (command == CW_LLDI)
-		p_command_instance->cw_put_param(p_command_instance, CW_LLDI,	CW_REG | CW_DIR | CW_IND,	CW_REG | CW_DIR,			CW_REG,				CW_SHDIR_CODE_SIZE, CW_TRUE, 50, CW_TRUE, &lldi_exec);
-	else if (command == CW_LFORK)
-		p_command_instance->cw_put_param(p_command_instance, CW_LFORK, CW_DIR,					CW_FALSE,					CW_FALSE,			CW_SHDIR_CODE_SIZE, CW_FALSE, 1000, CW_FALSE, &lfork_exec);
-	else if (command == CW_AFF)
-		p_command_instance->cw_put_param(p_command_instance, CW_AFF,	CW_REG,						CW_FALSE,					CW_FALSE,			CW_DIR_CODE_SIZE, CW_FALSE, 2, CW_TRUE, &aff_exec);
+	if (com == CO_FORK)
+		p_c_i->cw_put_param(p_c_i, at
+	| (CO_FORK << 56) | (CW_DIR << 48) | (CW_SHDIR_CODE_SIZE << 24)
+	| (CW_FALSE << 16) | (800 << 6) | (CW_FALSE), &fork_exec);
+	else if (com == CO_LLD)
+		p_c_i->cw_put_param(p_c_i, at
+	| (CO_LLD << 56) | ((CW_DIR | CW_IND) << 48) | (CW_REG << 40)
+	| (CW_DIR_CODE_SIZE << 24) | (CW_TRUE << 16) | (10 << 6)
+	| (CW_TRUE), &lld_exec);
+	else if (com == CO_LLDI)
+		p_c_i->cw_put_param(p_c_i, at
+	| (CO_LLDI << 56) | ((CW_REG | CW_DIR | CW_IND) << 48) | ((CW_REG
+	| CW_DIR) << 40) | (CW_REG << 32) | (CW_SHDIR_CODE_SIZE << 24)
+	| (CW_TRUE << 16) | (50 << 6) | (CW_TRUE), &lldi_exec);
+	else if (com == CO_LFORK)
+		p_c_i->cw_put_param(p_c_i, at
+	| (CO_LFORK << 56) | (CW_DIR << 48) | (CW_SHDIR_CODE_SIZE << 24)
+	| (1000 << 6), &lfork_exec);
+	else if (com == CO_AFF)
+		p_c_i->cw_put_param(p_c_i, at
+	| (CO_AFF << 56) | (CW_REG << 48) | (CW_DIR_CODE_SIZE << 24)
+	| (2 << 6) | (CW_TRUE), &aff_exec);
+	return (1);
+}
+
+static int	cw_recognize_command2(t_command *p_c_i, int com, size_t at)
+{
+	if (com == CO_AND)
+		p_c_i->cw_put_param(p_c_i, at | (CO_AND << 56) | ((CW_REG | CW_DIR
+	| CW_IND) << 48) | ((CW_REG | CW_DIR | CW_IND) << 40) | (CW_REG << 32)
+	| (4 << 24) | (CW_TRUE << 16) | (6 << 6) | (CW_TRUE), &and_exec);
+	else if (com == CO_OR)
+		p_c_i->cw_put_param(p_c_i, at | (CO_OR << 56) | ((CW_REG | CW_DIR
+	| CW_IND) << 48) | ((CW_REG | CW_DIR | CW_IND) << 40) | (CW_REG << 32)
+	| (4 << 24) | (CW_TRUE << 16) | (6 << 6) | (CW_TRUE), &or_exec);
+	else if (com == CO_XOR)
+		p_c_i->cw_put_param(p_c_i, at | (CO_XOR << 56) | ((CW_REG | CW_DIR
+	| CW_IND) << 48) | ((CW_REG | CW_DIR | CW_IND) << 40) | (CW_REG << 32)
+	| (4 << 24) | (CW_TRUE << 16) | (6 << 6) | (CW_TRUE), &xor_exec);
+	else if (com == CO_ZJMP)
+		p_c_i->cw_put_param(p_c_i, at | (CO_ZJMP << 56) | (CW_DIR << 48)
+	| (CW_SHDIR_CODE_SIZE << 24) | (20 << 6), &zjmp_exec);
+	else if (com == CO_LDI)
+		p_c_i->cw_put_param(p_c_i, at | (CO_LDI << 56) | ((CW_REG | CW_DIR
+	| CW_IND) << 48) | ((CW_REG | CW_DIR) << 40) | (CW_REG << 32)
+	| (CW_SHDIR_CODE_SIZE << 24) | (25 << 6) | (CW_TRUE), &ldi_exec);
+	else if (com == CO_STI)
+		p_c_i->cw_put_param(p_c_i, at | (CO_STI << 56) | (CW_REG << 48)
+	| ((CW_REG | CW_DIR | CW_IND) << 40) | ((CW_REG | CW_DIR) << 32)
+	| (CW_SHDIR_CODE_SIZE << 24) | (25 << 6) | (CW_TRUE), &sti_exec);
+	com > CO_STI ? cw_recognize_command3(p_c_i, com, at) : CW_FALSE;
+	return (0);
+}
+
+static void	cw_recognize_command(t_command *p_command_instance, int command)
+{
+	size_t	attr;
+
+	if (!(attr = 0) && command == CO_LIVE)
+		p_command_instance->cw_put_param(p_command_instance, attr
+	| (CO_LIVE << 56) | (CW_DIR << 48) | (CW_DIR_CODE_SIZE << 24)
+	| (10 << 6), &live_exec);
+	else if (command == CO_LD)
+		p_command_instance->cw_put_param(p_command_instance, attr
+	| (CO_LD << 56) | ((CW_DIR | CW_IND) << 48) | (CW_REG << 40)
+	| (CW_FALSE << 32) | (CW_DIR_CODE_SIZE << 24) | (CW_TRUE << 16)
+	| (5 << 6) | (CW_TRUE), &ld_exec);
+	else if (command == CO_ST)
+		p_command_instance->cw_put_param(p_command_instance, attr
+	| (CO_ST << 56) | (CW_REG << 48) | ((CW_REG | CW_IND) << 40)
+	| (CW_DIR_CODE_SIZE << 24) | (5 << 6) | (CW_TRUE), &st_exec);
+	else if (command == CO_ADD)
+		p_command_instance->cw_put_param(p_command_instance, attr
+	| (CO_ADD << 56) | (CW_REG << 48) | (CW_REG << 40) | (CW_REG << 32)
+	| (4 << 24) | (CW_TRUE << 16) | (10 << 6) | (CW_TRUE), &add_exec);
+	else if (command == CO_SUB)
+		p_command_instance->cw_put_param(p_command_instance, attr
+	| (CO_SUB << 56) | (CW_REG << 48) | (CW_REG << 40) | (CW_REG << 32)
+	| (4 << 24) | (CW_TRUE << 16) | (10 << 6) | (CW_TRUE), &sub_exec);
+	else if (cw_recognize_command2(p_command_instance, command, attr))
+		;
+}
+
+extern void	cw_command_functions_linker(t_command *p_command_instance)
+{
+	p_command_instance->cw_recognize = cw_recognize_command;
+	p_command_instance->cw_put_param = cw_put_param;
 }

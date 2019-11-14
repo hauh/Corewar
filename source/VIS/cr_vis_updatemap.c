@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_updatemap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/11 16:20:56 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:25:33 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ int		cr_vis_getxrev(int i)
 
 int		cr_vis_printcarmap(t_corewar *cr)
 {
-	t_carriage	*car;
+	t_process	*car;
 	int			colour;
 	int			i;
 
-	car = cr->p_carriage_obj;
+	car = cr->p_scheduler->p_processes_list;
 	i = -1;
-	while (++i < cr->carriages_amount)
+	while (++i < cr->p_scheduler->processes_amount)
 	{
 		colour = cr_vis_getxcolour(car->current_location);
 		cr_vis_putx(cr->p_arena_obj->p_field[car->current_location],

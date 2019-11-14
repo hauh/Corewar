@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_control.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/05 14:10:01 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:18:26 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		cr_vis_keys(t_corewar *cr)
 	if (key == '[')
 		vis->fpsdiv = vis->fpsdiv <= 10 ? 10 : vis->fpsdiv - 10;
 	if (key == KEY_UP)
-		vis->car_place = (vis->car_place + V_CARVOL >= cr->carriages_amount) ?
+		vis->car_place = (vis->car_place + V_CARVOL >= cr->p_scheduler->processes_amount) ?
 		vis->car_place : (vis->car_place + V_CARVOL);
 	if (key == KEY_DOWN)
 		vis->car_place =

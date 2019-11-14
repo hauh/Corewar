@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printhealth.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 14:15:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/05 14:12:14 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:21:27 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int					cr_vis_printhealth(t_corewar *cr)
 	int	life;
 
 	id = 1;
-	y = cr->players_amount * 4 + 18;
+	y = cr->p_scheduler->players_amount * 4 + 18;
 	cr_vis_printdeath(cr->p_arena_obj->cycle_to_die);
-	while (id <= cr->players_amount)
+	while (id <= cr->p_scheduler->players_amount)
 	{
 		life = cr_vis_lastlive(cr, id);
 		attron(COLOR_PAIR(id));

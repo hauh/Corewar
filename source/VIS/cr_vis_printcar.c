@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printcar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 13:52:05 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:20:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static t_carriage		*cr_vis_getcarp(t_corewar *cr, int place)
+static t_process		*cr_vis_getcarp(t_corewar *cr, int place)
 {
-	t_carriage *car;
+	t_process *car;
 
-	car = cr->p_carriage_obj;
+	car = cr->p_scheduler->p_processes_list;
 	while (car->id != 1 && place)
 	{
-		if (car->p_next == cr->p_carriage_obj)
+		if (car->p_next == cr->p_scheduler->p_processes_list)
 			return (car);
 		car = car->p_next;
 		place -= 1;
@@ -32,7 +32,7 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 	int i;
 
 	i = 0;
-	while (i < CW_REG_SIZE * CW_REG_NUMBER)
+	while (i < CW_REG_SIZE * CW_REG_NUM)
 	{
 		if (i == 32)
 			y += 1;
@@ -41,7 +41,7 @@ static void				cr_vis_printreg(unsigned char *reg, int y)
 	}
 }
 
-static void				cr_vis_bbmvprintw(t_carriage *car, int y)
+static void				cr_vis_bbmvprintw(t_process *car, int y)
 {
 	int			xy[2];
 	char		owner[2];
@@ -62,7 +62,7 @@ car->error_ocurred, car->args, car->offset);
 
 void					cr_vis_printcarinfo(t_corewar *cr)
 {
-	t_carriage	*car;
+	t_process	*car;
 	int			y;
 
 	cr_vis_buildbox(V_RIGHT);
@@ -78,7 +78,7 @@ cr->vis->car_place);
 		cr_vis_bbmvprintw(car, y);
 		attroff(A_BOLD);
 		cr_vis_printreg(car->p_registers, y + 1);
-		if (car->p_next == cr->p_carriage_obj)
+		if (car->p_next == cr->p_scheduler->p_processes_list)
 			break ;
 		car = car->p_next;
 		y += 3;
