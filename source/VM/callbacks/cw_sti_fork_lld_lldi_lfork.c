@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 19:45:28 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 16:59:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:39:09 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	sti_exec(t_corewar *p_game_obj)
 	{
 		GA_ARENA_OBJ_O->p_field[GA_WORK_UNIT_O->current_location] = SPI2;
 		GA_WORK_UNIT_O->cw_move_to(GA_WORK_UNIT_O, 1);
-		GA_NCURSES_O ? cr_vis_putx(SPI2, SPI3, SPI4, 0) : CW_FALSE;
+		GA_NCURSES_O ? cr_vis_putx(SPI2, SPI3, SPI4, SPI5) : 0;
 	}
 	GA_WORK_UNIT_O->cw_carriage_return(GA_WORK_UNIT_O, PR_ADDIT_SAVE);
 }

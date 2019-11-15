@@ -6,13 +6,13 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/31 14:44:55 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:27:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:55:05 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	cr_vis_clearscreen()
+void	cr_vis_clearscreen(void)
 {
 	int		y;
 	char	*x;
@@ -47,7 +47,8 @@ void	cr_vis_welcome(t_corewar *cr)
 	mvprintw(V_H / 2, V_W / 2, "Introducing contestants...\n");
 	while (iter < cr->p_scheduler->players_amount)
 	{
-		cr->p_scheduler->p_processes_list = cr->p_scheduler->p_processes_list->p_prev;
+		cr->p_scheduler->p_processes_list =
+		cr->p_scheduler->p_processes_list->p_prev;
 		mvprintw(V_H / 2 + iter, V_W / 2,
 		"* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
 		cr->p_scheduler->p_processes_list->p_owner->id,

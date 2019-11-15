@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_box.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 12:06:01 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 14:11:50 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 17:51:36 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ void	cr_vis_buildbox(int part)
 	}
 }
 
-void	cr_vis_clearbox(int part)
+void	cr_vis_clearbox(int part, int mini)
 {
 	int		y;
 	int		x;
 	char	*str;
 
+	mini = 0;
 	y = (part == V_MID) ? (V_SEPSEP - V_SEP) : (V_W - V_SEPSEP);
 	str = ft_strnew(y);
 	ft_memset(str, ' ', y);
@@ -54,4 +55,32 @@ void	cr_vis_clearbox(int part)
 	while (++y < V_H)
 		mvprintw(y, x, str);
 	ft_strdel(&str);
+}
+
+int		cr_vis_box_manager(int action)
+{
+	static t_box *box;
+
+	if (!box)
+	{
+		box = (t_box *)malloc(sizeof(t_box));
+		box->vh = (action == V_BM_SET_MINI) ? 68 : 100;
+		box->vs = (action == V_BM_SET_MINI) ? 200 : 136;
+		box->vss = box->vs + 60;
+		box->vw = (action == V_BM_SET_MINI) ? box->vs + 62 : 400;
+		box->vcarvol = box->vh / 3 - 2;
+	}
+	if (action == V_BM_GET_VW)
+		return (box->vw);
+	else if (action == V_BM_GET_VH)
+		return (box->vh);
+	else if (action == V_BM_GET_VS)
+		return (box->vs);
+	else if (action == V_BM_GET_VSS)
+		return (box->vss);
+	else if (action == V_BM_GET_VCARVOL)
+		return (box->vcarvol);
+	else if (action == V_BM_CLEAR)
+		free(box);
+	return (0);
 }

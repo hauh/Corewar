@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 16:35:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:39:02 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@
 # define SPI2				p_game_obj->AR_VALUE_BUF_1_O->p_data[GA_ITERATOR_O]
 # define SPI3				GA_WORK_UNIT_O->current_location
 # define SPI4				GA_WORK_UNIT_O->p_owner->id
+# define SPI5				GA_STE_O ? VPS : VPN
 
 # define GA_FIRST_ARG		GA_WORK_UNIT_O->args >> 6 & 0x03
 # define GA_SECOND_ARG		GA_WORK_UNIT_O->args >> 4 & 0x03

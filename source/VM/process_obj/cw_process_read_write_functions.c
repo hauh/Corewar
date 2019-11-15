@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:10:45 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 15:52:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:45:21 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	cw_ind_write_handle(t_process *p_process_instance,
 		AR_FIELD_O[PR_CURRENT_LOCATION_I] = BU_DATA_O[i];
 		p_process_instance->cw_move_to(p_process_instance, 1);
 		if (AR_NCURSES_O)
-			cr_vis_putx(BU_DATA_O[i], PR_CURRENT_LOCATION_I, PR_OWNER_I->id, 0);
+			cr_vis_putx(BU_DATA_O[i], PR_CURRENT_LOCATION_I, PR_OWNER_I->id, G);
 	}
 	p_process_instance->cw_carriage_return(p_process_instance, PR_ADDIT_SAVE);
 }

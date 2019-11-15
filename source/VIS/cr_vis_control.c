@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:50:13 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:18:26 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:54:57 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	cr_vis_morekeys(t_corewar *cr, int key)
 	t_vis		*vis;
 
 	vis = cr->vis;
+	if (key == 'c')
+		vis->carinfo = (vis->carinfo == 1) ? 0 : 1;
 	if (key == 'i')
 		vis->info = (vis->info == 1) ? 0 : 1;
 	if (key == 'k')
@@ -62,13 +64,12 @@ int		cr_vis_keys(t_corewar *cr)
 	if (key == '[')
 		vis->fpsdiv = vis->fpsdiv <= 10 ? 10 : vis->fpsdiv - 10;
 	if (key == KEY_UP)
-		vis->car_place = (vis->car_place + V_CARVOL >= cr->p_scheduler->processes_amount) ?
+		vis->car_place =
+		(vis->car_place + V_CARVOL >= cr->p_scheduler->processes_amount) ?
 		vis->car_place : (vis->car_place + V_CARVOL);
 	if (key == KEY_DOWN)
 		vis->car_place =
 		(vis->car_place <= 0) ? 0 : (vis->car_place - V_CARVOL);
-	if (key == 'c')
-		vis->carinfo = (vis->carinfo == 1) ? 0 : 1;
 	cr_vis_morekeys(cr, key);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 15:05:45 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:41:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void		cw_processes_obj_init(t_corewar *p_game_instance)
 	if (GA_TREE_TIME_I || GA_LIST_TIME_I)
 		GA_SCHEDULER_I->cw_timeline_init(GA_SCHEDULER_I, p_game_instance);
 	GA_ARENA_OBJ_I->ncurses = GA_NCURSES_I;
+	GA_ARENA_OBJ_I->stealth = GA_STE_I;
 	while (++iter < GA_SCHEDULER_I->players_amount)
 	{
 		cw_create_instance_process(&p_process_obj);

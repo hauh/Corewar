@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:22:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:55:07 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	cr_vis_clearinfo(t_corewar *cr)
 {
 	if (cr->vis->carinfo != -1 || cr->vis->info != -1)
 	{
-		cr_vis_clearbox(V_MID);
-		cr_vis_clearbox(V_RIGHT);
+		cr_vis_clearbox(V_MID, cr->mini);
+		cr_vis_clearbox(V_RIGHT, cr->mini);
 	}
 	if (!cr->vis->carinfo && !cr->vis->info)
 	{
@@ -55,7 +55,7 @@ int		cr_vis_printplayers(t_corewar *cr)
 	{
 		mvprintw(p->id + i * 3 + 6, V_SEP + 6, "Player %d: ", p->id);
 		attron(COLOR_PAIR(p->id));
-		mvprintw(p->id + i * 3 + 6, V_SEP + 17, "% 15s", p->p_name);
+		mvprintw(p->id + i * 3 + 6, V_SEP + 17, "%.42s", p->p_name);
 		attroff(COLOR_PAIR(p->id));
 		mvprintw(p->id + i * 3 + 7, V_SEP + 12,
 		"Last live: %d", cr_vis_lastlive(cr, p->id));
@@ -68,7 +68,7 @@ int		cr_vis_printplayers(t_corewar *cr)
 int		cr_vis_printinfo(t_corewar *cr)
 {
 	cr_vis_clearinfo(cr);
-	if (cr->vis->carinfo == 1)
+	if (!cr->mini && cr->vis->carinfo == 1)
 		cr_vis_printcarinfo(cr);
 	if (cr->vis->info == 1)
 	{
@@ -79,7 +79,8 @@ int		cr_vis_printinfo(t_corewar *cr)
 		mvprintw(4, V_SEP + 12, "Cycles/second limit: %d",
 		(CLOCKS_PER_SEC / (CLOCKS_PER_SEC / cr->vis->fpsdiv)));
 		mvprintw(6, V_SEP + 18, " Cycle: %d", cr->p_arena_obj->cycle);
-		mvprintw(8, V_SEP + 18, "Processes: %d", cr->p_scheduler->processes_amount);
+		mvprintw(8, V_SEP + 18, "Processes: %d",
+		cr->p_scheduler->processes_amount);
 		cr_vis_printplayers(cr);
 		mvprintw(cr->p_scheduler->players_amount * 4 + 12, V_SEP + 6,
 		"CYCLE_TO_DIE: %d   CYCLE_DELTA: %d", CYCLE_TO_DIE, CYCLE_DELTA);

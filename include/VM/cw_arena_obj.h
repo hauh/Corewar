@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 16:37:14 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:45:17 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define AR_BUFFERS_I		p_arena_instance->pa_buffer_set
 # define AR_FIELD_I			p_arena_instance->p_field
 # define AR_NCURSES_I		p_arena_instance->ncurses
+# define AR_STEALTH_I		p_arena_instance->stealth
 # define AR_SPARE_BUF_I		AR_BUFFERS_I[CW_SPARE_BUF]
 # define AR_SYSTEM_BUF_I	AR_BUFFERS_I[CW_SYSTEM_BUF]
 # define AR_VALUE_BUF_1_I	AR_BUFFERS_I[CW_VALUE_BUF_1]
@@ -37,6 +38,7 @@
 # define AR_BUFFERS_O		p_arena_obj->pa_buffer_set
 # define AR_FIELD_O			p_arena_obj->p_field
 # define AR_NCURSES_O		p_arena_obj->ncurses
+# define AR_STEALTH_O		p_arena_obj->stealth
 # define AR_SYSTEM_BUF_O	AR_BUFFERS_O[CW_SYSTEM_BUF]
 # define AR_SPARE_BUF_O		AR_BUFFERS_O[CW_SPARE_BUF]
 # define AR_SYSTEM_BUF_O	AR_BUFFERS_O[CW_SYSTEM_BUF]
@@ -49,6 +51,8 @@
 # define AR_FIELD_ERROR		"Memory for ARENA->FIELD has not been allocated"
 # define AR_OBJECT_ERROR	"Memory for ARENA has not been allocated"
 # define AR_OBJECT_NAME		"ARENA"
+
+# define G					AR_STEALTH_O ? VPS : VPN
 
 typedef enum		e_set_buffer
 {
@@ -63,6 +67,7 @@ typedef enum		e_set_buffer
 typedef struct		s_arena
 {
 	t_flag			ncurses;
+	t_flag			stealth;
 
 	t_mark			cycle_to_die;
 	t_counter		live_amount;

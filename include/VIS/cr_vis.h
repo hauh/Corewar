@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 15:49:08 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:14:43 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@
 ** Visual defines
 */
 
-# define V_W 400 // <- с каретками
-// # define V_W 136 + 60
-# define V_H 100
-# define V_SEP 136
-# define V_SEPSEP (V_SEP + 60)
-# define V_CARVOL (V_H / 3 - 3)
+# define V_W cr_vis_box_manager(V_BM_GET_VW)
+# define V_H cr_vis_box_manager(V_BM_GET_VH)
+# define V_SEP cr_vis_box_manager(V_BM_GET_VS)
+# define V_SEPSEP cr_vis_box_manager(V_BM_GET_VSS)
+# define V_CARVOL cr_vis_box_manager(V_BM_GET_VCARVOL)
 # define V_BSYM "\xe2\x96\x88"
 # define V_BHALF "\xe2\x96\x93"
 # define V_BQUARTER "\xe2\x96\x91"
+# define V_STEALTH "\xe2\x96\xa3"
 
 
 /*
@@ -49,6 +49,15 @@
 ** ---------------------------
 ** Visual typedefs
 */
+
+typedef struct			s_box
+{
+	int					vh;
+	int					vw;
+	int					vs;
+	int					vss;
+	int					vcarvol;
+}						t_box;
 
 typedef struct			s_vis
 {
@@ -65,7 +74,7 @@ typedef struct			s_vis
 	long int			sound_time;
 }						t_vis;
 
-enum						e_vis_act
+enum					e_vis_act
 {
 	V_INIT,								// initialise the matp
 	V_CONTROL,							// update time and check key input
@@ -75,6 +84,26 @@ enum						e_vis_act
 	V_MID,
 	V_RIGHT,
 	V_SCREEN,
+};
+
+enum					e_vis_print
+{
+	VPN,							// print normal number (also, VPN, lol)
+	VPNR,							// print normal number with carriage on it
+	VPS,								// print stealth characters insted of numbers
+	VPSR,							// stealth with carriage
+};
+
+enum					e_vis_boxmanager
+{
+	V_BM_SET_MINI,
+	V_BM_SET_NORMAL,
+	V_BM_GET_VH,
+	V_BM_GET_VW,
+	V_BM_GET_VS,
+	V_BM_GET_VSS,
+	V_BM_GET_VCARVOL,
+	V_BM_CLEAR,
 };
 
 /*
@@ -102,11 +131,13 @@ void						cr_vis_printcarinfo			(t_corewar *cr);
 void						cr_vis_welcome				(t_corewar *cr);
 void						cr_vis_winner				(t_corewar *cr);
 void						cr_vis_buildbox				(int part);
-void						cr_vis_clearbox				(int part);
+void						cr_vis_clearbox				(int part, int mini);
 int							cr_vis_printhealth			(t_corewar *cr);
 int							cr_vis_lastlive				(t_corewar *cr, int id);
 void						cr_vis_sound				(t_vis *vis, int piece);
 void						cr_vis_sound_sellout		(t_corewar *cr);
+int							cr_vis_printattr_stealth	(int i, int colour, int flag);
+int							cr_vis_box_manager			(int action);
 
 /*
 ** ---------------------------

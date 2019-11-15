@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 16:36:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:25:33 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 18:11:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,12 @@ int		cr_vis_printcarmap(t_corewar *cr)
 	while (++i < cr->p_scheduler->processes_amount)
 	{
 		colour = cr_vis_getxcolour(car->current_location);
-		cr_vis_putx(cr->p_arena_obj->p_field[car->current_location],
-		car->current_location, colour, 1);
+		if (!cr->stealth)
+			cr_vis_putx(cr->p_arena_obj->p_field[car->current_location],
+			car->current_location, colour, VPNR);
+		else
+			cr_vis_printattr_stealth(
+			car->current_location, colour, VPSR);
 		car = car->p_next;
 	}
 	return (0);
@@ -73,8 +77,14 @@ int		cr_vis_printdiff(t_corewar *cr)
 	while (++i < MEM_SIZE)
 	{
 		if (cr_vis_getxrev(i))
-			cr_vis_putx(cr->p_arena_obj->p_field[i],
-			i, cr_vis_getxcolour(i), 0);
+		{
+			if (!cr->stealth)
+				cr_vis_putx(cr->p_arena_obj->p_field[i],
+				i, cr_vis_getxcolour(i), VPN);
+			else
+				cr_vis_printattr_stealth(
+					i, cr_vis_getxcolour(i), VPS);
+		}
 	}
 	return (0);
 }
