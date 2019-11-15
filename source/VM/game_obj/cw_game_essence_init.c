@@ -1,4 +1,4 @@
-git /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cw_game_essence_init.c                             :+:      :+:    :+:   */
@@ -6,7 +6,7 @@ git /* *************************************************************************
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 15:02:21 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 15:06:43 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void		cw_processes_obj_init(t_corewar *p_game_instance)
 static int		cw_keys_parse(t_corewar *p_game_instance,
 								char **argv, int argc, int iter)
 {
-	while (*++(argv[iter]) && SPY < 2)
+	while (*++(argv[iter]) && (SPY < 2 || SPY > 5))
 		if (*(argv[iter]) == 's' && iter + 1 < argc && (SPY = CW_TRUE))
 			p_game_instance->starting_cycle = ft_atoi(argv[iter + 1]);
 		else if (!ft_strcmp(argv[iter], "dump") && iter + 1 < argc && (SPY = 2))
@@ -54,11 +54,11 @@ static int		cw_keys_parse(t_corewar *p_game_instance,
 			p_game_instance->stealth = CW_TRUE;
 		else if (!ft_strcmp(argv[iter], "-mini") && (SPY = 5))
 			p_game_instance->mini = CW_TRUE;
-		else if (*(argv[iter]) == 't')
+		else if (*(argv[iter]) == 't' && (SPY = 6))
 			p_game_instance->timeline_avl_tree_mode = CW_TRUE;
-		else if (*(argv[iter]) == 'l')
+		else if (*(argv[iter]) == 'l' && (SPY = 6))
 			p_game_instance->timeline_list_mode = CW_TRUE;
-		else if (*(argv[iter]) == 'g' || *(argv[iter]) == 'a')
+		else if ((*(argv[iter]) == 'g' || *(argv[iter]) == 'a') && (SPY = 6))
 			*(argv[iter]) == 'g' ? GA_NCURSES_I = CW_TRUE :
 			(GA_AFF_I = CW_TRUE);
 		else
