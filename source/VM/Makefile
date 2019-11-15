@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
+#    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/11/15 18:25:13 by vrichese         ###   ########.fr        #
+#    Updated: 2019/11/15 19:01:22 by smorty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,7 @@ vpath %.c $(VM_DIR_SOURCE)	$(VM_DIR_SOURCE)/game_obj						\
 							$(VM_DIR_SOURCE)/player_obj						\
 							$(VM_DIR_SOURCE)/scheduler_obj					\
 								$(VM_DIR_SOURCE)/scheduler_obj/queue_obj	\
-							$(VM_DIR_SOURCE)/rest							\
+
 vpath %.c $(VIS_DIR_SOURCE)
 vpath %.h $(VM_DIR_INCLUDE)
 vpath %.h $(VIS_DIR_INCLUDE)

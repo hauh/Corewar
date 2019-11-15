@@ -2,5 +2,5 @@
 	path = ft_printf
 	url = https://github.com/AloySobek/ft_printf
 [submodule "libft"]
-	path = libft
-	url = https://github.com/AloySobek/libft
+	path = src/libft
+	url = https://github.com/hauh/libft.git
