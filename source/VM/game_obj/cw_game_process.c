@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 14:33:29 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 16:54:47 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static void	cw_usage(t_corewar *p_game_instance)
 
 static void	cw_start_execution(t_corewar *p_game_instance)
 {
+	char i;
+
 	while (GA_SC_PR_AM_I && ++p_game_instance->AR_CYCLE_O)
 	{
 		GA_SCHEDULER_I->cw_execution_processes(GA_SCHEDULER_I,
@@ -49,9 +51,16 @@ static void	cw_start_execution(t_corewar *p_game_instance)
 		if (GA_ARENA_OBJ_I->cw_time_to_check(GA_ARENA_OBJ_I, GA_LAST_CHECK_I))
 			GA_SCHEDULER_I->cw_deadline(GA_SCHEDULER_I, p_game_instance);
 		if (GA_DUMP_I == p_game_instance->AR_CYCLE_O && GA_SC_PR_AM_I)
-			GA_ARENA_OBJ_I->cw_print_field(GA_ARENA_OBJ_I);
+			GA_ARENA_OBJ_I->cw_print_field(GA_ARENA_OBJ_I, CW_TRUE);
 		if (GA_VERBOSE_I == GA_SHOW_CYCLES)
 			ft_printf("It is now cycle %d\n", GA_ARENA_OBJ_I->cycle);
+		if (GA_STARTING_I && p_game_instance->AR_CYCLE_O >= GA_STARTING_I)
+		{
+			GA_ARENA_OBJ_I->cw_print_field(GA_ARENA_OBJ_I, CW_FALSE);
+			i = 0;
+			while (i != '\n')
+				read(0, &i, 1);
+		}
 	}
 }
 
@@ -72,8 +81,6 @@ static void	cw_graphic_execution(t_corewar *p_game_instance)
 				p_game_instance, p_game_instance->AR_CYCLE_O);
 			if (GA_ARENA_OBJ_I->cw_time_to_check(GA_ARENA_OBJ_I, GA_LAST_CHECK_I))
 				GA_SCHEDULER_I->cw_deadline(GA_SCHEDULER_I, p_game_instance);
-			if (GA_DUMP_I == p_game_instance->AR_CYCLE_O && GA_SC_PR_AM_I)
-				GA_ARENA_OBJ_I->cw_print_field(GA_ARENA_OBJ_I);
 			if (GA_SC_PR_AM_I)
 				cr_vis_main(p_game_instance, V_UPDATE);
 		}

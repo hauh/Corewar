@@ -6,7 +6,11 @@
 #    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2019/11/15 15:08:29 by dbrady           ###   ########.fr        #
+=======
+#    Updated: 2019/11/15 16:01:13 by vrichese         ###   ########.fr        #
+>>>>>>> ad13a51951a1eabb10d05690b150c92ef6e17131
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,12 +109,18 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(VIS_OBJ) $(LIBFT) $(LIBFTPRINTF)
 	gcc $(FLAGS) $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+	clear
+	printf "\r\e[J\e[33m"
+	bash .output.sh
+	printf "\e[0m\e[?25h"
 
 $(OBJ):%.o:%.c $(VM_HEADERS) | $(DIR_BIN)
 	gcc $(FLAGS) -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
+	printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
 
 $(VIS_OBJ):%.o:%.c $(VIS_HEADER)
 	gcc $(FLAGS) -I $(DIR_LIBFT)includes -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE)  -c $< -o $(DIR_BIN)$@
+	printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
 
 $(DIR_BIN):
 	mkdir -p $@

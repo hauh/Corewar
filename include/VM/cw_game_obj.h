@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 14:34:32 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 16:55:16 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define GA_NCURSES_I		p_game_instance->ncurses
 # define GA_STE_I			p_game_instance->stealth
 # define GA_AFF_I			p_game_instance->aff_hide
+# define GA_STARTING_I		p_game_instance->starting_cycle
 
 # define GA_SCHEDULER_I		p_game_instance->p_scheduler
 # define GA_ID_I			p_game_instance->custom_id
@@ -58,6 +59,7 @@
 # define GA_TREE_TIME_O		p_game_obj->timeline_avl_tree_mode
 # define GA_LIST_TIME_O		p_game_obj->timeline_list_mode
 # define GA_AFF_O			p_game_obj->aff_hide
+# define GA_STARTING_O		p_game_obj->starting_cycle
 
 # define GA_OBJ_NAME		"GAME"
 # define GA_OBJ_ERROR		"Memory for GAME has not been allocated"

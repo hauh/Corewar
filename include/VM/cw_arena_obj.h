@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:07:10 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 15:52:00 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 16:37:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct		s_arena
 	t_buffer		*pa_buffer_set[CW_BUFFER_AMOUNT];
 
 	t_method		(*cw_constructor)	(struct s_arena **);
-	t_method		(*cw_print_field)	(struct s_arena *);
+	t_method		(*cw_print_field)	(struct s_arena *, int);
 	t_method		(*cw_buffer_init)	(struct s_arena *);
 	t_mark			(*cw_time_to_check)	(struct s_arena *, int);
 	t_method		(*cw_destructor)	(struct s_arena **);

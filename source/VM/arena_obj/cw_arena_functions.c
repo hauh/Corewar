@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 13:22:52 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/09 18:37:31 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 16:37:46 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int		cw_time_to_check(t_arena *p_arena_instance, int last_check)
 		return (CW_FALSE);
 }
 
-static void		cw_print_field(t_arena *p_arena_instance)
+static void		cw_print_field(t_arena *p_arena_instance, int last)
 {
 	t_mark		border;
 	t_iterator	iter;
@@ -35,7 +35,8 @@ static void		cw_print_field(t_arena *p_arena_instance)
 			ft_printf("\n%#06x : ", iter + 1);
 	}
 	ft_printf("\n");
-	exit(AR_DUMP_EXIT);
+	if (last)
+		exit(AR_DUMP_EXIT);
 }
 
 static void		cw_buffer_init(t_arena *p_arena_instance)
