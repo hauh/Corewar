@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
+#    By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/11/14 19:50:14 by vrichese         ###   ########.fr        #
+#    Updated: 2019/11/15 15:08:29 by dbrady           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ OBJ				:=		$(VM_SOURCE:.c=.o)
 VIS_OBJ			:=		$(VIS_SOURCE:.c=.o)
 OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))
 
-FLAGS			:=		-O3 -Wall -Werror -Wextra
+FLAGS			:=		-O3 -Wall -Werror -Wextra -g
 
 LIBFT			:=		libft.a
 LIBFTPRINTF		:=		libftprintf.a

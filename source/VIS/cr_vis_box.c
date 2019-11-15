@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 12:06:01 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/15 14:30:27 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 15:15:15 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		cr_vis_box_manager(int	action)
 	if (!box)
 	{
 		box = (t_box *)malloc(sizeof(t_box));
-		box->vh = (action == V_BM_SET_MINI) ? 63 : 100;
+		box->vh = (action == V_BM_SET_MINI) ? 68 : 100;
 		box->vs = (action == V_BM_SET_MINI) ? 200 : 136;
 		box->vss = (action == V_BM_SET_MINI) ? 0 : box->vs + 60;
 		box->vw = box->vss ? 400 : box->vs + 60;

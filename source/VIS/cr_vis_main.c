@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 12:31:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:19:19 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 15:08:08 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		cr_vis_cleanup(t_corewar *cr)
 {
 	endwin();
 	system("(pkill afplay)");
+	cr_vis_box_manager(V_BM_CLEAR);
 	if (cr)
 	{
 		if (cr->vis)
