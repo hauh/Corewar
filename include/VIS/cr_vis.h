@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 14:41:45 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 17:14:43 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@
 ** Visual defines
 */
 
-# define V_W cr_vis_box_manager(V_BM_GET_VW) // <- с каретками
-// # define V_W 136 + 60
+# define V_W cr_vis_box_manager(V_BM_GET_VW)
 # define V_H cr_vis_box_manager(V_BM_GET_VH)
 # define V_SEP cr_vis_box_manager(V_BM_GET_VS)
 # define V_SEPSEP cr_vis_box_manager(V_BM_GET_VSS)
@@ -132,7 +131,7 @@ void						cr_vis_printcarinfo			(t_corewar *cr);
 void						cr_vis_welcome				(t_corewar *cr);
 void						cr_vis_winner				(t_corewar *cr);
 void						cr_vis_buildbox				(int part);
-void						cr_vis_clearbox				(int part);
+void						cr_vis_clearbox				(int part, int mini);
 int							cr_vis_printhealth			(t_corewar *cr);
 int							cr_vis_lastlive				(t_corewar *cr, int id);
 void						cr_vis_sound				(t_vis *vis, int piece);

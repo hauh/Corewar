@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/15 14:53:06 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 17:25:18 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	cr_vis_clearinfo(t_corewar *cr)
 {
 	if (cr->vis->carinfo != -1 || cr->vis->info != -1)
 	{
-		cr_vis_clearbox(V_MID);
-		cr_vis_clearbox(V_RIGHT);
+		cr_vis_clearbox(V_MID, cr->mini);
+		cr_vis_clearbox(V_RIGHT, cr->mini);
 	}
 	if (!cr->vis->carinfo && !cr->vis->info)
 	{
@@ -55,7 +55,7 @@ int		cr_vis_printplayers(t_corewar *cr)
 	{
 		mvprintw(p->id + i * 3 + 6, V_SEP + 6, "Player %d: ", p->id);
 		attron(COLOR_PAIR(p->id));
-		mvprintw(p->id + i * 3 + 6, V_SEP + 17, "% 15s", p->p_name);
+		mvprintw(p->id + i * 3 + 6, V_SEP + 17, "%.42s", p->p_name);
 		attroff(COLOR_PAIR(p->id));
 		mvprintw(p->id + i * 3 + 7, V_SEP + 12,
 		"Last live: %d", cr_vis_lastlive(cr, p->id));
@@ -68,7 +68,6 @@ int		cr_vis_printplayers(t_corewar *cr)
 int		cr_vis_printinfo(t_corewar *cr)
 {
 	cr_vis_clearinfo(cr);
-	mvprintw(30, 300, "mini: %d | sellout: %d | stealth: %d", cr->mini, cr->sellout, cr->stealth);
 	if (!cr->mini && cr->vis->carinfo == 1)
 		cr_vis_printcarinfo(cr);
 	if (cr->vis->info == 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printcar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 16:15:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:20:46 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:25:02 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ cr->vis->car_place);
 	while (y / 3 - 1 < V_CARVOL)
 	{
 		attron(A_BOLD);
-		cr_vis_bbmvprintw(car, y);
+		cr_vis_bbmvprintw(car, y + 1);
 		attroff(A_BOLD);
-		cr_vis_printreg(car->p_registers, y + 1);
+		cr_vis_printreg(car->p_registers, y + 2);
 		if (car->p_next == cr->p_scheduler->p_processes_list)
 			break ;
 		car = car->p_next;

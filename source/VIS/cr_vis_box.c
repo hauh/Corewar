@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 12:06:01 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/15 15:15:15 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 17:23:53 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ void	cr_vis_buildbox(int part)
 	}
 }
 
-void	cr_vis_clearbox(int part)
+void	cr_vis_clearbox(int part, int mini)
 {
 	int		y;
 	int		x;
 	char	*str;
 
+	mini = 0;
 	y = (part == V_MID) ? (V_SEPSEP - V_SEP) : (V_W - V_SEPSEP);
 	str = ft_strnew(y);
 	ft_memset(str, ' ', y);
@@ -65,9 +66,9 @@ int		cr_vis_box_manager(int	action)
 		box = (t_box *)malloc(sizeof(t_box));
 		box->vh = (action == V_BM_SET_MINI) ? 68 : 100;
 		box->vs = (action == V_BM_SET_MINI) ? 200 : 136;
-		box->vss = (action == V_BM_SET_MINI) ? 0 : box->vs + 60;
-		box->vw = box->vss ? 400 : box->vs + 60;
-		box->vcarvol = box->vh / 3 - 3;
+		box->vss = box->vs + 60;
+		box->vw = (action == V_BM_SET_MINI) ? box->vs + 62 : 400;
+		box->vcarvol = box->vh / 3 - 2;
 	}
 	if (action == V_BM_GET_VW)
 		return (box->vw);
