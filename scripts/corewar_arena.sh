@@ -1,7 +1,7 @@
 #!/bin/bash
 
-OG_COREWAR="../samples/corewar"
-OG_ASM="../samples/asm"
+OG_COREWAR="../vm_champs/corewar"
+OG_ASM="../vm_champs/asm"
 MY_COREWAR="../corewar"
 CHECKER="./corewar_checker.sh"
 

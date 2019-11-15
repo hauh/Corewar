@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OG_COREWAR="../samples/corewar"
+OG_COREWAR="../vm_champs/corewar"
 MY_COREWAR="../corewar"
 
 if [ -z "$1" ]; then
