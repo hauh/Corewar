@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 14:32:00 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 14:41:45 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int							cr_vis_lastlive				(t_corewar *cr, int id);
 void						cr_vis_sound				(t_vis *vis, int piece);
 void						cr_vis_sound_sellout		(t_corewar *cr);
 int							cr_vis_printattr_stealth	(int i, int colour, int flag);
-int							cr_vis_box_manager			0(int	action);
+int							cr_vis_box_manager			(int action);
 
 /*
 ** ---------------------------

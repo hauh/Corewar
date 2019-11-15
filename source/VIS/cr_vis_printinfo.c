@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/15 14:29:44 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 14:53:06 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int		cr_vis_printplayers(t_corewar *cr)
 int		cr_vis_printinfo(t_corewar *cr)
 {
 	cr_vis_clearinfo(cr);
+	mvprintw(30, 300, "mini: %d | sellout: %d | stealth: %d", cr->mini, cr->sellout, cr->stealth);
 	if (!cr->mini && cr->vis->carinfo == 1)
 		cr_vis_printcarinfo(cr);
 	if (cr->vis->info == 1)
