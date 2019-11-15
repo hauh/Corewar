@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_obj.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 17:03:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 12:55:02 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct			s_corewar
 	t_flag		ncurses;
 	t_flag		sellout;
 	t_flag		stealth;
+	t_flag		mini;
 
 	t_mark		last_check_cycle;
 	t_counter	numerate_carriage;

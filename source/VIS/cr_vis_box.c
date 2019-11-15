@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 12:06:01 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 14:11:50 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 14:30:27 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,32 @@ void	cr_vis_clearbox(int part)
 	while (++y < V_H)
 		mvprintw(y, x, str);
 	ft_strdel(&str);
+}
+
+int		cr_vis_box_manager(int	action)
+{
+	static t_box *box;
+
+	if (!box)
+	{
+		box = (t_box *)malloc(sizeof(t_box));
+		box->vh = (action == V_BM_SET_MINI) ? 63 : 100;
+		box->vs = (action == V_BM_SET_MINI) ? 200 : 136;
+		box->vss = (action == V_BM_SET_MINI) ? 0 : box->vs + 60;
+		box->vw = box->vss ? 400 : box->vs + 60;
+		box->vcarvol = box->vh / 3 - 3;
+	}
+	if (action == V_BM_GET_VW)
+		return (box->vw);
+	else if (action == V_BM_GET_VH)
+		return (box->vh);
+	else if (action == V_BM_GET_VS)
+		return (box->vs);
+	else if (action == V_BM_GET_VSS)
+		return (box->vss);
+	else if (action == V_BM_GET_VCARVOL)
+		return (box->vcarvol);
+	else if (action == V_BM_CLEAR)
+		free(box);
+	return (0);
 }

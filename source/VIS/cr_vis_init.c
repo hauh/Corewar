@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:44:47 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/04 14:09:31 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 14:29:18 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ int		cr_vis_initvis(t_corewar *cr)
 {
 	t_vis *tmp;
 
+	if (cr->mini)
+		cr_vis_box_manager(V_BM_SET_MINI);
+	else
+		cr_vis_box_manager(V_BM_SET_NORMAL);
 	tmp = (t_vis *)malloc(sizeof(t_vis));
 	ft_bzero(tmp, sizeof(t_vis));
 	tmp->flow = 0;
