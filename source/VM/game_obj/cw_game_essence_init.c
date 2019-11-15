@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 14:18:59 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 14:29:49 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void		cw_players_obj_init(t_corewar *p_game_instance, int c, char **v)
 	i = CW_BEGIN_FROM_ZERO;
 	while (++i < c)
 		if (*(v[i]) == CW_KEY && !(SPY = CW_FALSE))
-			cw_keys_parse(p_game_instance, v, c, i) == 1 ? ++i : 0;
+			cw_keys_parse(p_game_instance, v, c, i) <= 2 ? ++i : 0;
 		else
 		{
 			cw_create_instance_player(&p);
