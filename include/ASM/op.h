@@ -6,12 +6,12 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 19:38:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/09/12 14:19:14 by smorty           ###   ########.fr       */
+/*   Updated: 2019/11/15 21:01:28 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OP_H
-# define OP_H
+#ifndef		OP_H
+# define	OP_H
 
 # define IND_SIZE			2
 # define REG_SIZE			4
@@ -54,15 +54,5 @@
 # define PROG_NAME_LENGTH	(128)
 # define COMMENT_LENGTH		(2048)
 # define COREWAR_EXEC_MAGIC	0xea83f3
-
-typedef char	t_arg_type;
-
-typedef struct	s_header
-{
-	unsigned int	magic;
-	char			prog_name[PROG_NAME_LENGTH + 1];
-	unsigned int	prog_size;
-	char			comment[COMMENT_LENGTH + 1];
-}				t_header;
 
 #endif
