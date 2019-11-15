@@ -6,7 +6,7 @@
 /*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 16:54:47 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/15 17:30:57 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	cw_usage(t_corewar *p_game_instance)
 {
-	ft_printf("Usage: \".cor file\" [-dump N -s N -v N | -g --stealth] ");
-	ft_printf("ft_[-a | -t | -l] <champion1.cor> <...>\n");
-	ft_printf("  -a        : Prints output fomr \"aff\"");
+	ft_printf("Usage: \".cor file\" [-dump N -s N -v N | -g --stealth ");
+	ft_printf("--sellout --mini] [-a | -t | -l] <champion1.cor> <...>\n");
+	ft_printf("  -a        : Prints output from \"aff\"");
 	ft_printf("(Default is to hide it)\n");
 	ft_printf("  -t        : TIMELINE AVL TREE Execution model if it enable\n");
 	ft_printf("  -l        : TIMELINE SORT Execution model if it enable\n");
@@ -25,11 +25,11 @@ static void	cw_usage(t_corewar *p_game_instance)
 	ft_printf("  -dump N   : Dumps memory after N cycles then exists\n");
 	ft_printf("  -s N      : Runs N cycles, dumps memory, pauses, then ");
 	ft_printf("repeats\n");
-	ft_printf("  -v N      : Verbosity levels, can be added together to");
+	ft_printf("  -v N      : Verbosity levels, can be added together to ");
 	ft_printf("enable several\n");
-	ft_printf("                    - 1 : Show lives\n");
-	ft_printf("                    - 2 : Show cycles\n");
-	ft_printf("                    - 4 : Show deaths\n");
+	ft_printf("               - 1 : Show lives\n");
+	ft_printf("               - 2 : Show cycles\n");
+	ft_printf("               - 4 : Show deaths\n");
 	ft_printf("$$$$$ NCURSES OUTPUT MODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 	ft_printf("$$$$$$$$$$$$$$$$$$\n");
 	ft_printf("  -g        : Ncurses output mode\n");
