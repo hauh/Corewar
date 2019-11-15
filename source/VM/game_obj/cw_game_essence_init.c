@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:39:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 19:38:04 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 14:18:59 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,31 @@ static void		cw_processes_obj_init(t_corewar *p_game_instance)
 static int		cw_keys_parse(t_corewar *p_game_instance,
 								char **argv, int argc, int iter)
 {
-	SPI = CW_FALSE;
-	while (*++(argv[iter]) && SPI == CW_FALSE)
-		if (*(argv[iter]) == 's' && iter + 1 < argc && (SPI = CW_TRUE))
+	while (*++(argv[iter]) && SPY < 2)
+		if (*(argv[iter]) == 's' && iter + 1 < argc && (SPY = CW_TRUE))
 			p_game_instance->starting_cycle = ft_atoi(argv[iter + 1]);
-		else if (!ft_strcmp(argv[iter], "dump") && iter + 1 < argc && (SPI = 1))
+		else if (!ft_strcmp(argv[iter], "dump") && iter + 1 < argc && (SPY = 2))
 			p_game_instance->dump_cycle = ft_atoi(argv[iter + 1]);
-		else if (*(argv[iter]) == 'n' && iter + 1 < argc && (SPI = CW_TRUE))
+		else if (*(argv[iter]) == 'n' && iter + 1 < argc && (SPY = CW_TRUE))
 			p_game_instance->custom_id = ft_atoi(argv[iter + 1]);
-		else if (*(argv[iter]) == 'v' && iter + 1 < argc && (SPI = CW_TRUE))
+		else if (*(argv[iter]) == 'v' && iter + 1 < argc && (SPY = CW_TRUE))
 			p_game_instance->verbose = ft_atoi(argv[iter + 1]);
-		else if (!ft_strcmp(argv[iter], "-sellout"))
+		else if (!ft_strcmp(argv[iter], "-sellout") && (SPY = 3))
 			p_game_instance->sellout = CW_TRUE;
-		else if (!ft_strcmp(argv[iter], "-stealth"))
+		else if (!ft_strcmp(argv[iter], "-stealth") && (SPY = 4))
 			p_game_instance->stealth = CW_TRUE;
+		else if (!ft_strcmp(argv[iter], "-mini") && (SPY = 5))
+			p_game_instance->mini = CW_TRUE;
 		else if (*(argv[iter]) == 't')
 			p_game_instance->timeline_avl_tree_mode = CW_TRUE;
 		else if (*(argv[iter]) == 'l')
 			p_game_instance->timeline_list_mode = CW_TRUE;
-		else if (*(argv[iter]) == 'g')
-			p_game_instance->ncurses = CW_TRUE;
-		else if (*(argv[iter]) == 'a')
-			p_game_instance->aff_hide = CW_TRUE;
+		else if (*(argv[iter]) == 'g' || *(argv[iter]) == 'a')
+			*(argv[iter]) == 'g' ? GA_NCURSES_I = CW_TRUE :
+			(GA_AFF_I = CW_TRUE);
 		else
 			p_game_instance->cw_usage(p_game_instance);
-	return (SPI);
+	return (SPY);
 }
 
 static void		cw_players_obj_init(t_corewar *p_game_instance, int c, char **v)
@@ -77,8 +77,8 @@ static void		cw_players_obj_init(t_corewar *p_game_instance, int c, char **v)
 	b = CW_ALL_FREE;
 	i = CW_BEGIN_FROM_ZERO;
 	while (++i < c)
-		if (*(v[i]) == CW_KEY)
-			cw_keys_parse(p_game_instance, v, c, i) ? ++i : 0;
+		if (*(v[i]) == CW_KEY && !(SPY = CW_FALSE))
+			cw_keys_parse(p_game_instance, v, c, i) == 1 ? ++i : 0;
 		else
 		{
 			cw_create_instance_player(&p);

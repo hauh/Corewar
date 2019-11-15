@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/14 19:55:03 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 13:52:52 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	cw_usage(t_corewar *p_game_instance)
 	ft_printf("  -g        : Ncurses output mode\n");
 	ft_printf("  --stealth : Hides the real contents of the memory\n");
 	ft_printf("  --sellout : Add some fun ad to game process XD\n");
+	ft_printf("  --mini    : Enable mini version to small size screen\n");
 	p_game_instance = NULL;
 	exit(1);
 }
