@@ -31,7 +31,7 @@ STEP=1000
 while [ 1 ]; do
 	printf "\rCurrent cycle: $CYCLE"
 	${OG_COREWAR} -d $CYCLE $@ &>og_dump
-	${MY_COREWAR} -d $CYCLE $@ &>my_dump
+	${MY_COREWAR} -dump $CYCLE $@ &>my_dump
 	if ! diff -q og_dump my_dump &>/dev/null; then
 		if [ $STEP == 1 ]; then
 			printf "\rDifferent output at cycle $CYCLE\n"
