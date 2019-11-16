@@ -6,7 +6,7 @@ MY_COREWAR="../corewar"
 CHECKER="./corewar_checker.sh"
 
 if [ -z "$1" ]; then
-	echo "Usage: corewar_bruteforce.sh dirname [-u for different fighters only]"
+	echo "Usage: corewar_arena.sh dirname [-u for different fighters only]"
 	exit 1
 fi
 
