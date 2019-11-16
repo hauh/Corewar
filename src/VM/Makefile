@@ -6,7 +6,7 @@
 #    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/11/15 20:58:28 by smorty           ###   ########.fr        #
+#    Updated: 2019/11/16 12:39:37 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ VM_SOURCE		:=		cw_process_obj.c						\
 						cw_arena_obj.c							\
 							cw_arena_functions.c				\
 						cw_error_manager.c						\
-						cw_game_object.c						\
+						cw_game_obj.c						\
 							cw_game_functions.c					\
 							cw_game_essence_init.c				\
 							cw_game_process.c					\
@@ -42,7 +42,7 @@ VM_SOURCE		:=		cw_process_obj.c						\
 						cw_live_ld_st_add_sub.c					\
 						cw_sti_fork_lld_lldi_lfork.c			\
 						cw_aff.c								\
-						cw_scheduler_object.c					\
+						cw_scheduler_obj.c					\
 							cw_scheduler_functions.c			\
 							cw_scheduler_insertion.c			\
 								cw_queue_obj.c					\
