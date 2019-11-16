@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 14:15:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/16 14:50:18 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/16 17:15:14 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			cr_vis_printdeath(int ctd, int mini)
 	str = " death ";
 	count = 0;
 	y = V_H - 2;
-	mini ? ctd -= 64 : 0;
+	mini ? ctd += 64 * 3 : 0;
 	attron(COLOR_PAIR(4));
 	attroff(A_BOLD);
 	while (ctd > 0)
@@ -74,7 +74,7 @@ int					cr_vis_printhealth(t_corewar *cr)
 	id = 1;
 	y = cr->p_scheduler->players_amount * 4 + 18;
 	cr_vis_printdeath(
-		(CYCLE_TO_DIE - cr->p_arena_obj->cycle_to_die + 32 * 14), cr->mini);
+		(CYCLE_TO_DIE - cr->p_arena_obj->cycle_to_die + 32 * 22), cr->mini);
 	while (id <= cr->p_scheduler->players_amount)
 	{
 		life = cr_vis_lastlive(cr, id);

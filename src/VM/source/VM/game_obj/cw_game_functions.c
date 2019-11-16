@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 15:41:14 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 18:30:43 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/16 17:30:48 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ static void		cw_write_code_to_memory(t_corewar *p_game_instance)
 static void		cw_congratulations(t_corewar *p_game_instance)
 {
 	if (GA_NCURSES_I)
+	{
 		cr_vis_winner(p_game_instance);
+		cr_vis_main(p_game_instance, V_CLEANUP);
+		exit(0);
+	}
 	else
 	{
 		ft_printf("Contestant %d, \"%s\", has won !\n",

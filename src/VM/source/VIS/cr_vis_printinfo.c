@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/23 14:10:43 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/15 17:55:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/16 17:16:44 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,12 @@ int		cr_vis_printplayers(t_corewar *cr)
 	p = cr->p_scheduler->p_players_list;
 	while (++i <= cr->p_scheduler->players_amount)
 	{
-		mvprintw(p->id + i * 3 + 6, V_SEP + 6, "Player %d: ", p->id);
+		mvprintw(p->id + p->id * 3 + 6, V_SEP + 6, "Player %d: ", p->id);
 		attron(COLOR_PAIR(p->id));
-		mvprintw(p->id + i * 3 + 6, V_SEP + 17, "%.42s", p->p_name);
+		mvprintw(p->id + p->id * 3 + 6, V_SEP + 17, "%.42s", p->p_name);
 		attroff(COLOR_PAIR(p->id));
-		mvprintw(p->id + i * 3 + 7, V_SEP + 12,
+		mvprintw(p->id + p->id * 3 + 7, V_SEP + 12,
 		"Last live: %d", cr_vis_lastlive(cr, p->id));
-		mvprintw(p->id + i * 3 + 8, V_SEP + 12, "Some info", p->p_name);
 		p = p->p_next;
 	}
 	return (0);

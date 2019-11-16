@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_buildmap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 17:52:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/16 13:34:08 by dbrady           ###   ########.fr       */
+/*   Updated: 2019/11/16 16:51:11 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			cr_vis_getcolour(int i, t_corewar *cr)
 	colour = i / (MEM_SIZE / cr->p_scheduler->players_amount);
 	if (cr->p_scheduler->players_amount == 3 && i == MEM_SIZE - 1)
 		return (0);
-	while (colour-- && player->p_next)
+	while (player->id != colour + 1)
 		player = player->p_next;
 	return ((i % (MEM_SIZE / cr->p_scheduler->players_amount)) >
 	player->code_size - 1 ? 0 : player->id);
