@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 18:11:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/11/16 14:49:02 by smorty           ###   ########.fr       */
+/*   Updated: 2019/09/26 22:53:28 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static void	cleanup(t_warrior *warrior)
 		while (warrior->program->labels)
 		{
 			clean = (t_label *)warrior->program->labels;
-			free(warrior->program->labels->label_name);
 			warrior->program->labels = warrior->program->labels->next;
 			free(clean);
 		}

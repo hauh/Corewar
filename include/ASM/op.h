@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   op.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 19:38:29 by smorty            #+#    #+#             */
-/*   Updated: 2019/11/15 21:01:28 by smorty           ###   ########.fr       */
+/*   Updated: 2019/11/16 14:42:47 by vrichese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef		OP_H
-# define	OP_H
+#ifndef OP_H
+# define OP_H
 
 # define IND_SIZE			2
 # define REG_SIZE			4
