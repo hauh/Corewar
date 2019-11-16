@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+         #
+#    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 18:33:42 by vrichese          #+#    #+#              #
-#    Updated: 2019/11/16 14:10:15 by vrichese         ###   ########.fr        #
+#    Updated: 2019/11/16 12:39:37 by vrichese         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,11 @@ NAME			:=		corewar
 
 DIR_PRINTF		:=		../ft_printf/
 DIR_LIBFT		:=		../libft/
-VM_DIR_SOURCE	:=		source/VM
-VIS_DIR_SOURCE	:=		source/VIS
-VM_DIR_INCLUDE	:=		../../include/VM/VM
-VIS_DIR_INCLUDE :=		../../include/VM/VIS
-DIR_BIN			:=		bin/
+VM_DIR_SOURCE	:=		.
+VIS_DIR_SOURCE	:=		../VIS
+VM_DIR_INCLUDE	:=		../../include/VM
+VIS_DIR_INCLUDE :=		../../include/VIS
+DIR_BIN			:=		../..
 
 VM_SOURCE		:=		cw_process_obj.c						\
 							cw_process_prepare_functions.c		\
@@ -34,7 +34,7 @@ VM_SOURCE		:=		cw_process_obj.c						\
 						cw_arena_obj.c							\
 							cw_arena_functions.c				\
 						cw_error_manager.c						\
-						cw_game_obj.c							\
+						cw_game_obj.c						\
 							cw_game_functions.c					\
 							cw_game_essence_init.c				\
 							cw_game_process.c					\
@@ -42,7 +42,7 @@ VM_SOURCE		:=		cw_process_obj.c						\
 						cw_live_ld_st_add_sub.c					\
 						cw_sti_fork_lld_lldi_lfork.c			\
 						cw_aff.c								\
-						cw_scheduler_obj.c						\
+						cw_scheduler_obj.c					\
 							cw_scheduler_functions.c			\
 							cw_scheduler_insertion.c			\
 								cw_queue_obj.c					\
@@ -78,7 +78,7 @@ VIS_HEADER		:=		cr_vis.h
 
 OBJ				:=		$(VM_SOURCE:.c=.o)
 VIS_OBJ			:=		$(VIS_SOURCE:.c=.o)
-OBJ_WITH_DIR	:=		$(addprefix $(DIR_BIN), $(OBJ) $(VIS_OBJ))
+OBJ_DIR			:=		obj
 
 FLAGS			:=		-O3 -Wall -Werror -Wextra
 
@@ -94,36 +94,35 @@ vpath %.c $(VM_DIR_SOURCE)	$(VM_DIR_SOURCE)/game_obj						\
 							$(VM_DIR_SOURCE)/player_obj						\
 							$(VM_DIR_SOURCE)/scheduler_obj					\
 								$(VM_DIR_SOURCE)/scheduler_obj/queue_obj	\
+
 vpath %.c $(VIS_DIR_SOURCE)
 vpath %.h $(VM_DIR_INCLUDE)
 vpath %.h $(VIS_DIR_INCLUDE)
-vpath %.o $(DIR_BIN)
+vpath %.o $(OBJ_DIR)
 vpath %.a $(DIR_LIBFT) $(DIR_PRINTF)
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(VIS_OBJ)
-	gcc $(FLAGS) $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
-	mv $(NAME) ../../
+$(NAME): $(OBJ_DIR) $(OBJ) $(VIS_OBJ)
+	gcc $(FLAGS) -lncurses -o $@ $(addprefix $(OBJ_DIR)/, $(OBJ)) $(addprefix $(OBJ_DIR)/, $(VIS_OBJ)) $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+	@mv $(NAME) ../..
 	printf "\r\e[J\e[33m"
-	printf "Virtual machine"
-	#bash .output.sh
-	printf "\e[0m done!\e[?25h\n"
+	bash .output.sh
+	printf "\e[0m\e[?25h"
 
-$(OBJ):%.o:%.c $(VM_HEADERS) | $(DIR_BIN)
-	gcc $(FLAGS) -I $(DIR_LIBFT) -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE) -c $< -o $(DIR_BIN)$@
-	printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+
+$(OBJ):%.o:%.c $(VM_HEADERS)
+	gcc $(FLAGS) -I $(DIR_LIBFT) -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE) -c $< -o $(OBJ_DIR)/$@
+	printf "\r\e[?25l\e[Jcompiling \e[35m$(notdir $<)\e[0m"
 
 $(VIS_OBJ):%.o:%.c $(VIS_HEADER)
-	gcc $(FLAGS) -I $(DIR_LIBFT) -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE)  -c $< -o $(DIR_BIN)$@
-	printf "\r\e[?25l\e[JCompiling \e[35m$(notdir $<)\e[0m"
-
-$(DIR_BIN):
-	mkdir -p $@
+	gcc $(FLAGS) -I $(DIR_LIBFT) -I $(DIR_PRINTF)includes -I $(VM_DIR_INCLUDE) -I $(VIS_DIR_INCLUDE) -c $< -o $(OBJ_DIR)/$@
+	printf "\r\e[?25l\e[Jcompiling \e[35m$(notdir $<)\e[0m"
 
 clean:
-	rm -rf $(OBJ_WITH_DIR)
-	rm -rf $(DIR_BIN)
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -rf $(NAME)
@@ -131,4 +130,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re
-.SILENT: all $(NAME) $(OBJ) $(VIS_OBJ) $(DIR_BIN) $(LIBFT) $(LIBFTPRINTF) clean fclean re
+.SILENT: all $(NAME) $(OBJ) $(VIS_OBJ) clean fclean re

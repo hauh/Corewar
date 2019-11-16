@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/16 14:42:16 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:14:43 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define V_BQUARTER "\xe2\x96\x91"
 # define V_STEALTH "\xe2\x96\xa3"
 
+
 /*
 ** ---------------------------
 */
@@ -49,16 +50,16 @@
 ** Visual typedefs
 */
 
-typedef struct				s_box
+typedef struct			s_box
 {
-	int						vh;
-	int						vw;
-	int						vs;
-	int						vss;
-	int						vcarvol;
-}							t_box;
+	int					vh;
+	int					vw;
+	int					vs;
+	int					vss;
+	int					vcarvol;
+}						t_box;
 
-typedef struct				s_vis
+typedef struct			s_vis
 {
 	int					flow;
 	int					step;
@@ -71,29 +72,29 @@ typedef struct				s_vis
 	int					car_place;
 	int					sound_cur;
 	long int			sound_time;
-}							t_vis;
+}						t_vis;
 
-enum						e_vis_act
+enum					e_vis_act
 {
-	V_INIT,
-	V_CONTROL,
-	V_UPDATE,
-	V_CLEANUP,
+	V_INIT,								// initialise the matp
+	V_CONTROL,							// update time and check key input
+	V_UPDATE,							// update the map (left section)
+	V_CLEANUP,							// clean allocated memory and get rid of the visuals
 	V_LEFT,
 	V_MID,
 	V_RIGHT,
 	V_SCREEN,
 };
 
-enum						e_vis_print
+enum					e_vis_print
 {
-	VPN,
-	VPNR,
-	VPS,
-	VPSR,
+	VPN,							// print normal number (also, VPN, lol)
+	VPNR,							// print normal number with carriage on it
+	VPS,								// print stealth characters insted of numbers
+	VPSR,							// stealth with carriage
 };
 
-enum						e_vis_boxmanager
+enum					e_vis_boxmanager
 {
 	V_BM_SET_MINI,
 	V_BM_SET_NORMAL,
@@ -114,32 +115,29 @@ enum						e_vis_boxmanager
 ** Visual declarations
 */
 
-int							cr_vis_main(t_corewar *cr, int act);
-int							cr_vis_cleanup(t_corewar *cr);
-int							cr_vis_printattr
-							(int *xy, char *str, int colour, int reverse);
-int							cr_vis_initvis(t_corewar *cr);
-int							cr_vis_initcolour(void);
-int							cr_vis_initterm(void);
-void						cr_vis_putx(int num, int i, int colour, int rev);
-int							cr_vis_printmap
-							(unsigned char *f, int f_len, t_corewar *cr);
-int							cr_vis_timer(t_corewar *cr);
-int							cr_vis_keys(t_corewar *cr);
-int							cr_vis_updatemap(t_corewar *cr);
-int							cr_vis_printinfo(t_corewar *cr);
-void						cr_vis_printcarinfo(t_corewar *cr);
-void						cr_vis_welcome(t_corewar *cr);
-void						cr_vis_winner(t_corewar *cr);
-void						cr_vis_buildbox(int part);
-void						cr_vis_clearbox(int part, int mini);
-int							cr_vis_printhealth(t_corewar *cr);
-int							cr_vis_lastlive(t_corewar *cr, int id);
-void						cr_vis_sound(t_vis *vis, int piece);
-void						cr_vis_sound_sellout(t_corewar *cr);
-int							cr_vis_printattr_stealth
-							(int i, int colour, int flag);
-int							cr_vis_box_manager(int action);
+int							cr_vis_main					(t_corewar *cr, int act);
+int							cr_vis_cleanup				(t_corewar *cr);
+int							cr_vis_printattr			(int *xy, char *str, int colour, int reverse);
+int							cr_vis_initvis				(t_corewar *cr);
+int							cr_vis_initcolour			(void);
+int							cr_vis_initterm				(void);
+void						cr_vis_putx					(int num, int i, int colour, int rev);
+int							cr_vis_printmap				(unsigned char *f, int f_len, t_corewar *cr);
+int							cr_vis_timer				(t_corewar *cr);
+int							cr_vis_keys					(t_corewar *cr);
+int							cr_vis_updatemap			(t_corewar *cr);
+int							cr_vis_printinfo			(t_corewar *cr);
+void						cr_vis_printcarinfo			(t_corewar *cr);
+void						cr_vis_welcome				(t_corewar *cr);
+void						cr_vis_winner				(t_corewar *cr);
+void						cr_vis_buildbox				(int part);
+void						cr_vis_clearbox				(int part, int mini);
+int							cr_vis_printhealth			(t_corewar *cr);
+int							cr_vis_lastlive				(t_corewar *cr, int id);
+void						cr_vis_sound				(t_vis *vis, int piece);
+void						cr_vis_sound_sellout		(t_corewar *cr);
+int							cr_vis_printattr_stealth	(int i, int colour, int flag);
+int							cr_vis_box_manager			(int action);
 
 /*
 ** ---------------------------
