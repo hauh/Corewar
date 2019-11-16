@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cr_vis_printhealth.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbrady <dbrady@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 14:15:16 by dbrady            #+#    #+#             */
-/*   Updated: 2019/11/14 14:21:27 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/16 13:31:49 by dbrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static void			cr_vis_printdeath(int ctd)
+static void			cr_vis_printdeath(int ctd, int mini)
 {
 	int		y;
 	int		x;
@@ -23,6 +23,8 @@ static void			cr_vis_printdeath(int ctd)
 	count = 0;
 	y = V_H - 2;
 	ctd = (CYCLE_TO_DIE - ctd) + 32 * 14;
+	if (mini)
+		ctd -= 64;
 	attron(COLOR_PAIR(4));
 	attroff(A_BOLD);
 	while (ctd > 0)
@@ -35,7 +37,7 @@ static void			cr_vis_printdeath(int ctd)
 			x += 1;
 		}
 		y -= 1;
-		ctd -= 32;
+		ctd -= mini ? 64 : 32;
 	}
 	attroff(COLOR_PAIR(4));
 	attron(A_BOLD);
@@ -73,17 +75,17 @@ int					cr_vis_printhealth(t_corewar *cr)
 
 	id = 1;
 	y = cr->p_scheduler->players_amount * 4 + 18;
-	cr_vis_printdeath(cr->p_arena_obj->cycle_to_die);
+	cr_vis_printdeath(cr->p_arena_obj->cycle_to_die, cr->mini);
 	while (id <= cr->p_scheduler->players_amount)
 	{
-		life = cr_vis_lastlive(cr, id);
+		life = cr->p_arena_obj->cycle_to_die - cr_vis_lastlive(cr, id);
 		attron(COLOR_PAIR(id));
 		mvprintw(y - 2, V_SEP + id * 10 - 2, "P%d", id);
 		if (life < cr->p_arena_obj->cycle_to_die)
 			mvprintw(y, V_SEP + id * 10 - 2, "L%d", life);
 		else
 			mvprintw(y, V_SEP + id * 10 - 2, "X_X");
-		cr_vis_healthmeter(life, id, y, cr->p_arena_obj->cycle_to_die);
+		cr_vis_healthmeter(cr->mini ? life / 2 : life, id, y, cr->p_arena_obj->cycle_to_die);
 		attroff(COLOR_PAIR(id));
 		id += 1;
 	}
