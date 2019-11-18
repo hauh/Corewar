@@ -6,7 +6,7 @@
 #    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/15 19:28:55 by smorty            #+#    #+#              #
-#    Updated: 2019/11/18 19:30:31 by smorty           ###   ########.fr        #
+#    Updated: 2019/11/18 22:57:13 by smorty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ VM			:= corewar
 SRCDIR		:= src
 LFTDIR		:= $(SRCDIR)/libft
 FTPRINTFDIR	:= $(SRCDIR)/ft_printf
-ASMDIR		:= $(SRCDIR)/ASM
-VMDIR		:= $(SRCDIR)/VM
+ASMDIR		:= $(SRCDIR)/asm
+VMDIR		:= $(SRCDIR)/vm
 
 all: $(LIBFT) $(FTPRINTF) $(ASM) $(VM)
 

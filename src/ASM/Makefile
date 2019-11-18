@@ -6,7 +6,7 @@
 #    By: smorty <smorty@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/15 18:56:46 by smorty            #+#    #+#              #
-#    Updated: 2019/11/15 21:02:04 by smorty           ###   ########.fr        #
+#    Updated: 2019/11/18 22:59:31 by smorty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ LFT_DIR := ../libft
 
 LFT_PRINTF_DIR := ../ft_printf
 
-HEADERS_DIR := ../../include/ASM $(LFT_DIR) $(LFT_PRINTF_DIR)/includes
+HEADERS_DIR := ../../include/asm $(LFT_DIR) $(LFT_PRINTF_DIR)/includes
 
 SRC_ASM := asm.c process_argument.c parse_file.c read_input.c\
 			parse_title.c parse_label.c parse_opcode.c parse_parameter.c\
@@ -39,7 +39,7 @@ all: $(NAME)
 $(NAME): $(OBJ_ASM)
 	@$(CC) $(addprefix $(OBJ_DIR)/, $(OBJ_ASM)) $(INCLUDE) -lft -L $(LFT_DIR) -lftprintf -L $(LFT_PRINTF_DIR) -o $@
 	@printf "\r\e[J\e[32m$@\e[0m done!\n\e[?25h"
-	@mv $(NAME) ../..
+	@mv $@ ../..
 
 $(OBJ_ASM): %.o: %.c $(HEADERS)
 	@mkdir -p $(OBJ_DIR)
