@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/19 00:43:19 by smorty           ###   ########.fr       */
+/*   Updated: 2019/11/19 00:45:41 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ static void	cw_usage(t_corewar *p_game_instance)
 	ft_printf(
 	"Usage: %s [-dump N -s N -v N | -g --stealth --sellout --mini]"
 		" [-a | -t] <champion1.cor> <...>\n"
-	"    -a : Prints output from \"aff\" (Default is to hide it)\n"
-	"    -t : TIMELINE AVL TREE execution model (faster with MANY carriages)\n"
+	"    -a       : Prints output from \"aff\" (Default is to hide it)\n"
+	"    -t       : TIMELINE AVL TREE execution model"
+		" (Faster with MANY carriages)\n"
 	"##### TEXT OUTPUT MODE ##################"
 		"#######################################\n"
-	"   -dump N : Dumps memory after N cycles then exits\n"
-	"   -s N    : Runs N cycles, dumps memory, pauses, then repeats\n"
-	"   -v N    : Verbosity levels, can be added together to enable several\n"
+	"   -dump N   : Dumps memory after N cycles then exits\n"
+	"   -s N      : Runs N cycles, dumps memory, pauses, then repeats\n"
+	"   -v N      : Verbosity levels, can be added together to enable several\n"
 	"\t\t- 1 : Show lives\n"
 	"\t\t- 2 : Show cycles\n"
 	"\t\t- 4 : Show deaths\n"
