@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 18:21:39 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/19 00:31:55 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,27 @@
 
 static void	cw_usage(t_corewar *p_game_instance)
 {
-	ft_printf("Usage: \".cor file\" [-dump N -s N -v N | -g --stealth ");
-	ft_printf("--sellout --mini] [-a | -t | -l] <champion1.cor> <...>\n");
-	ft_printf("  -a        : Prints output from \"aff\"");
-	ft_printf("(Default is to hide it)\n");
-	ft_printf("  -t        : TIMELINE AVL TREE Execution model if it enable\n");
-	ft_printf("  -l        : TIMELINE SORT Execution model if it enable\n");
-	ft_printf("$$$$$ TEXT OUTPUT MODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-	ft_printf("$$$$$$$$$$$$$$$$$$$$$$\n");
-	ft_printf("  -dump N   : Dumps memory after N cycles then exists\n");
-	ft_printf("  -s N      : Runs N cycles, dumps memory, pauses, then ");
-	ft_printf("repeats\n");
-	ft_printf("  -v N      : Verbosity levels, can be added together to ");
-	ft_printf("enable several\n");
-	ft_printf("               - 1 : Show lives\n");
-	ft_printf("               - 2 : Show cycles\n");
-	ft_printf("               - 4 : Show deaths\n");
-	ft_printf("$$$$$ NCURSES OUTPUT MODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-	ft_printf("$$$$$$$$$$$$$$$$$$\n");
-	ft_printf("  -g        : Ncurses output mode\n");
-	ft_printf("  --stealth : Hides the real contents of the memory\n");
-	ft_printf("  --sellout : Add some fun ad to game process XD\n");
-	ft_printf("  --mini    : Enable mini version to small size screen\n");
+	ft_printf(
+	"Usage: ./corewar [-dump N -s N -v N | -g --stealth --sellout --mini]"
+		"[-a | -t] <champion1.cor> <...>\n"
+	"\t-a\t: Prints output from \"aff\" (Default is to hide it)\n"
+	"\t-t\t: TIMELINE AVL TREE execution model (faster with MANY carriages)\n"
+	"##### TEXT OUTPUT MODE ##################"
+		"#######################################\n"
+	"\t-dump N : Dumps memory after N cycles then exits\n"
+	"\t-s N\t: Runs N cycles, dumps memory, pauses, then repeats\n"
+	"\t-v N\t: Verbosity levels, can be added together to enable several\n"
+	"\t\t- 1 : Show lives\n"
+	"\t\t- 2 : Show cycles\n"
+	"\t\t- 4 : Show deaths\n"
+	"##### NCURSES OUTPUT MODE ###############"
+		"#######################################\n"
+	"\t-g\t\t: Ncurses output mode\n"
+	"\t--stealth\t: Hides the real contents of the memory\n"
+	"\t--sellout\t: Add some fun ad to game process XD\n"
+	"\t--mini\t\t: Enable mini version for smaller screens\n"
+	"########################################"
+		"########################################\n");
 	p_game_instance = NULL;
 	exit(1);
 }
