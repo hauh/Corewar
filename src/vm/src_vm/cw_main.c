@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 21:09:41 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 16:33:57 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/19 00:37:17 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int				main(int argc, char **argv)
 {
 	t_corewar	*p_game_obj;
 
-	cw_create_instance_game(&p_game_obj);
+	cw_create_instance_game(&p_game_obj, *argv);
 	argc < 2 ? p_game_obj->cw_usage(p_game_obj) : CW_FALSE;
 	p_game_obj->cw_arena_scheduler_command_obj_init(p_game_obj);
 	p_game_obj->cw_players_obj_init(p_game_obj, argc, argv);

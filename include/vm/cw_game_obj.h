@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_obj.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/06 17:15:38 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/15 17:39:02 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/19 00:38:10 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@
 
 typedef struct			s_corewar
 {
+	char		*filename;
+
 	t_flag		timeline_avl_tree_mode;
 	t_flag		timeline_list_mode;
 	t_flag		starting_cycle;
@@ -121,7 +123,8 @@ typedef struct			s_corewar
 	t_method	(*cw_destructor)			(struct s_corewar **);
 }						t_corewar;
 
-void					cw_create_instance_game	(t_corewar **pp_game_obj);
+void					cw_create_instance_game	(t_corewar **pp_game_obj,
+															char *filename);
 void					cw_game_process_linker	(t_corewar *p_game_instance);
 void					cw_essence_init_linker	(t_corewar *p_game_instance);
 void					cw_game_functions_linker(t_corewar *p_game_instance);

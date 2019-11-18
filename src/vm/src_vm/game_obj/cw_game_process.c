@@ -6,7 +6,7 @@
 /*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:40:29 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/19 00:31:55 by smorty           ###   ########.fr       */
+/*   Updated: 2019/11/19 00:43:19 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,27 @@
 static void	cw_usage(t_corewar *p_game_instance)
 {
 	ft_printf(
-	"Usage: ./corewar [-dump N -s N -v N | -g --stealth --sellout --mini]"
-		"[-a | -t] <champion1.cor> <...>\n"
-	"\t-a\t: Prints output from \"aff\" (Default is to hide it)\n"
-	"\t-t\t: TIMELINE AVL TREE execution model (faster with MANY carriages)\n"
+	"Usage: %s [-dump N -s N -v N | -g --stealth --sellout --mini]"
+		" [-a | -t] <champion1.cor> <...>\n"
+	"    -a : Prints output from \"aff\" (Default is to hide it)\n"
+	"    -t : TIMELINE AVL TREE execution model (faster with MANY carriages)\n"
 	"##### TEXT OUTPUT MODE ##################"
 		"#######################################\n"
-	"\t-dump N : Dumps memory after N cycles then exits\n"
-	"\t-s N\t: Runs N cycles, dumps memory, pauses, then repeats\n"
-	"\t-v N\t: Verbosity levels, can be added together to enable several\n"
+	"   -dump N : Dumps memory after N cycles then exits\n"
+	"   -s N    : Runs N cycles, dumps memory, pauses, then repeats\n"
+	"   -v N    : Verbosity levels, can be added together to enable several\n"
 	"\t\t- 1 : Show lives\n"
 	"\t\t- 2 : Show cycles\n"
 	"\t\t- 4 : Show deaths\n"
 	"##### NCURSES OUTPUT MODE ###############"
 		"#######################################\n"
-	"\t-g\t\t: Ncurses output mode\n"
-	"\t--stealth\t: Hides the real contents of the memory\n"
-	"\t--sellout\t: Add some fun ad to game process XD\n"
-	"\t--mini\t\t: Enable mini version for smaller screens\n"
+	"   -g        : Ncurses output mode\n"
+	"   --stealth : Hides the real contents of the memory\n"
+	"   --sellout : Add some fun ad to game process XD\n"
+	"   --mini    : Enable mini version for smaller screens\n"
 	"########################################"
-		"########################################\n");
+		"########################################\n",
+		p_game_instance->filename);
 	p_game_instance = NULL;
 	exit(1);
 }

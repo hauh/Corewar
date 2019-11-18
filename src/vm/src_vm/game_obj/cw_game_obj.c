@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cw_game_obj.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smorty <smorty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:14:01 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/16 17:28:12 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/19 00:37:09 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	cw_destructor(t_corewar **pp_game_instance)
 	*pp_game_instance = NULL;
 }
 
-extern void	cw_create_instance_game(t_corewar **pp_game_obj)
+extern void	cw_create_instance_game(t_corewar **pp_game_obj, char *filename)
 {
 	if (!(*pp_game_obj = (t_corewar *)malloc(sizeof(t_corewar))))
 		cw_error_catcher(GA_OBJ_NAME, GA_OBJ_ERROR, __FILE__, __LINE__);
@@ -46,4 +46,5 @@ extern void	cw_create_instance_game(t_corewar **pp_game_obj)
 	cw_game_process_linker(*pp_game_obj);
 	cw_essence_init_linker(*pp_game_obj);
 	cw_game_functions_linker(*pp_game_obj);
+	(*pp_game_obj)->filename = filename;
 }
