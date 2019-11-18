@@ -6,7 +6,7 @@
 /*   By: vrichese <vrichese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/12 13:55:06 by vrichese          #+#    #+#             */
-/*   Updated: 2019/11/13 16:38:07 by vrichese         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:49:39 by smorty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include "ft_printf.h"
 # include "libft.h"
+# include "ft_printf.h"
 # include "cr_vis.h"
 
 # include "cw_obj_container.h"
