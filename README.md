@@ -4,11 +4,27 @@ Last project of the first part of algorithmic branch at School 42.
 
 Project's objective is to create an analog of an old programming game called [Core Wars](https://en.wikipedia.org/wiki/Core_War).
 
-The project consists of two parts: virtual machine 'corewar' and assembler 'asm'.
+The project consists of two parts: assembler 'asm' and virtual machine 'corewar'.
+
+### The Assembler
+
+The programm 'asm' takes any amount of champion code files ("\*.s"), translates their code, written in pseudo-assembly language to bytecode, and saves that code to "\*.cor" files. These Champion files are ready for battle in corewar program.
+
+With -f flag it will save them into current directory instead.
+
+With -d flag it can disassemble champions back from bytecode to their assembly code.
 
 ### The Virtual Machine
 
-The program 'corewar' loads up to 4 player files ("*.cor"), stores them in memory and executes their code. Every few cycles it checks if they are still alive, until only one alive left.
+The program 'corewar' loads up to 4 player files ("\*.cor"), stores them in memory and executes their code. Every few cycles it checks if they are still alive, until only one alive left.
+
+### Installing
+
+The project was written and tested on macOS Sierra with 'ncurses' library for visualization.
+
+```
+git clone --recursive https://github.com/hauh/Corewar.git corewar && cd corewar && make
+```
 
 ### Usage
 
@@ -29,23 +45,7 @@ The program 'corewar' loads up to 4 player files ("*.cor"), stores them in memor
    --mini    : Enable mini version for smaller screens
 ```
 
-### The Assembler
-
-The programm 'asm' takes any amount of champion code files ("*.s"), translates their code, written in pseudo-assembly language to bytecode, and saves that code to "*.cor" files. These Champion files are ready for battle in corewar program.
-
-With -f flag it will save them into current directory instead.
-
-With -d flag it can disassemble champions back from bytecode to their assembly code.
-
-### Installing
-
-The project was written and tested on macOS Sierra with SDL2 library for visualization, which is included into this repository
-
-```
-git clone --recursive https://github.com/hauh/Corewar.git corewar && cd corewar && make
-```
-
-### Autors
+### Authors
 
 Project was made in collaboration with [Rustam 'vrichese'](https://github.com/AloySobek) and [Alexander 'dbrady'](https://github.com/hardworkingcomma).
 
