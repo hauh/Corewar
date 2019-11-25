@@ -2,13 +2,13 @@
 
 Last project of the first part of algorithmic branch at School 42.
 
-Project's objective is to create an analog of an old programming game called [Core Wars](https://en.wikipedia.org/wiki/Core_War).
+Project's objective is to create an analog of an old programing game called [Core Wars](https://en.wikipedia.org/wiki/Core_War), where programs fights in memory.
 
 The project consists of two parts: assembler 'asm' and virtual machine 'corewar'.
 
 ### The Assembler
 
-The programm 'asm' takes any amount of champion code files ("\*.s"), translates their code, written in pseudo-assembly language to bytecode, and saves that code to "\*.cor" files. These Champion files are ready for battle in corewar program.
+The programm 'asm' takes any amount of champion code files ("\*.s"), translates their code, written in pseudo-assembly language to bytecode, and saves that code to "\*.cor" files. These champion files are ready for battle in corewar program.
 
 With -f flag it will save them into current directory instead.
 
