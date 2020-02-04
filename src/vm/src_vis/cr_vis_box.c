@@ -64,10 +64,10 @@ int		cr_vis_box_manager(int action)
 	if (!box)
 	{
 		box = (t_box *)malloc(sizeof(t_box));
-		box->vh = (action == V_BM_SET_MINI) ? 68 : 100;
-		box->vs = (action == V_BM_SET_MINI) ? 200 : 136;
+		box->vh = (action == V_BM_SET_MINI) ? 68 : 84;
+		box->vs = (action == V_BM_SET_MINI) ? 200 : 200;
 		box->vss = box->vs + 60;
-		box->vw = (action == V_BM_SET_MINI) ? box->vs + 62 : 400;
+		box->vw = (action == V_BM_SET_MINI) ? box->vs + 62 : 250;
 		box->vcarvol = box->vh / 3 - 2;
 	}
 	if (action == V_BM_GET_VW)

@@ -16,28 +16,29 @@ static void		cr_play_sound(char *filename)
 {
 	static int	status = 1;
 	char		*command;
-
+	int			check;
+	
 	if (status == 1)
-	{
 		command = ft_strjoin("afplay ", filename);
-		if (system(command) == -1)
-			status = 2;
-		free(command);
-	}
-	if (status == 2)
-	{
+	else if (status == 2)
 		command = ft_strjoin("aplay ", filename);
-		if (system(command) == -1)
-			status = 0;
-		free(command);
+	else
+		return ;
+	check = system(command);
+	ft_printf(ft_itoa(check));
+	if (check == -1 || check == 1 || check == 127 || check == 32512)
+	{
+		status = (status == 1 ? 2 : 0);
+		cr_play_sound(filename);
 	}
+	free(command);
 }
 
 static void		cr_stop_sound(void)
 {
-	if (system("pkill afplay") != -1)
+	if (system("pkill afplay") != 1)
 		return ;
-	if (system("pkill aplay") != -1)
+	if (system("pkill aplay") != 1)
 		return ;
 }
 

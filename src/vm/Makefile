@@ -101,7 +101,7 @@ vpath %.a	$(DIR_LIBFT) $(DIR_PRINTF)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(VIS_OBJ)
-	@gcc $(FLAGS) $(OBJ_WITH_DIR) -lncurses -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
+	@gcc $(FLAGS) $(OBJ_WITH_DIR) -lncursesw -o $@ $(DIR_LIBFT)$(LIBFT) $(DIR_PRINTF)$(LIBFTPRINTF)
 	@printf "\r\e[J\e[32m$@\e[0m done!\n\e[?25h"
 	@mv $@ ../..
 
