@@ -40,6 +40,10 @@
 # define V_BQUARTER "\xe2\x96\x91"
 # define V_STEALTH "\xe2\x96\xa3"
 
+# define V_SCR_WIDTH	400
+# define V_SCR_HEIGHT	100
+# define V_SCR_LINE_LEN	136
+
 /*
 ** ---------------------------
 */
