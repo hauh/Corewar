@@ -70,11 +70,9 @@ static int		cw_keys_parse(t_corewar *p_game_instance,
 static void		cw_players_obj_init(t_corewar *p_game_instance, int c, char **v)
 {
 	t_player	*p;
-	t_mark		standart_id;
 	t_mark		b;
 	t_iter		i;
 
-	standart_id = 0;
 	b = CW_ALL_FREE;
 	i = CW_BEGIN_FROM_ZERO;
 	while (++i < c)

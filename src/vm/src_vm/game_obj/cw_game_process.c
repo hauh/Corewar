@@ -60,7 +60,8 @@ static void	cw_start_execution(t_corewar *p_game_instance)
 			GA_ARENA_OBJ_I->cw_print_field(GA_ARENA_OBJ_I, CW_FALSE);
 			i = 0;
 			while (i != '\n')
-				read(0, &i, 1);
+				if (read(0, &i, 1) != 1)
+					exit(5);
 		}
 	}
 }

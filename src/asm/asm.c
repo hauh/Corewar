@@ -18,10 +18,13 @@ int g_cur_col;
 void		error(char *err, int type)
 {
 	if (type)
+	{
 		ft_printf("%s [%d:%d]\n", err, g_cur_line, g_cur_col);
+		errno = EINVAL;
+	}
 	else
-		ft_printf("%s\n", err);
-	exit(11);
+   		ft_printf("%s\n", err);
+	exit(errno);
 }
 
 static void	usage(void)

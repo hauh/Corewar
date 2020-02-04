@@ -46,7 +46,7 @@ void	cr_vis_clearbox(int part, int mini)
 	int		x;
 	char	*str;
 
-	mini = 0;
+	(void)mini;
 	y = (part == V_MID) ? (V_SEPSEP - V_SEP) : (V_W - V_SEPSEP);
 	str = ft_strnew(y);
 	ft_memset(str, ' ', y);

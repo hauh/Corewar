@@ -64,7 +64,8 @@ static int	build_file(t_warrior *warrior, char *name, int flag)
 		ft_printf("Writing output champion to %s\n", new_file);
 	else
 	{
-		write(fd, warrior->byte_code, warrior->code_size);
+		if (!(write(fd, warrior->byte_code, warrior->code_size)))
+			error(strerror(errno), 0);
 		close(fd);
 		ft_printf("Writing output program to %s\n", new_file);
 	}

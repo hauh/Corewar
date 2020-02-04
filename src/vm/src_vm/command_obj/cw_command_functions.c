@@ -107,8 +107,8 @@ static void	cw_recognize_command(t_command *p_command_instance, int command)
 		p_command_instance->cw_put_param(p_command_instance, attr
 	| (CO_SUB << 56) | (CW_REG << 48) | (CW_REG << 40) | (CW_REG << 32)
 	| (4 << 24) | (CW_TRUE << 16) | (10 << 6) | (CW_TRUE), &sub_exec);
-	else if (cw_recognize_command2(p_command_instance, command, attr))
-		;
+	else
+		cw_recognize_command2(p_command_instance, command, attr);
 }
 
 extern void	cw_command_functions_linker(t_command *p_command_instance)

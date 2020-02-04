@@ -46,7 +46,8 @@ static char	*get_string(int fd)
 	size = get_string_size(fd);
 	if (!(s = (char *)malloc(sizeof(char) * (size + 1))))
 		error(strerror(errno), 0);
-	read(fd, s, size + 1);
+	if (read(fd, s, size + 1) != size + 1)
+		errno = EIO;
 	s[size] = 0;
 	if (errno)
 		error(strerror(errno), 0);

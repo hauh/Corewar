@@ -15,7 +15,7 @@
 static void		cr_vis_sound_swap(t_vis *vis, int piece)
 {
 	if (piece == 'k')
-		system("(pkill afplay) && (afplay ./res/k.mp3&)");
+		(void)(void)system("(pkill afplay) && (afplay ./res/k.mp3&)");
 	else if (piece == 'b')
 		system("(pkill afplay) && (afplay ./res/b.mp3&)");
 	vis->sound_cur = piece;
@@ -28,6 +28,27 @@ static void		cr_vis_sound_timer(t_vis *vis, int piece)
 	else if
 		(piece == 'b' && (vis->time - vis->sound_time) / CLOCKS_PER_SEC > 72)
 		system("(pkill afplay) && (afplay ./res/b.mp3&)");
+}
+
+void			cr_play_sound(char *filename)
+{
+	static int	status = 1;
+	char		*command;
+
+	if (!status)
+		return ;
+	if (status == 1)
+	{
+		command = ft_strjoin("afplay ", filename);
+		if (system(command) == -1)
+			status = 2;
+		free(command);
+	}
+	if (status == 2)
+	{
+		command = ft_strjoin("aplay ", filename));
+	if (system(command) == -1)
+	}
 }
 
 void			cr_vis_sound_sellout(t_corewar *cr)

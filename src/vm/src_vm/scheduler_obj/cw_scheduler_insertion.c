@@ -61,7 +61,7 @@ static void		cw_insert_process_to_list(t_scheduler *p_scheduler_instance,
 		if (!p_scheduler_instance->avl_tree_timeline_on
 			&& !p_scheduler_instance->list_timeline_on)
 			p_scheduler_instance->processes_amount += 1;
-		stub = CW_FALSE;
+		(void)stub;
 	}
 }
 

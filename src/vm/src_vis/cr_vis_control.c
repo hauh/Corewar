@@ -18,7 +18,7 @@ int		cr_vis_timer(t_corewar *cr)
 	t_vis		*vis;
 
 	vis = cr->vis;
-	if (time < 0)
+	if (vis->time < 0)
 		return (1);
 	check = clock();
 	if ((check - vis->time) >= (CLOCKS_PER_SEC / vis->fpsdiv))

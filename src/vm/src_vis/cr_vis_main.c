@@ -15,7 +15,7 @@
 int		cr_vis_cleanup(t_corewar *cr)
 {
 	endwin();
-	system("(pkill afplay)");
+	(void)(void)system("(pkill afplay)");
 	cr_vis_box_manager(V_BM_CLEAR);
 	if (cr)
 	{

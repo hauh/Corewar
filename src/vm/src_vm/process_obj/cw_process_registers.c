@@ -62,7 +62,7 @@ static void	cw_conversion(t_process *p_process_instance, t_buffer *p_buffer_obj,
 			++type;
 		}
 	}
-	p_process_instance = NULL;
+	(void)p_process_instance;
 }
 
 extern void	cw_process_registers_functions_linker(t_process *p_process_instance)

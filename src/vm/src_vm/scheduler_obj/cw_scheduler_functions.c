@@ -59,7 +59,7 @@ static void		cw_ordinary_execution_processes(
 		iter->cw_exec_command(iter, p_game_obj);
 		iter = iter->p_next;
 	}
-	cycle = PR_STUB;
+	(void)cycle;
 }
 
 static void		cw_timeline_execution_processes(
@@ -69,7 +69,7 @@ static void		cw_timeline_execution_processes(
 	cw_exec_processes(p_scheduler_instance->pa_timeline[cycle],
 	p_scheduler_instance->pa_timeline[cycle]->p_root);
 	p_scheduler_instance->pa_timeline[cycle]->p_root = NULL;
-	p_game_obj = NULL;
+	(void)p_game_obj;
 }
 
 static void		cw_timeline_init(t_scheduler *p_scheduler_instance,
