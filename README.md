@@ -2,7 +2,7 @@
 
 Last project of the first part of algorithmic branch at School 42.
 
-Project's objective is to create an analog of an old programing game called [Core Wars](https://en.wikipedia.org/wiki/Core_War), where programs fights in memory.
+The Project's objective is to recreate the old programing game [Core Wars](https://en.wikipedia.org/wiki/Core_War), where programs fights in memory. In a broader sence, this is compiler for an assembly-like code, and a virtuale machine for execution of compiled code.
 
 The project consists of two parts: assembler 'asm' and virtual machine 'corewar'.
 
